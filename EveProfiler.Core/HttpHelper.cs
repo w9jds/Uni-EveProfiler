@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EveProfiler.Core
 {
@@ -25,8 +23,8 @@ namespace EveProfiler.Core
             if (queryParams != null)
             {
                 string query = string.Join("&", queryParams
-                    .Select(x => string.Format("{0}={1}", x.Key, x.Value)).ToArray());
-                getXml.GetAsync(string.Format("{0}?{1}", pathUri, query))
+                    .Select(x => $"{x.Key}={x.Value}").ToArray());
+                getXml.GetAsync($"{pathUri}?{query}")
                     .ContinueWith(t => response(t.Result));
             }
             else
@@ -55,11 +53,11 @@ namespace EveProfiler.Core
 
             if (pathUri == @"/Character/")
             {
-                pathUri += string.Format("{0}_{1}.jpg", ID, size);
+                pathUri += $"{ID}_{size}.jpg";
             }
             else
             {
-                pathUri += string.Format("{0}_{1}.png", ID, size);
+                pathUri += $"{ID}_{size}.png";
             }
 
             getBytes.GetAsync(pathUri).ContinueWith(t => aResponse(t.Result));

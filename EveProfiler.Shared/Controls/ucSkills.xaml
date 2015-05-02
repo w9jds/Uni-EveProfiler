@@ -1,0 +1,78 @@
+﻿<UserControl
+    x:Class="EveProfiler.Controls.ucSkills"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:EveProfiler.Controls"
+    xmlns:Controls="using:EveProfiler.Controls"
+    xmlns:Classes="using:EveProfiler.Classes"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" IsTextScaleFactorEnabled="False"
+    Loaded="UserControl_Loaded" Unloaded="UserControl_Unloaded">
+    
+    <UserControl.Resources>
+        <CollectionViewSource x:Name="cvsGroupSkills" IsSourceGrouped="true" ItemsPath="groupSkills"/>
+        <Classes:SkillCountConverter x:Key="SkillCountConverter"/>
+        <Classes:GroupSkillPointsConverter x:Key="GroupSkillPointsConverter"/>
+    </UserControl.Resources>
+
+    <Grid x:Name="LayoutRoot">
+        <ProgressBar x:Name="pbProgress" VerticalAlignment="Top" Background="Transparent" />
+
+        <ListView x:Name="lbSkillGroups"
+                  SelectionMode="None"
+                  ItemsSource="{Binding Source={StaticResource cvsGroupSkills}}" 
+                  Background="Transparent">
+            
+            <ListView.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderContainerStyle>
+                        <Style TargetType="ListViewHeaderItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </GroupStyle.HeaderContainerStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            
+                            <Grid Background="#FFFFFF" Margin="5,2.5" Height="60">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Name="tbGroupName" Text="{Binding groupName}" Foreground="Black" Margin="20,0,0,0" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="18"/>
+
+                                <Grid Grid.Column="1">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    
+                                    <TextBlock Name="tbSkillCount" Text="{Binding groupSkills, Converter={StaticResource SkillCountConverter}}" Foreground="Black" Margin="0,0,20,1.5" HorizontalAlignment="Right" VerticalAlignment="Bottom" FontSize="16"/>
+                                    <TextBlock Name="tbSkillPoints" Grid.Row="1" Text="{Binding groupSkillPoints, Converter={StaticResource GroupSkillPointsConverter}}" Foreground="Black" Margin="0,1.5,20,0" HorizontalAlignment="Right" VerticalAlignment="Top" FontSize="16"/>
+                                </Grid>
+
+                            </Grid>
+
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </ListView.GroupStyle>
+
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    
+                </Style>
+            </ListView.ItemContainerStyle>
+            
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Controls:ucSkillItem Tapped="ucSkillItem_Tapped"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        
+    </Grid>
+</UserControl>

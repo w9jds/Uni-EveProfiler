@@ -1,0 +1,58 @@
+﻿<UserControl
+    x:Class="EveProfiler.Controls.ucMailItem"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:EveProfiler.Controls"
+    xmlns:Classes="using:EveProfiler.Classes"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" IsTextScaleFactorEnabled="False">
+
+    <UserControl.Resources>
+        <Classes:ByteArrayConverter x:Key="ByteArrayConverter"/>
+        <Classes:DateConverter x:Key="DateConverter"/>
+        <Classes:MailBodyConverter x:Key="MailBodyConverter"/>
+        <Classes:ExtensionConverter x:Key="ExtendedConverter"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid Background="#DDFFFFFF" Margin="10,5">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="{Binding isExpanded, Converter={StaticResource ExtendedConverter}}"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=".45*"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Grid x:Name="gSender" Margin="20,15,15,15" VerticalAlignment="Center">
+                <!--<Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>-->
+                
+                <Image Grid.Row="1" HorizontalAlignment="Stretch" Height="{Binding ActualWidth, ElementName=gSender}" Source="{Binding senderPic, Converter={StaticResource ByteArrayConverter}}"/>
+            </Grid>
+            
+            <Line x:Name="lBreak" Visibility="Collapsed" HorizontalAlignment="Center" Margin="15,0" Grid.ColumnSpan="3" VerticalAlignment="Bottom" X1="0" Y1="0" X2="1" Y2="0" Stretch="Fill" Stroke="Black" StrokeThickness="1" />
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Foreground="Black" Text="{Binding sentDate, Converter={StaticResource DateConverter}}" FontSize="13" Margin="0,0,15,0" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+                <TextBlock Grid.Row="1" Text="{Binding senderName}" Margin="10,5,0,5" FontSize="17" FontWeight="SemiBold" Foreground="Black" HorizontalAlignment="Left"/>
+                <TextBlock Grid.Row="2" Text="{Binding title}" Margin="10,0,20,0" FontSize="13" TextWrapping="Wrap" Foreground="Black" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            </Grid>
+
+            <TextBlock Name="tbMailBody" FontSize="15" Grid.Row="1" Grid.ColumnSpan="2" Margin="20,15" Foreground="Black" TextWrapping="Wrap" Text="{Binding messageBody, Converter={StaticResource MailBodyConverter}}"/>
+        </Grid>
+    </Grid>
+</UserControl>

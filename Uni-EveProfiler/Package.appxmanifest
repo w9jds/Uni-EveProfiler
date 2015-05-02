@@ -7,11 +7,11 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="7a95cb33-55c7-46ab-9ac2-9d35d5858e6c"
+    Name="713929ec-6fef-4c62-8f32-2b50bed26b1c"
     Publisher="CN=Jeremy Shore"
     Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="7a95cb33-55c7-46ab-9ac2-9d35d5858e6c" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="713929ec-6fef-4c62-8f32-2b50bed26b1c" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>Uni-EveProfiler</DisplayName>

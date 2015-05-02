@@ -1,0 +1,36 @@
+﻿<UserControl
+    x:Class="EveProfiler.Controls.ucMail"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:EveProfiler.Controls"
+    xmlns:Controls="using:EveProfiler.Controls"
+    xmlns:Classes="using:EveProfiler.Classes"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" IsTextScaleFactorEnabled="False"
+    Loaded="UserControl_Loaded">
+
+    <UserControl.Resources>
+        <Classes:ByteArrayConverter x:Key="ByteArrayConverter"/>
+        <Classes:DateConverter x:Key="DateConverter"/>
+        <Classes:MailBodyConverter x:Key="MailBodyConverter"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <ListView x:Name="lbHeaders" Background="Transparent" ScrollViewer.VerticalScrollBarVisibility="Hidden">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Controls:ucMailItem Tapped="ucMailItem_Tapped"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+
+        </ListView>
+
+    </Grid>
+</UserControl>

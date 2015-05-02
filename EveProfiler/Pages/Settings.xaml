@@ -1,0 +1,60 @@
+﻿<Page
+    x:Class="EveProfiler.Pages.pSettings"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:EveProfiler.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" IsTextScaleFactorEnabled="False"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton x:Name="abtnSave" Label="Save" Click="abtnSave_Click">
+                <SymbolIcon Symbol="Save"/>
+            </AppBarButton>
+        </CommandBar>
+    </Page.BottomAppBar>
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="120"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel VerticalAlignment="Bottom" Margin="0,0,0,30">
+            <TextBlock HorizontalAlignment="Center" Text="Create and get your Api Keys:"/>
+            <Button HorizontalAlignment="Center" Content="Api Management" Name="btnApi" Tapped="btnApi_Tapped"/>
+        </StackPanel>
+
+        <Grid Name="vCodeRow" Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=".20*"/>
+                <ColumnDefinition Width=".35*"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width=".25*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="1" Margin="10,0" Text="vCode:" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBox Grid.Column="2" Name="tbvCode" VerticalAlignment="Stretch" TextWrapping="Wrap" FontSize="17" TextChanged="tbvCode_TextChanged" />
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=".25*"/>
+                <ColumnDefinition Width=".30*"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width=".25*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="1" Text="KeyId:" Margin="10,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBox Grid.Column="2" Name="tbKeyid" FontSize="17" TextChanged="tbKeyid_TextChanged"/>
+        </Grid>
+
+        <!--<Button HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Row="3" Tap="btnTile_Tap" Content="Create Live Tile" Name="btnTile"/>-->
+
+    </Grid>
+</Page>

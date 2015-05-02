@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>7f3d07ae-ed23-4c08-a341-5fb0b9e2f4cd</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>EveProfiler.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Images\amarr_race.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Images\assets.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Images\caldari_race.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Images\charactersheet.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Images\charisma.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Images\chingy.jpg" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Images\contacts.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Images\evemail.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Images\gallente_race.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Images\intelligence.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Images\memory.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Images\minmatar_race.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Images\perception.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Images\skills.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Images\twitter_circle_color-512.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Images\wallet.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Images\willpower.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Logo.scale-240.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\SmallLogo.scale-240.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\space_background.jpg" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\SplashScreen.scale-240.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Square170x170.scale-240.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\StoreLogo.scale-240.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\WideLogo.scale-240.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\Converters.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\StorageSerialization.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\Selectors.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\TemplateSelector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\ucCharacter.xaml.cs">
+      <DependentUpon>ucCharacter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\ucDrawer.xaml.cs">
+      <DependentUpon>ucDrawer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\ucInfo.xaml.cs">
+      <DependentUpon>ucInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\ucLevel.xaml.cs">
+      <DependentUpon>ucLevel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\ucMail.xaml.cs">
+      <DependentUpon>ucMail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\ucMailItem.xaml.cs">
+      <DependentUpon>ucMailItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\ucSkillItem.xaml.cs">
+      <DependentUpon>ucSkillItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\ucSkills.xaml.cs">
+      <DependentUpon>ucSkills.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\ucUpcomingCalendarEvents.xaml.cs">
+      <DependentUpon>ucUpcomingCalendarEvents.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\ucWallet.xaml.cs">
+      <DependentUpon>ucWallet.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)Controls\ucCharacter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Controls\ucDrawer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Controls\ucInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Controls\ucLevel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Controls\ucMail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Controls\ucMailItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Controls\ucSkillItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Controls\ucSkills.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Controls\ucUpcomingCalendarEvents.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Controls\ucWallet.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="$(MSBuildThisFileDirectory)App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </ApplicationDefinition>
+  </ItemGroup>
+</Project>

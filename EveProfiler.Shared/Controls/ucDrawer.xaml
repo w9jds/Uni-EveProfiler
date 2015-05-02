@@ -1,0 +1,116 @@
+﻿<UserControl
+    x:Class="EveProfiler.Controls.ucDrawer"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:EveProfiler.Controls"
+    xmlns:Classes="using:EveProfiler.Classes"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" IsTextScaleFactorEnabled="False">
+
+    <UserControl.Resources>
+        <Classes:ByteArrayConverter x:Key="ByteArrayConverter"/>
+    </UserControl.Resources>
+
+    <Grid Background="{ThemeResource AppBarBackgroundThemeBrush}" Name="gDrawer">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="150"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+        
+        
+            <Ellipse Width="75" Height="75" HorizontalAlignment="Left" Margin="20 0">
+                <Ellipse.Fill>
+                    <ImageBrush>
+                        <ImageBrush.ImageSource>
+                            <BitmapImage x:Name="imgActiveCharacter" />
+                        </ImageBrush.ImageSource>
+                    </ImageBrush>
+                </Ellipse.Fill>
+            </Ellipse>            
+        </Grid>
+        
+        <ListView Name="lvDrawer" Background="Transparent" Grid.Row="1">
+
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            
+            <ListView.Items>
+                <ListViewItem Tapped="Info_Tapped">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Image Height="40" Width="40" Margin="20, 5" VerticalAlignment="Center" Source="/Assets/Images/charactersheet.png"/>
+                        <TextBlock Grid.Column="2" Text="Character Sheet" Margin="10 0 0 0" FontSize="15" VerticalAlignment="Center"/>
+                    </Grid>
+                </ListViewItem>
+                <ListViewItem Tapped="Mail_Tapped">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Image Height="40" Width="40" Margin="20, 5" Source="/Assets/Images/evemail.png"/>
+                        <TextBlock Grid.Column="2" Text="Mail" FontSize="15" Margin="10 0 0 0" VerticalAlignment="Center"/>
+                    </Grid>
+                </ListViewItem>
+                <ListViewItem Tapped="Skills_Tapped">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Image Height="40" Width="40" Margin="20, 5" Source="/Assets/Images/skills.png"/>
+                        <TextBlock Grid.Column="2" Text="Skills" FontSize="15" Margin="10 0 0 0" VerticalAlignment="Center"/>
+                    </Grid>               
+                </ListViewItem>
+                <!--<ListViewItem Tapped="Wallet_Tapped">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Image Height="40" Width="40" Margin="20, 5" Source="/Assets/Images/wallet_icon.png"/>
+                        <TextBlock Grid.Column="2" Text="Wallet" FontSize="15" Margin="10 0 0 0" VerticalAlignment="Center"/>
+                    </Grid>
+                </ListViewItem>
+                <ListViewItem Tapped="Assets_Tapped">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Image Height="40" Width="40" Margin="20, 5" Source="/Assets/Images/asset_icon.png"/>
+                        <TextBlock Grid.Column="2" Text="Assets" FontSize="15" Margin="10 0 0 0" VerticalAlignment="Center"/>
+                    </Grid>
+                </ListViewItem>
+                <ListViewItem Tapped="Science_Tapped">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Image Height="40" Width="40" Margin="20, 5" Source="/Assets/Images/science_icon.png"/>
+                        <TextBlock Grid.Column="2" Text="" FontSize="15" Margin="10 0 0 0" VerticalAlignment="Center"/>
+                    </Grid>
+                </ListViewItem>
+                <ListViewItem Tapped="UpcomingEvents_Tapped">
+                    <Border Margin="5" Background="#ff242424">
+                        <Image Height="50" Width="50" Margin="6" />
+                    </Border>
+                </ListViewItem>-->
+            </ListView.Items>
+        </ListView>
+    </Grid>
+</UserControl>

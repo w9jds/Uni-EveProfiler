@@ -1,0 +1,45 @@
+﻿<Page
+    x:Class="EveProfiler.Pages.pAbout"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:EveProfiler.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid Margin="0 0 0 40">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        
+        <TextBlock TextWrapping="Wrap" Margin="10" FontSize="15" VerticalAlignment="Center" TextAlignment="Center">
+            This Application is in no way associated with CCP and is created and maintained entirely by a seperate third party.
+            Assets are taken from the static dumps supplied by CCP and data is pulled from the XML Api.
+        </TextBlock>
+        
+        <Image Grid.Row="1" HorizontalAlignment="Center" Source="/Assets/Images/chingy.jpg" Width="150" Height="150" VerticalAlignment="Top"/>
+        
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock Grid.ColumnSpan="3" TextWrapping="Wrap" Margin="10" VerticalAlignment="Top" FontSize="15" TextAlignment="Center">
+                Developed by Chingy Chonga. Any donations or questions should be sent to me in game. You can also find me here:
+            </TextBlock>
+            
+            <Image Grid.Row="1" Grid.Column="1" Height="70" Width="70" VerticalAlignment="Top" Source="/Assets/Images/twitter_circle_color-512.png" Tapped="Twitter_Tapped"/>
+        </Grid>
+        
+
+    </Grid>
+</Page>
