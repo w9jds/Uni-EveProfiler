@@ -1,23 +1,14 @@
-﻿using EveProfiler.BusinessLogic.Character;
-using EveProfiler.BusinessLogic.Eve;
-using EveProfiler.Controls;
+﻿using EveProfiler.BusinessLogic;
+using EveProfiler.BusinessLogic.CharacterAttributes;
 using EveProfiler.DataAccess;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.ApplicationModel.Core;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.Storage;
-using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
@@ -27,14 +18,15 @@ namespace EveProfiler.Pages
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class pCharacterList : Page
+    public sealed partial class CharacterList : Page
     {
-        private ApplicationDataContainer _LocalSettings = ApplicationData.Current.LocalSettings;
+        private ApplicationDataContainer _localSettings = ApplicationData.Current.LocalSettings;
+        private Account _account = new Account();
         private bool isGridViewTap = false;
 
-        public pCharacterList()
+        public CharacterList()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         /// <summary>
@@ -44,106 +36,67 @@ namespace EveProfiler.Pages
         /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (_LocalSettings.Values.ContainsKey("vCode") && _LocalSettings.Values.ContainsKey("keyId"))
-            {
-                if (App.thisAccount == null)
-                    PopulateGrid();
-                else
-                {
-                    gvCharacters.SetBinding(
-                        ListBox.ItemsSourceProperty, new Binding() 
-                        { 
-                            Source = App.thisAccount.CharacterList 
-                        });
-
-                    getCharacterInfo(App.thisAccount);
-                }
-            }
-            else
-            {
-                //new MessageDialog("No Api has been set up!").ShowAsync();
-                Frame.Navigate(typeof(pSettings));
-            }
+            _account = (Account)JsonConvert.DeserializeObject((string)_localSettings.Values["account"]);
+            PopulateGrid();
         }
 
         private void PopulateGrid()
         {
-            Api.getCharacterList(_LocalSettings.Values["vCode"].ToString(), _LocalSettings.Values["keyId"].ToString(), 
-                new Action<BusinessLogic.cEveAccount>(eaResult =>
+            Api.getCharacterList(_account, new Action<List<Character>>(result =>
                 {
-                    App.thisAccount = new BusinessLogic.cEveAccount();
-                    App.thisAccount.CharacterList = eaResult.CharacterList;
+                    _account.Characters = result;
 
-                    Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
-                    {
-                        gvCharacters.SetBinding(ListBox.ItemsSourceProperty, 
-                            new Binding() { Source = App.thisAccount.CharacterList });
-                    }).AsTask().Wait();
+                    characterList.SetBinding(ItemsControl.ItemsSourceProperty,
+                        new Binding() { Source = _account.Characters });
 
-                    getCharacterInfo(eaResult);
+                    getCharacterInfo();
                 }));
         }
 
         private void thisCharacter_OnCharacterNavClicked(object sender, object loadControl)
         {
-            isGridViewTap = true;
+            //isGridViewTap = true;
 
-            cBase thisCharacter = ((ucCharacter)sender).DataContext as cBase;
+            //cBase thisCharacter = ((ucCharacter)sender).DataContext as cBase;
 
-            App.thisAccount.ActiveCharacter = App.thisAccount.CharacterList.IndexOf(thisCharacter);
+            //App.thisAccount.ActiveCharacter = App.thisAccount.CharacterList.IndexOf(thisCharacter);
 
-            Frame.Navigate(typeof(pMain), loadControl);
+            //Frame.Navigate(typeof(pMain), loadControl);
         }
 
-        private void getCharacterInfo(BusinessLogic.cEveAccount eaResult)
+        private void getCharacterInfo()
         {
-            Api.getServerStatus(new Action<ServerStatus>(ssResult => 
+            //Api.getServerStatus(new Action<ServerStatus>(ssResult =>
+            //{
+            //    tbOnlinePlayers.Text = ssResult.onlinePlayers.ToString("##,#");
+            //    if (ssResult.serverOpen)
+            //    {
+            //        tbServerStatus.Text = "Online";
+            //    }
+            //    else
+            //        tbServerStatus.Text = "Offline";
+            //}));
+
+            foreach (Character character in _account.Characters)
             {
-                #pragma warning disable CS4014
-                Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-                {
-                    this.tbOnlinePlayers.Text = ssResult.onlinePlayers.ToString("##,#");
-                    if (ssResult.serverOpen)
+                Api.getCharacterInfo(character, new Action<Info>(result =>
                     {
-                        this.tbServerStatus.Text = "Online";
-                    }
-                    else
-                        this.tbServerStatus.Text = "Offline";
-                });
-                #pragma warning restore CS4014
-            }));
-            
-            foreach (cBase character in eaResult.CharacterList)
-            {
-                Api.getCharacterInfo(character.characterID, _LocalSettings.Values["vCode"].ToString(),
-                    _LocalSettings.Values["keyId"].ToString(), new Action<Info>(iResult =>
-                    {
-                        character.characterInfo = iResult;
+                        character.addAttribute(Enums.CharacterAttributes.Info, result);
                     }));
 
-                Api.getCharacterPortrait(character.characterID, 1024, new Action<byte[]>(baResult =>
-                    {
-                        character.characterImage = baResult;
-                    }));
+                //Api.getSkillInTraining(character.characterID, _LocalSettings.Values["vCode"].ToString(),
+                //    _LocalSettings.Values["keyId"].ToString(), new Action<cSkillInTraining>(sitResult =>
+                //    {
+                //        character.skillInTraining = sitResult;
 
-                Api.getCorporationPortrait(character.corporationID, 256, new Action<byte[]>(baResult =>
-                    {
-                        character.corporationImage = baResult;
-                    }));
-
-                Api.getSkillInTraining(character.characterID, _LocalSettings.Values["vCode"].ToString(),
-                    _LocalSettings.Values["keyId"].ToString(), new Action<cSkillInTraining>(sitResult =>
-                    {
-                        character.skillInTraining = sitResult;
-
-                        if (character.skillInTraining.hasSkillInTraining())
-                        {
-                            Api.getTypeName((int)character.skillInTraining.trainingTypeID, new Action<List<cId>>(sResult =>
-                            {
-                                character.skillInTraining.skillName = sResult[0].name;
-                            }));
-                        }
-                    }));
+                //        if (character.skillInTraining.hasSkillInTraining())
+                //        {
+                //            Api.getTypeName((int)character.skillInTraining.trainingTypeID, new Action<List<cId>>(sResult =>
+                //            {
+                //                character.skillInTraining.skillName = sResult[0].name;
+                //            }));
+                //        }
+                //    }));
             }
         }
 
@@ -163,19 +116,19 @@ namespace EveProfiler.Pages
 
         private void abtnSettings_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(pSettings));
+            Frame.Navigate(typeof(Settings));
         }
 
         private void ucCharacter_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            if (!isGridViewTap)
-            {
-                cBase thisCharacter = ((ucCharacter)sender).DataContext as cBase;
+            //if (!isGridViewTap)
+            //{
+            //    cBase thisCharacter = ((ucCharacter)sender).DataContext as cBase;
 
-                App.thisAccount.ActiveCharacter = App.thisAccount.CharacterList.IndexOf(thisCharacter);
+            //    App.thisAccount.ActiveCharacter = App.thisAccount.CharacterList.IndexOf(thisCharacter);
 
-                Frame.Navigate(typeof(pMain), new ucInfo());
-            }
+            //    Frame.Navigate(typeof(pMain), new ucInfo());
+            //}
         }
 
         private void abtnLiveTile_Click(object sender, RoutedEventArgs e)

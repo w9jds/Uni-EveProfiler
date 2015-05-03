@@ -31,14 +31,15 @@ namespace EveProfiler.BusinessLogic
             }
         }
         public Dictionary<string, string> Keys => _keys;
-
-        public Dictionary<long, Character> Characters = new Dictionary<long, Character>();
+        public List<Character> Characters = new List<Character>();
 
         public void addCharacters(List<Character> characters)
         {
             foreach (Character character in characters)
             {
-                Characters.Add(character.CharacterId, character);
+                character.vCode = vCode;
+                character.keyId = keyId;
+                Characters.Add(character);
             }
         }
     }

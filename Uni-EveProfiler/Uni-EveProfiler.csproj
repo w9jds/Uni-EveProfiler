@@ -139,15 +139,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EveProfiler.DataAccess\EveProfiler.DataAccess.csproj">
+      <Project>{ff535772-41cd-41fd-a108-52f56b3eea44}</Project>
+      <Name>EveProfiler.DataAccess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EveProfiler.Logic\EveProfiler.Logic.csproj">
-      <Project>{c77015f5-2a90-4681-bd99-1206e4853a2d}</Project>
+      <Project>{ac2c0e78-28da-4dfe-967a-7dabbf408428}</Project>
       <Name>EveProfiler.Logic</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <SDKReference Include="WindowsMobile, Version=10.0.0.1">
-      <Name>Microsoft Mobile Extension SDK for Universal App Platform</Name>
-    </SDKReference>
   </ItemGroup>
   <Import Project="..\EveProfiler.Shared\EveProfiler.Shared.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

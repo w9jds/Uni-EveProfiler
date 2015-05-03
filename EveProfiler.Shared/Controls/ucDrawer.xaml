@@ -6,11 +6,8 @@
     xmlns:Classes="using:EveProfiler.Classes"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" IsTextScaleFactorEnabled="False">
+    mc:Ignorable="d">
 
-    <UserControl.Resources>
-        <Classes:ByteArrayConverter x:Key="ByteArrayConverter"/>
-    </UserControl.Resources>
 
     <Grid Background="{ThemeResource AppBarBackgroundThemeBrush}" Name="gDrawer">
         <Grid.RowDefinitions>

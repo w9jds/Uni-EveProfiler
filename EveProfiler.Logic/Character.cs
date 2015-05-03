@@ -1,19 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace EveProfiler.BusinessLogic
 {
-    public class Character : Account, ICallMetadata
+    public class Character : Account, ICallMetadata, INotifyPropertyChanged
     {
-        public long AccountId { get; set; }
+        #region Properties
+
+        private Dictionary<Enums.CharacterAttributes, object> _attributes = new Dictionary<Enums.CharacterAttributes, object>();
+        private Dictionary<long, Logic.Eve.Skill> _skills = new Dictionary<long, Logic.Eve.Skill>();
+
+        //public long AccountId { get; set; }
         public DateTime CachedUntil { get; set; }
         public long CharacterId { get; set; }
         public string CharacterName { get; set; }
         public DateTime LastPulled { get; set; }
+        public Dictionary<Enums.CharacterAttributes, object> Attributes => _attributes;
+        public Dictionary<long, Logic.Eve.Skill> Skills => _skills;
 
-        public Dictionary<string, object> Attributes = new Dictionary<string, object>();
+        public void addAttribute(Enums.CharacterAttributes key, object value)
+        {
+            _attributes.Add(key, value);
+            NotifyPropertyChanged("Attributes");
+        }
+
+        public void addSkill(long key, Logic.Eve.Skill value)
+        {
+            _skills.Add(key, value);
+            NotifyPropertyChanged("Skills");
+        }
+
+        #endregion
+
+        public Dictionary<string, string> getCharacterQuery() => new Dictionary<string, string>()
+        {
+            ["keyId"] = keyId,
+            ["vCode"] = vCode,
+            ["characterID"] = CharacterId.ToString()
+        };
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
     }
 }

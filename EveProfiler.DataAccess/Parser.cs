@@ -1,5 +1,8 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using EveProfiler.BusinessLogic;
+using EveProfiler.BusinessLogic.CharacterAttributes;
+using EveProfiler.Logic.Eve;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -7,201 +10,172 @@ namespace EveProfiler.DataAccess
 {
     public class Parser
     {
-        public static cEveAccount parseCharacterList(string xml)
+        public static List<Character> parseCharacterList(string xml)
         {
             XDocument doc = XDocument.Parse(xml);
 
-            return doc.Descendants().Select(x => new BusinessLogic.cEveAccount
+            return doc.Descendants("row").Select(x => new Character
             {
-                CharacterList = new ObservableCollection<cBase>( 
-                    doc.Descendants("row").Select(z => new cBase 
-                    { 
-                        name = (string) z.Attribute("name") ?? string.Empty,
-                        characterID = (int) z.Attribute("characterID"),
-                        corporationID = (int) z.Attribute("corporationID"),
-                        corporationName = (string) z.Attribute("corporationName") ?? string.Empty,
-                        allianceID = (int) z.Attribute("allianceID"),
-                        allianceName = (string) z.Attribute("allianceName") ?? string.Empty,
-                        factionID = (int) z.Attribute("factionID"),
-                        factionName = (string) z.Attribute("factionName") ?? string.Empty
-                    })),
-                cachedUntil = (DateTime) x.Element("cachedUntil")
-            }).ElementAt(0);
+                CharacterName = (string)x.Attribute("name") ?? string.Empty,
+                CharacterId = (int)x.Attribute("characterID")
+            }).ToList();
 
         }
 
-        //public static Info parseCharacterInfo(string xml)
+        public static Info parseCharacterInfo(string xml)
+        {
+            XDocument doc = XDocument.Parse(xml);
+
+            return doc.Descendants("result").Select(x => new Info
+            {
+                //race = (string)x.Element("race") ?? string.Empty,
+                //bloodline = (string)x.Element("bloodline") ?? string.Empty,
+                AccountBalance = x.Element("accountBalance")?.Value,
+                SkillPoints = (int)x.Element("skillPoints"),
+                ShipName = x.Element("shipName")?.Value,
+                ShipTypeID = (int)x.Element("shipTypeID"),
+                ShipTypeName = x.Element("shipTypeName")?.Value,
+                CorporationID = (int)x.Element("corporationID"),
+                Corporation = x.Element("corporation")?.Value,
+                CorporationDate = (DateTime)x.Element("corporationDate"),
+                Alliance = x.Element("alliance")?.Value,
+                AllianceID = (int?)x.Element("allianceID") ?? null,
+                AllianceDate = (DateTime?)x.Element("allianceDate") ?? null,
+                LastKnownLocation = x.Element("lastKnownLocation")?.Value,
+                SecurityStatus = (double)x.Element("securityStatus")
+            }).ToList().FirstOrDefault();
+
+        }
+
+        public static Character parseCharacterSheet(string xml, Character character)
+        {
+            XDocument doc = XDocument.Parse(xml);
+
+            character.Attributes.Add(Enums.CharacterAttributes.Sheet, doc.Descendants("result").Select(x => new Sheet
+            {
+                Race = x.Element("race")?.Value,
+                DateofBirth = (DateTime)x.Element("DoB"),
+                BloodLine = x.Element("bloodLine")?.Value,
+                Ancestry = x.Element("ancestry")?.Value,
+                Gender = x.Element("gender")?.Value,
+                Balance = (double)x.Element("balance"),
+                FreeRespecs = int.Parse(x.Element("freeRespecs").Value)
+            }).FirstOrDefault());
+
+            List<Skill> skills = doc.Descendants("rowset")
+                .Where(x => x.Attribute("name").Value == "skills")
+                .Elements()
+                .Select(x => new Skill((long)x.Attribute("typeID"))
+                {
+                    Skillpoints = long.Parse(x.Attribute("skillpoints").Value),
+                    Level = int.Parse(x.Attribute("level").Value),
+                    Published = int.Parse(x.Attribute("published").Value)
+                }).ToList();
+
+            foreach (Skill skill in skills)
+            {
+                character.Skills.Add(skill.TypeId, skill);
+            }
+
+            return character;
+        }
+
+        public static Dictionary<long, SkillGroup> parseSkillTree(string xml)
+        {
+            Dictionary<long, SkillGroup> skillGroups = new Dictionary<long, SkillGroup>();
+            XDocument doc = XDocument.Parse(xml);
+
+            List<Skill> skills =
+                doc.Descendants("row")
+                    .Where(x => x.FirstAttribute.Name.LocalName == "typeName")
+                    .Select(x => new Skill((long)x.Attribute("typeID"), getRequiredSkills(x))
+                    {
+                        TypeName = (string)x.Attribute("typeName"),
+                        GroupId = (int)x.Attribute("groupID"),
+                        Published = (int)x.Attribute("published"),
+                        Description = (string)x.Element("description"),
+                        Rank = (int)x.Element("rank"),
+                        //mainAttributes = getSkillAttributes(x.Element("requiredAttributes").Descendants()),
+                    }).ToList();
+
+            foreach (Skill skill in skills)
+            {
+                if (!skillGroups.ContainsKey(skill.GroupId))
+                {
+                    skillGroups.Add(skill.GroupId, new SkillGroup(skill.GroupId)
+                    {
+                        GroupName = doc.Descendants("row")
+                            .Where(x => x.LastAttribute.Name.LocalName == "groupID" && (int)x.LastAttribute == skill.GroupId)
+                            .FirstOrDefault()
+                            .Attribute("groupName").Value,
+                    });
+
+                }
+
+                skillGroups[skill.GroupId].Skills.Add(skill.TypeId, skill);
+            }
+
+            return skillGroups;
+        }
+
+        private static List<RequiredSkill> getRequiredSkills(XElement x) => x.Element("rowset")
+                .Descendants()
+                .Select(y => new RequiredSkill
+                {
+                    TypeId = (long)y.Attribute("typeID"),
+                    SkillLevel = (int)y.Attribute("skillLevel")
+                }).ToList();
+
+        public static Dictionary<long, Mail> parseMailHeaders(string xml)
+        {
+            XDocument doc = XDocument.Parse(xml);
+
+            List<Mail> mail = doc.Descendants("row")
+                .Select(x => new Mail((long)x.Attribute("messageID"), (long)x.Attribute("senderID"))
+                {
+                    SenderName = x.Attribute("senderName").Value,
+                    SentDate = (DateTime)x.Attribute("sentDate"),
+                    Title = x.Attribute("title")?.Value,
+                    ToCharacterIDs = x.Attribute("toCharacterIDs")?.Value,
+                    ToCorpOrAllianceID = x.Attribute("toCorpOrAllianceID")?.Value,
+                    ToListID = x.Attribute("toListID")?.Value
+                }).ToList();
+
+            Dictionary<long, Mail> mails = new Dictionary<long, Mail>();
+
+            foreach(Mail item in mail)
+            {
+                mails.Add(item.MessageID, item);
+            }
+
+            return mails;
+        }
+
+        public static Dictionary<long, Mail> parseMailBodies(string xml, Dictionary<long, Mail> mail)
+        {
+            XDocument doc = XDocument.Parse(xml);
+            
+            foreach(XElement x in doc.Descendants("rowset").Elements())
+            {
+                mail[(long)x.Attribute("messageID")].MessageBody = x.Value;
+            }
+
+            return mail;
+        }
+
+        //public static ObservableCollection<cCalendarEvent> parseUpcomingCalendarEvents(string xml)
         //{
-        //    XDocument doc = XDocument.Parse(xml);
-
-        //    return doc.Descendants("result").Select(x => new Info
-        //    {
-        //        race = (string) x.Element("race") ?? string.Empty,
-        //        bloodline = (string) x.Element("bloodline") ?? string.Empty,
-        //        accountBalance = (string) x.Element("accountBalance") ?? string.Empty,
-        //        skillPoints = (int) x.Element("skillPoints"),
-        //        shipName = (string) x.Element("shipName") ?? string.Empty,
-        //        shipTypeID = (int) x.Element("shipTypeID"),
-        //        shipTypeName = (string) x.Element("shipTypeName") ?? string.Empty,
-        //        corporationID = (int) x.Element("corporationID"),
-        //        corporation = (string) x.Element("corporation") ?? string.Empty,
-        //        corporationDate = (DateTime) x.Element("corporationDate"),
-        //        alliance = (string) x.Element("alliance") ?? string.Empty,
-        //        allianceID = (int?) x.Element("allianceID") ?? null,
-        //        allianceDate = (DateTime?) x.Element("allianceDate") ?? null,
-        //        lastKnownLocation = (string) x.Element("lastKnownLocation") ?? string.Empty,
-        //        securityStatus = (double) x.Element("securityStatus")
-        //    }).ToList().FirstOrDefault();
-
+        //    return new ObservableCollection<cCalendarEvent>();
         //}
 
-        //public static Sheet parseCharacterSheet(string xml)
-        //{
-        //    XDocument doc = XDocument.Parse(xml);
 
-        //    return doc.Descendants("result").Select(x => new Sheet
-        //    {
-        //        race = (string)x.Element("race") ?? string.Empty,
-        //        DoB = (DateTime)x.Element("DoB"),
-        //        bloodLine = (string)x.Element("bloodLine") ?? string.Empty,
-        //        ancestry = (string)x.Element("ancestry") ?? string.Empty,
-        //        gender = (string)x.Element("gender") ?? string.Empty,
-        //        cloneName = (string)x.Element("cloneName") ?? string.Empty,
-        //        cloneSkillPoints = (int)x.Element("cloneSkillPoints"),
-        //        balance = (double)x.Element("balance"),
-        //        attributes = getCharacterAttributes(x.Element("attributes").Descendants()),
-        //        //attributeEnhancers = new ObservableCollection<cAttributeEnhancer>
-        //        //    (
-        //        //        x.Element("attributeEnhancers")
-        //        //            .Elements()
-        //        //            .Select(y => new cAttributeEnhancer
-        //        //            {
-        //        //                attribute = getAttribute(y.Name.LocalName),
-        //        //                augmentatorName = (string)y.Element("augmentatorName"),
-        //        //                augmentatorValue = (int)y.Element("augmentatorValue")
-        //        //            }).ToList()
-        //        //    ),
-        //        skills = new ObservableCollection<cSkill>
-        //            (
-        //                x.Elements("rowset").Where(y => y.Attribute("name").Value == "skills")
-        //                    .Single()
-        //                    .Descendants()
-        //                    .Select(y => new cSkill
-        //                    {
-        //                        typeID = (int)y.Attribute("typeID"),
-        //                        skillpoints = (int)y.Attribute("skillpoints"),
-        //                        level = (int)y.Attribute("level"),
-        //                        published = (int)y.Attribute("published")
-        //                    }).ToList()
-        //            ),
-        //        corporationRolesAtHQ = new ObservableCollection<cRoleId>
-        //            (
-        //                x.Elements("rowset").Where(y => y.Attribute("name").Value == "corporationRolesAtHQ")
-        //                    .Single()
-        //                    .Descendants()
-        //                    .Select(y => new cRoleId
-        //                    {
-        //                        roleID = (string)y.Attribute("roleID") ?? string.Empty,
-        //                        roleName = (string)y.Attribute("roleName") ?? string.Empty
-        //                    }).ToList()
-        //            ),
-        //        corporationRolesAtBase = new ObservableCollection<cRoleId>
-        //            (
-        //                x.Elements("rowset").Where(y => y.Attribute("name").Value == "corporationRolesAtBase")
-        //                    .Single()
-        //                    .Descendants()
-        //                    .Select(y => new cRoleId
-        //                    {
-        //                        roleID = (string)y.Attribute("roleID") ?? string.Empty,
-        //                        roleName = (string)y.Attribute("roleName") ?? string.Empty
-        //                    }).ToList()
-        //            ),
-        //        corporationRolesAtOther = new ObservableCollection<cRoleId>
-        //            (
-        //                x.Elements("rowset").Where(y => y.Attribute("name").Value == "corporationRolesAtOther")
-        //                    .Single()
-        //                    .Descendants()
-        //                    .Select(y => new cRoleId
-        //                    {
-        //                        roleID = (string)y.Attribute("roleID") ?? string.Empty,
-        //                        roleName = (string)y.Attribute("roleName") ?? string.Empty
-        //                    }).ToList()
-        //            ),
-        //        corporationTitles = new ObservableCollection<cTitleId>
-        //            (
-        //                x.Elements("rowset").Where(y => y.Attribute("name").Value == "corporationTitles")
-        //                    .Single()
-        //                    .Descendants()
-        //                    .Select(y => new cTitleId
-        //                    {
-        //                        titleID = (int)y.Attribute("titleID"),
-        //                        titleName = (string)y.Attribute("titleName") ?? string.Empty
-        //                    }).ToList()
-        //            )
-        //    }).FirstOrDefault();
-        //}
 
-        ////public static dynamic Parse(dynamic response, XElement node)
-        ////{
-        ////    if (node.HasElements)
-        ////    {
-        ////        foreach(XElement child in node.Elements())
-        ////        {
-        ////            if (node.HasAttributes && node.FirstAttribute.Name.LocalName == "name")
-        ////            {
-        ////                AddProperty(response, node.FirstAttribute.Name.LocalName, Parse(new ExpandoObject(), child));
-        ////            }
-        ////            else
-        ////            {
-        ////                AddProperty(response, node.Name.LocalName, Parse(new ExpandoObject(), child));
-        ////            }
-        ////        }
-        ////    }
-        ////    else
-        ////    {
-        ////        if (!string.IsNullOrEmpty(node.Value))
-        ////        {
-        ////            if (node.HasAttributes && node.FirstAttribute.Name.LocalName == "name")
-        ////            {
-        ////                AddProperty(response, node.FirstAttribute.Name.LocalName, node.Value);
-        ////            }
-        ////            else
-        ////            {
-        ////                AddProperty(response, node.Name.LocalName, node.Value);
-        ////            }
-        ////        }
-        ////        else
-        ////        {
-        ////            string name = string.Empty;
-        ////            dynamic attributes = new ExpandoObject();
-        ////            foreach(XAttribute attribute in node.Attributes())
-        ////            {
-        ////                if (attribute.Name.LocalName == "name")
-        ////                {
-        ////                    name = attribute.Value;
-        ////                }
-        ////                else
-        ////                {
-        ////                    AddProperty(attributes, attribute.Name.LocalName, attribute.Value);
-        ////                }
-        ////            }
-        ////        }
-        ////    }
 
-        ////    return response;
-        ////}
 
-        ////private static void AddProperty(dynamic parent, string name, object value)
-        ////{
-        ////    if (parent is List<dynamic>)
-        ////    {
-        ////        (parent as List<dynamic>).Add(value);
-        ////    }
-        ////    else
-        ////    {
-        ////        (parent as IDictionary<String, object>)[name] = value;
-        ////    }
-        ////}
+
+
+
+
 
         //private static Enums.Attributes getAttribute(string attribute)
         //{
@@ -240,19 +214,6 @@ namespace EveProfiler.DataAccess
         //    }
         //}
 
-        //private static ObservableCollection<cCharacterAttribute> getCharacterAttributes(IEnumerable<XElement> items)
-        //{
-        //    ObservableCollection<cCharacterAttribute> characterAttributes = new ObservableCollection<cCharacterAttribute>();
-
-        //    foreach (XElement element in items)
-        //        characterAttributes.Add(new cCharacterAttribute
-        //        {
-        //            attribute = getAttribute(element.Name.LocalName),
-        //            basePoints = int.Parse(element.Value)
-        //        });
-
-        //    return characterAttributes;
-        //}
 
         //private static ObservableCollection<cSkillAttribute> getSkillAttributes(IEnumerable<XElement> items)
         //{
@@ -353,59 +314,6 @@ namespace EveProfiler.DataAccess
         //        }));
         //}
 
-        //public static ObservableCollection<cSkillGroup> parseSkillTree(string xml)
-        //{
-        //    HashSet<cSkillGroup> hsSkillGroups = new HashSet<cSkillGroup>();
-        //    XDocument doc = XDocument.Parse(xml);
-
-        //    List<cEVESkill> lSkills =
-        //        doc.Descendants("row")
-        //            .Where(x => x.FirstAttribute.Name.LocalName == "typeName")
-        //            .Select(x => new cEVESkill()
-        //            {
-        //                typeName = (string)x.Attribute("typeName"),
-        //                groupID = (int)x.Attribute("groupID"),
-        //                typeID = (int)x.Attribute("typeID"),
-        //                published = (int)x.Attribute("published"),
-        //                description = (string)x.Element("description"),
-        //                rank = (int)x.Element("rank"),
-        //                mainAttributes = getSkillAttributes(x.Element("requiredAttributes").Descendants()),
-        //                requiredSkills = new ObservableCollection<cRequiredSkill>(
-        //                    x.Element("rowset")
-        //                        .Descendants()
-        //                        .Select(y => new cRequiredSkill {
-        //                            typeID = (int)y.Attribute("typeID"),
-        //                            skillLevel = (int)y.Attribute("skillLevel")
-        //                        })
-        //                )
-        //            }).ToList();
-
-        //    foreach (cEVESkill thisSkill in lSkills)
-        //    {
-        //        List<cSkillGroup> lGroups = hsSkillGroups.Where(x => x.groupID == thisSkill.groupID).ToList();
-
-        //        if (lGroups.Count == 0)
-        //        {
-        //            hsSkillGroups.Add(new cSkillGroup
-        //            {
-        //                groupName = 
-        //                    doc.Descendants("row")
-        //                        .Where(x => x.LastAttribute.Name.LocalName == "groupID" && (int)x.LastAttribute == thisSkill.groupID)
-        //                        .FirstOrDefault()
-        //                        .Attribute("groupName").Value,
-        //                groupID = thisSkill.groupID,
-        //                groupSkills = new ObservableCollection<cEVESkill> { thisSkill }
-        //            });
-        //        }
-        //        else
-        //        {
-        //            lGroups.SingleOrDefault().groupSkills.Add(thisSkill);      
-        //        }
-        //    }
-
-        //    return new ObservableCollection<cSkillGroup>(hsSkillGroups.ToList());
-        //}
-
         //public static cSkillInTraining parseSkillInTraining(string xml)
         //{
         //    XDocument doc = XDocument.Parse(xml);
@@ -455,34 +363,6 @@ namespace EveProfiler.DataAccess
         //        onlinePlayers = (int)x.Element("onlinePlayers"),
         //        serverOpen = (bool)x.Element("serverOpen")
         //    }).SingleOrDefault();
-        //}
-
-        //public static ObservableCollection<cMailHeaderItem> parseMailHeaders(string xml)
-        //{
-        //    XDocument doc = XDocument.Parse(xml);
-
-        //    return new ObservableCollection<cMailHeaderItem>(doc.Descendants("row").Select(y => new cMailHeaderItem
-        //        {
-        //            messageID = (int) y.Attribute("messageID"),
-        //            senderID = (int) y.Attribute("senderID"),
-        //            sentDate = (DateTime) y.Attribute("sentDate"),
-        //            title = (string) y.Attribute("title") ?? string.Empty,
-        //            toCharacterIDs = (string) y.Attribute("toCharacterIDs") ?? string.Empty,
-        //            toCorpOrAllianceID = (string) y.Attribute("toCorpOrAllianceID") ?? string.Empty,
-        //            toListID = (string) y.Attribute("toListID") ?? string.Empty
-        //        }));
-        //}
-
-        //public static string parseMailBody(string xml)
-        //{
-        //    XDocument doc = XDocument.Parse(xml);
-
-        //    return (string)doc.Descendants("rowset").ElementAt(0);
-        //}
-
-        //public static ObservableCollection<cCalendarEvent> parseUpcomingCalendarEvents(string xml)
-        //{
-        //    return new ObservableCollection<cCalendarEvent>();
         //}
     }
 }

@@ -3,9 +3,11 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 
 #if WINDOWS_PHONE_APP
-    using Windows.Phone.UI.Input;
+using Windows.Phone.UI.Input;
+
 #endif
 
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
@@ -20,6 +22,7 @@ namespace EveProfiler
     /// </summary>
     public sealed partial class App : Application
     {
+        private ApplicationDataContainer _localSettings = ApplicationData.Current.LocalSettings;
         private TransitionCollection transitions;
 
         /// <summary>
@@ -28,14 +31,16 @@ namespace EveProfiler
         /// </summary>
         public App()
         {
-            this.InitializeComponent();
-            this.Suspending += this.OnSuspending;
-
-#if WINDOWS_PHONE_APP
-            HardwareButtons.BackPressed += HardwareButtons_BackPressed;
-#endif
+            InitializeComponent();
+            Suspending += OnSuspending;
         }
 
+#if WINDOWS_PHONE_APP
+        private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
+        {
+            goBack();
+        }
+#endif
 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
@@ -47,19 +52,20 @@ namespace EveProfiler
         {
 
 #if WINDOWS_UAP
-            Windows.UI.Core.SystemNavigationManager.GetForCurrentView().BackRequested += App_BackRequested;
+            //Windows.UI.Core.SystemNavigationManager.GetForCurrentView().BackRequested += Back_Requested;
+#endif
+#if WINDOWS_PHONE_APP
+            HardwareButtons.BackPressed += HardwareButtons_BackPressed;
 #endif
 
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
             {
-                this.DebugSettings.EnableFrameRateCounter = true;
+                DebugSettings.EnableFrameRateCounter = true;
             }
 #endif
 
             Frame rootFrame = Window.Current.Content as Frame;
-
-            
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
@@ -91,23 +97,35 @@ namespace EveProfiler
                 // Removes the turnstile navigation for startup.
                 if (rootFrame.ContentTransitions != null)
                 {
-                    this.transitions = new TransitionCollection();
+                    transitions = new TransitionCollection();
                     foreach (var c in rootFrame.ContentTransitions)
                     {
-                        this.transitions.Add(c);
+                        transitions.Add(c);
                     }
                 }
 
                 rootFrame.ContentTransitions = null;
-                rootFrame.Navigated += this.RootFrame_FirstNavigated;
+                rootFrame.Navigated += RootFrame_FirstNavigated;
 
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                if (!rootFrame.Navigate(typeof(Pages.pCharacterList), e.Arguments))
+#if WINDOWS_PHONE_APP
+                if (_localSettings.Values.ContainsKey("account"))
                 {
-                    throw new Exception("Failed to create initial page");
+                    if (!rootFrame.Navigate(typeof(Pages.CharacterList), e.Arguments))
+                    {
+                        throw new Exception("Failed to create initial page");
+                    }
                 }
+                else
+                {
+                    if (!rootFrame.Navigate(typeof(Pages.Settings), e.Arguments))
+                    {
+                        throw new Exception("Failed to create initial page");
+                    }
+                }
+#endif
             }
 
             // Ensure the current window is active
@@ -122,32 +140,32 @@ namespace EveProfiler
         private void RootFrame_FirstNavigated(object sender, NavigationEventArgs e)
         {
             var rootFrame = sender as Frame;
-            rootFrame.ContentTransitions = this.transitions ?? new TransitionCollection() { new NavigationThemeTransition() };
-            rootFrame.Navigated -= this.RootFrame_FirstNavigated;
+            rootFrame.ContentTransitions = transitions ?? new TransitionCollection() { new NavigationThemeTransition() };
+            rootFrame.Navigated -= RootFrame_FirstNavigated;
         }
 
-        private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
-        {
-            e.Handled = goBack();
-        }
+        //private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
+        //{
+        //    e.Handled = goBack();
+        //}
 
         private bool goBack()
         {
             Frame thisFrame = Window.Current.Content as Frame;
 
-            if (!(thisFrame.Content is Pages.pCharacterList))
-            {
-                //CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-                //{
-                //    thisFrame.Navigate(typeof(Pages.pCharacterList));
-                //});
+            //if (!(thisFrame.Content is Pages.pCharacterList))
+            //{
+            //    //CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            //    //{
+            //    //    thisFrame.Navigate(typeof(Pages.pCharacterList));
+            //    //});
 
-                if (thisFrame.CanGoBack)
-                {
-                    thisFrame.GoBack();
-                    return true;
-                }
-            }
+            //    if (thisFrame.CanGoBack)
+            //    {
+            //        thisFrame.GoBack();
+            //        return true;
+            //    }
+            //}
 
             return false;
         }

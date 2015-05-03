@@ -1,6 +1,4 @@
-﻿using EveProfiler.BusinessLogic.Character;
-using EveProfiler.DataAccess;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using Windows.Storage;
 using Windows.UI.Xaml;
@@ -13,7 +11,7 @@ namespace EveProfiler.Controls
     public sealed partial class ucWallet : UserControl
     {
         private ApplicationDataContainer _LocalSettings = ApplicationData.Current.LocalSettings;
-        private cBase _ActiveCharacter = App.thisAccount.getActiveCharacter();
+        //private cBase _ActiveCharacter = App.thisAccount.getActiveCharacter();
 
         public ucWallet()
         {
@@ -22,11 +20,11 @@ namespace EveProfiler.Controls
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            cEveProfiler.getWalletJournal(_LocalSettings.Values["keyId"].ToString(), _LocalSettings.Values["vCode"].ToString(),
-                _ActiveCharacter.characterID, 2560, new Action<ObservableCollection<cWalletJournalItem>>(csResult =>
-                {
+            //cEveProfiler.getWalletJournal(_LocalSettings.Values["keyId"].ToString(), _LocalSettings.Values["vCode"].ToString(),
+            //    _ActiveCharacter.characterID, 2560, new Action<ObservableCollection<cWalletJournalItem>>(csResult =>
+            //    {
 
-                }));
+            //    }));
         }
 
 

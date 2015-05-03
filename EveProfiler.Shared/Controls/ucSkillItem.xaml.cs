@@ -1,6 +1,4 @@
-﻿using EveProfiler.BusinessLogic.Character;
-using EveProfiler.BusinessLogic.Eve;
-using Windows.UI.Xaml;
+﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 
@@ -12,7 +10,7 @@ namespace EveProfiler.Controls
     public sealed partial class ucSkillItem : UserControl
     {
         private double _threshold = 0.1;
-        private cBase _ActiveCharacter = App.thisAccount.getActiveCharacter();
+        //private cBase _ActiveCharacter = App.thisAccount.getActiveCharacter();
 
         public ucSkillItem()
         {
@@ -21,18 +19,18 @@ namespace EveProfiler.Controls
 
         public void extendItem()
         {
-            cEVESkill thisSkill = DataContext as cEVESkill;
+            //cEVESkill thisSkill = DataContext as cEVESkill;
 
-            if (thisSkill.isExpanded)
-            {
-                thisSkill.isExpanded = false;
-                lBreak.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                lBreak.Visibility = Visibility.Visible;
-                thisSkill.isExpanded = true;
-            }
+            //if (thisSkill.isExpanded)
+            //{
+            //    thisSkill.isExpanded = false;
+            //    lBreak.Visibility = Visibility.Collapsed;
+            //}
+            //else
+            //{
+            //    lBreak.Visibility = Visibility.Visible;
+            //    thisSkill.isExpanded = true;
+            //}
                 
         }
 

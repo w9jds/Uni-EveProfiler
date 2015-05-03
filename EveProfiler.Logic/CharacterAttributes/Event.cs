@@ -15,8 +15,14 @@ namespace EveProfiler.BusinessLogic.CharacterAttributes
         private int _duration;
         private string _eventText;
 
-        public int EventId { get; set; }
-        public int OwnerId { get; set; }
+        public Event (long eventId, long ownerId)
+        {
+            EventId = eventId;
+            OwnerId = ownerId;
+        }
+
+        public long EventId { get; }
+        public long OwnerId { get; }
         public string OwnerName
         {
             get { return _ownerName; }

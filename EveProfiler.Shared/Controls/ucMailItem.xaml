@@ -6,13 +6,13 @@
     xmlns:Classes="using:EveProfiler.Classes"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" IsTextScaleFactorEnabled="False">
+    mc:Ignorable="d">
 
     <UserControl.Resources>
-        <Classes:ByteArrayConverter x:Key="ByteArrayConverter"/>
         <Classes:DateConverter x:Key="DateConverter"/>
         <Classes:MailBodyConverter x:Key="MailBodyConverter"/>
         <Classes:ExtensionConverter x:Key="ExtendedConverter"/>
+        <Classes:CharacterImageUriConverter x:Key="CharacterImageUriConverter"/>
     </UserControl.Resources>
 
     <Grid>
@@ -27,16 +27,16 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <Grid x:Name="gSender" Margin="20,15,15,15" VerticalAlignment="Center">
-                <!--<Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>-->
-                
-                <Image Grid.Row="1" HorizontalAlignment="Stretch" Height="{Binding ActualWidth, ElementName=gSender}" Source="{Binding senderPic, Converter={StaticResource ByteArrayConverter}}"/>
-            </Grid>
-            
+            <Ellipse Width="75" Height="75" HorizontalAlignment="Left" Margin="20,15,15,15">
+                <Ellipse.Fill>
+                    <ImageBrush>
+                        <ImageBrush.ImageSource>
+                            <BitmapImage UriSource="{Binding SenderId, Converter={StaticResource CharacterImageUriConverter}}" />
+                        </ImageBrush.ImageSource>
+                    </ImageBrush>
+                </Ellipse.Fill>
+            </Ellipse>
+
             <Line x:Name="lBreak" Visibility="Collapsed" HorizontalAlignment="Center" Margin="15,0" Grid.ColumnSpan="3" VerticalAlignment="Bottom" X1="0" Y1="0" X2="1" Y2="0" Stretch="Fill" Stroke="Black" StrokeThickness="1" />
 
             <Grid Grid.Column="1">

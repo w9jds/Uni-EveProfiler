@@ -1,14 +1,10 @@
-﻿using EveProfiler.BusinessLogic.Character;
-using EveProfiler.BusinessLogic.Eve;
-using EveProfiler.DataAccess;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
@@ -17,7 +13,7 @@ namespace EveProfiler.Controls
 {
     public sealed partial class ucSkills : UserControl
     {
-        private cBase _ActiveCharacter = App.thisAccount.getActiveCharacter();
+        //private cBase _ActiveCharacter = App.thisAccount.getActiveCharacter();
         private ApplicationDataContainer _LocalSettings = ApplicationData.Current.LocalSettings;
 
         public ucSkills()
@@ -66,83 +62,83 @@ namespace EveProfiler.Controls
         {
             pbProgress.IsIndeterminate = true;
 
-            if (_ActiveCharacter.characterSheet == null)
-            {
-                cEveProfiler.getCharacterSheet(_ActiveCharacter.characterID, _LocalSettings.Values["vCode"].ToString(),
-                    _LocalSettings.Values["keyId"].ToString(), new Action<Sheet>(csResult =>
-                    {
-                        _ActiveCharacter.characterSheet = csResult;
+            //if (_ActiveCharacter.characterSheet == null)
+            //{
+            //    cEveProfiler.getCharacterSheet(_ActiveCharacter.characterID, _LocalSettings.Values["vCode"].ToString(),
+            //        _LocalSettings.Values["keyId"].ToString(), new Action<Sheet>(csResult =>
+            //        {
+            //            _ActiveCharacter.characterSheet = csResult;
 
-                        #pragma warning disable CS4014
-                        Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-                        {
-                            LoadAllSkills();
-                        });
-                        #pragma warning restore CS4014
-                    }));
-            }
-            else
-            {
-                LoadAllSkills();
-            }
+            //            #pragma warning disable CS4014
+            //            Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            //            {
+            //                LoadAllSkills();
+            //            });
+            //            #pragma warning restore CS4014
+            //        }));
+            //}
+            //else
+            //{
+            //    LoadAllSkills();
+            //}
         }
 
         private async void LoadAllSkills()
         {
             pbProgress.IsIndeterminate = true;
 
-            if (_ActiveCharacter.allSkills == null)
-            {
-                try
-                {
-                    StorageFile CheckFile = await ApplicationData.Current.LocalFolder.GetFileAsync("skillTree");
-                    Classes.StorageSerialization.ReadFileAsync(typeof(ObservableCollection<cSkillGroup>), "skillTree", 
-                        new Action<object>((oResult) =>
-                        {
-                            _ActiveCharacter.allSkills = oResult as ObservableCollection<cSkillGroup>;
+            //if (_ActiveCharacter.allSkills == null)
+            //{
+            //    try
+            //    {
+            //        StorageFile CheckFile = await ApplicationData.Current.LocalFolder.GetFileAsync("skillTree");
+            //        Classes.StorageSerialization.ReadFileAsync(typeof(ObservableCollection<cSkillGroup>), "skillTree", 
+            //            new Action<object>((oResult) =>
+            //            {
+            //                _ActiveCharacter.allSkills = oResult as ObservableCollection<cSkillGroup>;
 
-                            #pragma warning disable CS4014
-                            Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-                            {
-                                pbProgress.IsIndeterminate = false;
-                                cvsGroupSkills.Source = _ActiveCharacter.allSkills;
-                            });
-                            #pragma warning restore CS4014
-                        }));
-                }
-                catch (FileNotFoundException)
-                {
-                    cEveProfiler.getSkillTree(new Action<ObservableCollection<cSkillGroup>>(ocResult =>
-                    {
-                        //alphabetize the group by name
-                        ocResult = new ObservableCollection<cSkillGroup>(
-                            ocResult.OrderBy(x => x.groupName).ToList());
-                            //(from x in ocResult orderby x.groupName select x).ToList());
+            //                #pragma warning disable CS4014
+            //                Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            //                {
+            //                    pbProgress.IsIndeterminate = false;
+            //                    cvsGroupSkills.Source = _ActiveCharacter.allSkills;
+            //                });
+            //                #pragma warning restore CS4014
+            //            }));
+            //    }
+            //    catch (FileNotFoundException)
+            //    {
+            //        cEveProfiler.getSkillTree(new Action<ObservableCollection<cSkillGroup>>(ocResult =>
+            //        {
+            //            //alphabetize the group by name
+            //            ocResult = new ObservableCollection<cSkillGroup>(
+            //                ocResult.OrderBy(x => x.groupName).ToList());
+            //                //(from x in ocResult orderby x.groupName select x).ToList());
 
-                        //go through all groups and alphabetize all the skills in each group
-                        foreach (cSkillGroup skillGroup in ocResult)
-                            skillGroup.groupSkills = new ObservableCollection<cEVESkill>((from x in skillGroup.groupSkills orderby x.typeName select x).ToList());
+            //            //go through all groups and alphabetize all the skills in each group
+            //            foreach (cSkillGroup skillGroup in ocResult)
+            //                skillGroup.groupSkills = new ObservableCollection<cEVESkill>((from x in skillGroup.groupSkills orderby x.typeName select x).ToList());
 
-                        //store the skill tree to save time next time.
-                        Classes.StorageSerialization.WriteFileAsync(typeof(ObservableCollection<cSkillGroup>), "skillTree", ocResult);
+            //            //store the skill tree to save time next time.
+            //            Classes.StorageSerialization.WriteFileAsync(typeof(ObservableCollection<cSkillGroup>), "skillTree", ocResult);
 
-                        _ActiveCharacter.allSkills = ocResult;
+            //            _ActiveCharacter.allSkills = ocResult;
 
-                        #pragma warning disable CS4014
-                        Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-                        {
-                            pbProgress.IsIndeterminate = false;
-                            cvsGroupSkills.Source = _ActiveCharacter.allSkills;
-                        });
-                        #pragma warning restore CS4014
-                    }));
-                }
-            }
-            else
-            {
-                pbProgress.IsIndeterminate = false;
-                cvsGroupSkills.Source = _ActiveCharacter.allSkills;
-            }
+            //            #pragma warning disable CS4014
+            //            Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            //            {
+            //                pbProgress.IsIndeterminate = false;
+            //                cvsGroupSkills.Source = _ActiveCharacter.allSkills;
+            //            });
+            //            #pragma warning restore CS4014
+            //        }));
+            //    }
+            //}
+            //else
+            //{
+            //    pbProgress.IsIndeterminate = false;
+            //    cvsGroupSkills.Source = _ActiveCharacter.allSkills;
+            //}
         }
 
         private void ucSkillItem_Tapped(object sender, TappedRoutedEventArgs e)

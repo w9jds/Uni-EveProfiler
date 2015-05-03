@@ -8,12 +8,20 @@ namespace EveProfiler.BusinessLogic
 {
     public class Enums
     {
-        public enum SkillAttibutePriority
+        public enum CharacterAttributes
         {
-            NA = -1,
-            Primary = 0,
-            Secondary = 1
+            Info,
+            Sheet,
+            Mail,
+            Wallet
         }
+
+        //public enum SkillAttibutePriority
+        //{
+        //    NA = -1,
+        //    Primary = 0,
+        //    Secondary = 1
+        //}
 
         public enum EventResponses
         {

@@ -7,16 +7,16 @@ using Windows.UI.Xaml.Input;
 
 namespace EveProfiler.Controls
 {
-    public sealed partial class ucCharacter : UserControl
+    public sealed partial class CharacterCard : UserControl
     {
         public delegate void CharacterNavEventArg(object sender, object loadControl);
         public event CharacterNavEventArg OnCharacterNavClicked;
 
         private Point _TopInitialPoint;
 
-        public ucCharacter()
+        public CharacterCard()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         //private void gCardTop_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
@@ -32,15 +32,15 @@ namespace EveProfiler.Controls
         //        Flip2Front.Begin();
         //}
 
-        private void Mail_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            //OnCharacterNavClicked.Invoke(this, new ucMail());
-        }
+        //private void Mail_Tapped(object sender, TappedRoutedEventArgs e)
+        //{
+        //    OnCharacterNavClicked.Invoke(this, new ucMail());
+        //}
 
-        private void Skill_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            //OnCharacterNavClicked.Invoke(this, new ucSkills());
-        }
+        //private void Skill_Tapped(object sender, TappedRoutedEventArgs e)
+        //{
+        //    OnCharacterNavClicked.Invoke(this, new ucSkills());
+        //}
 
         //private void gCardTop_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         //{

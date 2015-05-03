@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EveProfiler.BusinessLogic.CharacterAttributes
 {
@@ -13,11 +9,16 @@ namespace EveProfiler.BusinessLogic.CharacterAttributes
         private DateTime _sentDate;
         private string _title;
         private string _messageBody;
-        //private byte[] _SenderPic;
         //private bool _Extended;
 
-        public int MessageID { get; set; }
-        public int SenderID { get; set; }
+        public Mail(long messageId, long senderId)
+        {
+            MessageID = messageId;
+            SenderID = senderId;
+        }
+
+        public long MessageID { get; }
+        public long SenderID { get; }
         public string SenderName
         {
             get { return _senderName; }

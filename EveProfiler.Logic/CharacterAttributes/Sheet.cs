@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EveProfiler.BusinessLogic.CharacterAttributes
 {
@@ -15,7 +11,14 @@ namespace EveProfiler.BusinessLogic.CharacterAttributes
         private string _gender;
         private string _race;
         private double _balance;
+        private int _freeRespecs;
+        private int _intelligence;
+        private int _memory;
+        private int _charisma;
+        private int _perception;
+        private int _willpower;
 
+        public long HomeStationId { get; set; }
         public DateTime DateofBirth
         {
             get { return _dateOfBirth; }
@@ -68,6 +71,18 @@ namespace EveProfiler.BusinessLogic.CharacterAttributes
             {
                 _balance = value;
                 NotifyPropertyChanged("Balance");
+            }
+        }
+        public int FreeRespecs
+        {
+            get
+            {
+                return FreeRespecs;
+            }
+            set
+            {
+                _freeRespecs = value;
+                NotifyPropertyChanged("FreeRespecs");
             }
         }
 

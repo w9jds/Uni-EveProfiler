@@ -124,18 +124,23 @@
     <None Include="Package.StoreAssociation.xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\EveProfiler.DataAccess\EveProfiler.DataAccess.csproj">
-      <Project>{d337cf04-ac16-4359-bc1c-bc3ce1d4b886}</Project>
+      <Project>{ff535772-41cd-41fd-a108-52f56b3eea44}</Project>
       <Name>EveProfiler.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EveProfiler.Logic\EveProfiler.Logic.csproj">
+      <Project>{ac2c0e78-28da-4dfe-967a-7dabbf408428}</Project>
+      <Name>EveProfiler.Logic</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="HtmlAgilityPack-PCL">
-      <HintPath>..\packages\HtmlAgilityPack-PCL.1.4.6\lib\HtmlAgilityPack-PCL.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1-beta2\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="..\EveProfiler.Shared\EveProfiler.Shared.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">

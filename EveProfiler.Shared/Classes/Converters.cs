@@ -1,9 +1,7 @@
-﻿using HtmlAgilityPack;
+﻿using EveProfiler.BusinessLogic.CharacterAttributes;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
 using Windows.Security.Cryptography;
 using Windows.Storage.Streams;
@@ -13,39 +11,50 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace EveProfiler.Classes
 {
-    public class ByteArrayConverter : IValueConverter
+    //public class ByteArrayConverter : IValueConverter
+    //{
+    //    // This converts the DateTime object to the string to display.
+    //    public object Convert(object value, Type targetType, object parameter, string language)
+    //    {
+    //        if (value != null && value is byte[])
+    //        {
+    //            byte[] baImage = (byte[])value;
+
+    //            BitmapImage biImage = new BitmapImage();
+
+    //            InMemoryRandomAccessStream imraStream = CreateStream(baImage).Result;
+    //            imraStream.Seek(0);
+
+    //            biImage.SetSource(imraStream);
+    //            return biImage;
+    //        }
+
+    //        return null;
+    //    }
+
+    //    // No need to implement converting back on a one-way binding 
+    //    public object ConvertBack(object value, Type targetType, object parameter, string language)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+
+    //    private async Task<InMemoryRandomAccessStream> CreateStream(byte[] baImage)
+    //    {
+    //        InMemoryRandomAccessStream imraStream = new InMemoryRandomAccessStream();
+    //        await imraStream.WriteAsync(CryptographicBuffer.CreateFromByteArray(baImage));
+
+    //        return imraStream;
+    //    }
+    //}
+
+    public class CharacterImageUriConverter : IValueConverter
     {
-        // This converts the DateTime object to the string to display.
-        public object Convert(object value, Type targetType, object parameter, string language)
-        {
-            if (value != null && value is byte[])
-            {
-                byte[] baImage = (byte[])value;
-
-                BitmapImage biImage = new BitmapImage();
-
-                InMemoryRandomAccessStream imraStream = CreateStream(baImage).Result;
-                imraStream.Seek(0);
-
-                biImage.SetSource(imraStream);
-                return biImage;
-            }
-
-            return null;
-        }
+        public object Convert(object value, Type targetType, object parameter, string language) => $"https://image.eveonline.com/Character/{value}_256.jpg";
 
         // No need to implement converting back on a one-way binding 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
             throw new NotImplementedException();
-        }
-
-        private async Task<InMemoryRandomAccessStream> CreateStream(byte[] baImage)
-        {
-            InMemoryRandomAccessStream imraStream = new InMemoryRandomAccessStream();
-            await imraStream.WriteAsync(CryptographicBuffer.CreateFromByteArray(baImage));
-
-            return imraStream;
         }
     }
 
@@ -74,7 +83,7 @@ namespace EveProfiler.Classes
             if (value != null)
             {
                 Sheet thisCharacter = value as Sheet;
-                return $"{thisCharacter.gender} - {thisCharacter.race} - {thisCharacter.bloodLine} - {thisCharacter.ancestry}";
+                return $"{thisCharacter.Gender} - {thisCharacter.Race} - {thisCharacter.BloodLine} - {thisCharacter.Ancestry}";
             }
 
             return null;
@@ -111,7 +120,7 @@ namespace EveProfiler.Classes
             if (value != null)
             {
                 Info characterInfo = value as Info;
-                return $"{characterInfo.shipTypeName} [{characterInfo.shipName}]";
+                return $"{characterInfo.ShipTypeName} [{characterInfo.ShipName}]";
             }
             return null;
         }
@@ -233,16 +242,16 @@ namespace EveProfiler.Classes
     {
         public object Convert(object value, Type targetType, object parameter, string culture)
         {
-            HtmlDocument doc;
-            ObservableCollection<cTitleId> ocTitles = value as ObservableCollection<cTitleId>;
+            //HtmlDocument doc;
+            //ObservableCollection<cTitleId> ocTitles = value as ObservableCollection<cTitleId>;
 
-            if (ocTitles.Count > 0)
-            {
-                doc = new HtmlDocument();
-                doc.LoadHtml(ocTitles[0].titleName);
-                return doc.DocumentNode.InnerText;
-            }
-            else
+            //if (ocTitles.Count > 0)
+            //{
+            //    doc = new HtmlDocument();
+            //    doc.LoadHtml(ocTitles[0].titleName);
+            //    return doc.DocumentNode.InnerText;
+            //}
+            //else
                 return string.Empty;
 
             
@@ -256,10 +265,7 @@ namespace EveProfiler.Classes
 
     public class DateTime2DateConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, string culture)
-        {
-            return ((DateTime)value).ToString("d");
-        }
+        public object Convert(object value, Type targetType, object parameter, string culture) => ((DateTime)value).ToString("d");
 
         public object ConvertBack(object value, Type targetType, object parameter, string culture)
         {
@@ -271,20 +277,20 @@ namespace EveProfiler.Classes
     {
         public object Convert(object value, Type targetType, object parameter, string culture)
         {
-            HtmlDocument doc;
+            //HtmlDocument doc;
 
-            if (value != null)
-            {
-                string sHtml = (string)value;
+            //if (value != null)
+            //{
+            //    string sHtml = (string)value;
 
-                sHtml = sHtml.Replace("<br>", "\r\n");
+            //    sHtml = sHtml.Replace("<br>", "\r\n");
 
-                doc = new HtmlDocument();
-                doc.LoadHtml(sHtml);
-                string test = doc.DocumentNode.InnerText;
-                return doc.DocumentNode.InnerText;
-            }
-            else
+            //    doc = new HtmlDocument();
+            //    doc.LoadHtml(sHtml);
+            //    string test = doc.DocumentNode.InnerText;
+            //    return doc.DocumentNode.InnerText;
+            //}
+            //else
                 return string.Empty;
 
 
@@ -298,10 +304,7 @@ namespace EveProfiler.Classes
 
     public class AttributeConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, string culture)
-        {
-            return (int)value + " points";
-        }
+        public object Convert(object value, Type targetType, object parameter, string culture) => (int)value + " points";
 
         public object ConvertBack(object value, Type targetType, object parameter, string culture)
         {
@@ -313,10 +316,12 @@ namespace EveProfiler.Classes
     {
         public object Convert(object value, Type targetType, object parameter, string culture)
         {
-            List<cEVESkill> injectedSkills = new HashSet<cEVESkill>(value as ObservableCollection<cEVESkill>)
-                .Where(x => x.characterSkill != null).ToList();
+            //List<cEVESkill> injectedSkills = new HashSet<cEVESkill>(value as ObservableCollection<cEVESkill>)
+            //    .Where(x => x.characterSkill != null).ToList();
 
-            return string.Format("{0} of {1} Skills", injectedSkills.Count, ((ObservableCollection<cEVESkill>)value).Count);
+            //return string.Format("{0} of {1} Skills", injectedSkills.Count, ((ObservableCollection<cEVESkill>)value).Count);
+
+            return string.Empty;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string culture)
@@ -381,24 +386,24 @@ namespace EveProfiler.Classes
     {
         public object Convert(object value, Type targetType, object parameter, string culture)
         {
-            cEVESkill thisSkill = value as cEVESkill;
+            //cEVESkill thisSkill = value as cEVESkill;
 
-            if (thisSkill.characterSkill != null)
-            {
-                if (thisSkill.characterSkill.level == 5)
-                    return 100;
+            //if (thisSkill.characterSkill != null)
+            //{
+            //    if (thisSkill.characterSkill.level == 5)
+            //        return 100;
 
-                if (thisSkill.characterSkill.skillpoints > thisSkill.skillPointsPerLevel[thisSkill.characterSkill.level - 1])
-                {
-                    double pointsDifferent = thisSkill.characterSkill.skillpoints - thisSkill.skillPointsPerLevel[thisSkill.characterSkill.level - 1];
-                    double pointsToNextLevel = thisSkill.skillPointsPerLevel[thisSkill.characterSkill.level] - thisSkill.skillPointsPerLevel[thisSkill.characterSkill.level - 1];
+            //    if (thisSkill.characterSkill.skillpoints > thisSkill.skillPointsPerLevel[thisSkill.characterSkill.level - 1])
+            //    {
+            //        double pointsDifferent = thisSkill.characterSkill.skillpoints - thisSkill.skillPointsPerLevel[thisSkill.characterSkill.level - 1];
+            //        double pointsToNextLevel = thisSkill.skillPointsPerLevel[thisSkill.characterSkill.level] - thisSkill.skillPointsPerLevel[thisSkill.characterSkill.level - 1];
 
-                    return (pointsDifferent / pointsToNextLevel) * 100;
-                }
-                else
-                    return 0;
-            }
-            else
+            //        return (pointsDifferent / pointsToNextLevel) * 100;
+            //    }
+            //    else
+            //        return 0;
+            //}
+            //else
                 return 0;
         }
 
@@ -412,24 +417,24 @@ namespace EveProfiler.Classes
     {
         public object Convert(object value, Type targetType, object parameter, string culture)
         {
-            if (value != null)
-            {
-                switch ((Enums.Attributes)value)
-                {
-                    case Enums.Attributes.Intelligence:
-                        return new BitmapImage(new Uri("ms-appx:///Assets/Images/intelligence.png", UriKind.Absolute));
-                    case Enums.Attributes.Charisma:
-                        return new BitmapImage(new Uri("ms-appx:///Assets/Images/charisma.png", UriKind.Absolute));
-                    case Enums.Attributes.Memory:
-                        return new BitmapImage(new Uri("ms-appx:///Assets/Images/memory.png", UriKind.Absolute));
-                    case Enums.Attributes.Perception:
-                        return new BitmapImage(new Uri("ms-appx:///Assets/Images/perception.png", UriKind.Absolute));
-                    case Enums.Attributes.Willpower:
-                        return new BitmapImage(new Uri("ms-appx:///Assets/Images/willpower.png", UriKind.Absolute));
-                    default:
-                        return null;
-                }
-            }
+            //if (value != null)
+            //{
+            //    switch ((Enums.Attributes)value)
+            //    {
+            //        case Enums.Attributes.Intelligence:
+            //            return new BitmapImage(new Uri("ms-appx:///Assets/Images/intelligence.png", UriKind.Absolute));
+            //        case Enums.Attributes.Charisma:
+            //            return new BitmapImage(new Uri("ms-appx:///Assets/Images/charisma.png", UriKind.Absolute));
+            //        case Enums.Attributes.Memory:
+            //            return new BitmapImage(new Uri("ms-appx:///Assets/Images/memory.png", UriKind.Absolute));
+            //        case Enums.Attributes.Perception:
+            //            return new BitmapImage(new Uri("ms-appx:///Assets/Images/perception.png", UriKind.Absolute));
+            //        case Enums.Attributes.Willpower:
+            //            return new BitmapImage(new Uri("ms-appx:///Assets/Images/willpower.png", UriKind.Absolute));
+            //        default:
+            //            return null;
+            //    }
+            //}
 
             return null;
         }
