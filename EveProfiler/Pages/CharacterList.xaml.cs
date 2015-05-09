@@ -3,7 +3,7 @@ using EveProfiler.BusinessLogic.CharacterAttributes;
 using EveProfiler.DataAccess;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -36,21 +36,33 @@ namespace EveProfiler.Pages
         /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            _account = (Account)JsonConvert.DeserializeObject((string)_localSettings.Values["account"]);
-            PopulateGrid();
+            _account = JsonConvert.DeserializeObject<Account>((string)_localSettings.Values["account"]);
+
+            if (DateTime.UtcNow > _account.CachedUntil && NetworkInterface.GetIsNetworkAvailable())
+            {
+                GetCharacterList();
+            }
+            else
+            {
+                PopulateGrid();
+            }
+        }
+
+        private void GetCharacterList()
+        {
+            Api.GetCharacterList(_account, new Action<Account>(result =>
+                {
+                    _account = result;
+                    PopulateGrid();
+                }));
         }
 
         private void PopulateGrid()
         {
-            Api.getCharacterList(_account, new Action<List<Character>>(result =>
-                {
-                    _account.Characters = result;
+            characterList.SetBinding(ItemsControl.ItemsSourceProperty,
+                new Binding() { Source = _account.Characters });
 
-                    characterList.SetBinding(ItemsControl.ItemsSourceProperty,
-                        new Binding() { Source = _account.Characters });
-
-                    getCharacterInfo();
-                }));
+            getCharacterInfo();
         }
 
         private void thisCharacter_OnCharacterNavClicked(object sender, object loadControl)
@@ -79,7 +91,7 @@ namespace EveProfiler.Pages
 
             foreach (Character character in _account.Characters)
             {
-                Api.getCharacterInfo(character, new Action<Info>(result =>
+                Api.GetCharacterInfo(character, new Action<Info>(result =>
                     {
                         character.addAttribute(Enums.CharacterAttributes.Info, result);
                     }));

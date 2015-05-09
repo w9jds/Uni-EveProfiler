@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using Windows.Storage;
+﻿using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -11,14 +7,14 @@ using Windows.UI.Xaml.Input;
 
 namespace EveProfiler.Controls
 {
-    public sealed partial class ucSkills : UserControl
+    public sealed partial class Skills : UserControl
     {
         //private cBase _ActiveCharacter = App.thisAccount.getActiveCharacter();
         private ApplicationDataContainer _LocalSettings = ApplicationData.Current.LocalSettings;
 
-        public ucSkills()
+        public Skills()
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
             CommandBar cbPage = new CommandBar
             {
@@ -143,7 +139,7 @@ namespace EveProfiler.Controls
 
         private void ucSkillItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            ((ucSkillItem)sender).extendItem();
+            ((SkillItem)sender).extendItem();
         }
     }
 }

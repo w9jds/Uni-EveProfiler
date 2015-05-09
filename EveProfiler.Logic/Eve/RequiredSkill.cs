@@ -51,11 +51,8 @@ namespace EveProfiler.Logic.Eve
 
         #endregion
 
-        // Declare the PropertyChanged event.
         public event PropertyChangedEventHandler PropertyChanged;
 
-        // NotifyPropertyChanged will fire the PropertyChanged event, 
-        // passing the source property that is being updated.
         private void NotifyPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)

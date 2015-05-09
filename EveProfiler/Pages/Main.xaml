@@ -60,7 +60,7 @@
             </Popup.ChildTransitions>
 
             <Popup.Child>
-                <Controls:ucDrawer
+                <Controls:Drawer
                     x:Name="ucDrawerChild"
                     Height="{Binding ElementName=pDrawer, Path=ActualHeight}" 
                     Width="{Binding ElementName=pDrawer, Path=ActualWidth}"/>

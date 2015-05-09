@@ -45,32 +45,29 @@
     <Compile Include="$(MSBuildThisFileDirectory)Controls\CharacterCard.xaml.cs">
       <DependentUpon>CharacterCard.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\ucDrawer.xaml.cs">
-      <DependentUpon>ucDrawer.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Drawer.xaml.cs">
+      <DependentUpon>Drawer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\ucInfo.xaml.cs">
-      <DependentUpon>ucInfo.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Info.xaml.cs">
+      <DependentUpon>Info.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\ucLevel.xaml.cs">
-      <DependentUpon>ucLevel.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Mail.xaml.cs">
+      <DependentUpon>Mail.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\ucMail.xaml.cs">
-      <DependentUpon>ucMail.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\MailItem.xaml.cs">
+      <DependentUpon>MailItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\ucMailItem.xaml.cs">
-      <DependentUpon>ucMailItem.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\SkillItem.xaml.cs">
+      <DependentUpon>SkillItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\ucSkillItem.xaml.cs">
-      <DependentUpon>ucSkillItem.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Skills.xaml.cs">
+      <DependentUpon>Skills.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\ucSkills.xaml.cs">
-      <DependentUpon>ucSkills.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\CalendarEvents.xaml.cs">
+      <DependentUpon>CalendarEvents.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\ucUpcomingCalendarEvents.xaml.cs">
-      <DependentUpon>ucUpcomingCalendarEvents.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\ucWallet.xaml.cs">
-      <DependentUpon>ucWallet.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Wallet.xaml.cs">
+      <DependentUpon>Wallet.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -78,39 +75,35 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Controls\ucDrawer.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)Controls\Drawer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Controls\ucInfo.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)Controls\Info.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Controls\ucLevel.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)Controls\Mail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Controls\ucMail.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)Controls\MailItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Controls\ucMailItem.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)Controls\SkillItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Controls\ucSkillItem.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)Controls\Skills.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Controls\ucSkills.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)Controls\CalendarEvents.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Controls\ucUpcomingCalendarEvents.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Controls\ucWallet.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)Controls\Wallet.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

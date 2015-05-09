@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace EveProfiler.BusinessLogic
 {
-    public class Character : Account, ICallMetadata, INotifyPropertyChanged
+    public class Character : Account, ICallMetadata
     {
         #region Properties
 
@@ -39,15 +39,5 @@ namespace EveProfiler.BusinessLogic
             ["vCode"] = vCode,
             ["characterID"] = CharacterId.ToString()
         };
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
     }
 }

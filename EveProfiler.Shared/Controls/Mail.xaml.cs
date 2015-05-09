@@ -1,25 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using Windows.Storage;
-using Windows.UI.Xaml;
+﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace EveProfiler.Controls
 {
-    public sealed partial class ucMail : UserControl
+    public sealed partial class Mail : UserControl
     {
         //private ApplicationDataContainer _LocalSettings = ApplicationData.Current.LocalSettings;
         //private cBase _ActiveCharacter = App.thisAccount.getActiveCharacter();
 
-        public ucMail()
+        public Mail()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -75,7 +69,7 @@ namespace EveProfiler.Controls
 
         private void ucMailItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            ((ucMailItem)sender).extendItem();
+            ((MailItem)sender).extendItem();
         }
     }
 }

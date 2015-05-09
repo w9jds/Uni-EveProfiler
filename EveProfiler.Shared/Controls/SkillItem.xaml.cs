@@ -7,14 +7,14 @@ using Windows.UI.Xaml.Input;
 
 namespace EveProfiler.Controls
 {
-    public sealed partial class ucSkillItem : UserControl
+    public sealed partial class SkillItem : UserControl
     {
         private double _threshold = 0.1;
         //private cBase _ActiveCharacter = App.thisAccount.getActiveCharacter();
 
-        public ucSkillItem()
+        public SkillItem()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         public void extendItem()
@@ -31,7 +31,6 @@ namespace EveProfiler.Controls
             //    lBreak.Visibility = Visibility.Visible;
             //    thisSkill.isExpanded = true;
             //}
-                
         }
 
         private void Pivot_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)

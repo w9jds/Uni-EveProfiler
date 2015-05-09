@@ -10,19 +10,24 @@ namespace EveProfiler.DataAccess
 {
     public class Parser
     {
-        public static List<Character> parseCharacterList(string xml)
+        private static DateTime GetCachedUntil(XDocument doc) => doc.Descendants("eveapi")
+            .Select(x => (DateTime)x.Element("cachedUntil")).Single();
+
+        public static Account ParseCharacterList(string xml, Account account)
         {
             XDocument doc = XDocument.Parse(xml);
 
-            return doc.Descendants("row").Select(x => new Character
+            account.addCharacters(doc.Descendants("row").Select(x => new Character
             {
                 CharacterName = (string)x.Attribute("name") ?? string.Empty,
                 CharacterId = (int)x.Attribute("characterID")
-            }).ToList();
+            }).ToList());
 
+            account.CachedUntil = GetCachedUntil(doc);
+            return account;
         }
 
-        public static Info parseCharacterInfo(string xml)
+        public static Info ParseCharacterInfo(string xml)
         {
             XDocument doc = XDocument.Parse(xml);
 
@@ -42,12 +47,13 @@ namespace EveProfiler.DataAccess
                 AllianceID = (int?)x.Element("allianceID") ?? null,
                 AllianceDate = (DateTime?)x.Element("allianceDate") ?? null,
                 LastKnownLocation = x.Element("lastKnownLocation")?.Value,
-                SecurityStatus = (double)x.Element("securityStatus")
+                SecurityStatus = (double)x.Element("securityStatus"),
+                CachedUntil = GetCachedUntil(doc)
             }).ToList().FirstOrDefault();
 
         }
 
-        public static Character parseCharacterSheet(string xml, Character character)
+        public static Character ParseCharacterSheet(string xml, Character character)
         {
             XDocument doc = XDocument.Parse(xml);
 
@@ -59,7 +65,8 @@ namespace EveProfiler.DataAccess
                 Ancestry = x.Element("ancestry")?.Value,
                 Gender = x.Element("gender")?.Value,
                 Balance = (double)x.Element("balance"),
-                FreeRespecs = int.Parse(x.Element("freeRespecs").Value)
+                FreeRespecs = int.Parse(x.Element("freeRespecs").Value),
+                CachedUntil = GetCachedUntil(doc)
             }).FirstOrDefault());
 
             List<Skill> skills = doc.Descendants("rowset")
@@ -80,7 +87,7 @@ namespace EveProfiler.DataAccess
             return character;
         }
 
-        public static Dictionary<long, SkillGroup> parseSkillTree(string xml)
+        public static Dictionary<long, SkillGroup> ParseSkillTree(string xml)
         {
             Dictionary<long, SkillGroup> skillGroups = new Dictionary<long, SkillGroup>();
             XDocument doc = XDocument.Parse(xml);
@@ -88,7 +95,7 @@ namespace EveProfiler.DataAccess
             List<Skill> skills =
                 doc.Descendants("row")
                     .Where(x => x.FirstAttribute.Name.LocalName == "typeName")
-                    .Select(x => new Skill((long)x.Attribute("typeID"), getRequiredSkills(x))
+                    .Select(x => new Skill((long)x.Attribute("typeID"), GetRequiredSkills(x))
                     {
                         TypeName = (string)x.Attribute("typeName"),
                         GroupId = (int)x.Attribute("groupID"),
@@ -118,7 +125,7 @@ namespace EveProfiler.DataAccess
             return skillGroups;
         }
 
-        private static List<RequiredSkill> getRequiredSkills(XElement x) => x.Element("rowset")
+        private static List<RequiredSkill> GetRequiredSkills(XElement x) => x.Element("rowset")
                 .Descendants()
                 .Select(y => new RequiredSkill
                 {
@@ -126,7 +133,7 @@ namespace EveProfiler.DataAccess
                     SkillLevel = (int)y.Attribute("skillLevel")
                 }).ToList();
 
-        public static Dictionary<long, Mail> parseMailHeaders(string xml)
+        public static Dictionary<long, Mail> ParseMailHeaders(string xml)
         {
             XDocument doc = XDocument.Parse(xml);
 
@@ -138,7 +145,8 @@ namespace EveProfiler.DataAccess
                     Title = x.Attribute("title")?.Value,
                     ToCharacterIDs = x.Attribute("toCharacterIDs")?.Value,
                     ToCorpOrAllianceID = x.Attribute("toCorpOrAllianceID")?.Value,
-                    ToListID = x.Attribute("toListID")?.Value
+                    ToListID = x.Attribute("toListID")?.Value,
+                    CachedUntil = GetCachedUntil(doc)
                 }).ToList();
 
             Dictionary<long, Mail> mails = new Dictionary<long, Mail>();
@@ -151,7 +159,7 @@ namespace EveProfiler.DataAccess
             return mails;
         }
 
-        public static Dictionary<long, Mail> parseMailBodies(string xml, Dictionary<long, Mail> mail)
+        public static Dictionary<long, Mail> ParseMailBodies(string xml, Dictionary<long, Mail> mail)
         {
             XDocument doc = XDocument.Parse(xml);
             
@@ -163,19 +171,19 @@ namespace EveProfiler.DataAccess
             return mail;
         }
 
+
+
+
+
+
+
+
+
+
         //public static ObservableCollection<cCalendarEvent> parseUpcomingCalendarEvents(string xml)
         //{
         //    return new ObservableCollection<cCalendarEvent>();
         //}
-
-
-
-
-
-
-
-
-
 
         //private static Enums.Attributes getAttribute(string attribute)
         //{

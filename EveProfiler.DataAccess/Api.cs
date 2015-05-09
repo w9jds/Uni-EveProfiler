@@ -5,109 +5,176 @@ using EveProfiler.Logic.Eve;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.NetworkInformation;
 using System.Threading;
 
 namespace EveProfiler.DataAccess
 {
     public class Api
     {
-        public static void getCharacterList(Account account, Action<List<Character>> result)
+        public static void GetCharacterList(Account account, Action<Account> result)
         {
-            HttpHelper.get(@"/account/Characters.xml.aspx", account.Keys, new Action<HttpResponseMessage>(response =>
+            if (NetworkInterface.GetIsNetworkAvailable())
             {
-                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                HttpHelper.Get(@"/account/Characters.xml.aspx", account.Keys, new Action<HttpResponseMessage>(response =>
                 {
-                    response.Content.ReadAsStringAsync().ContinueWith(t =>
+                    if (response.IsSuccessStatusCode)
                     {
-                        return Parser.parseCharacterList(t.Result);
-                    }).ContinueWith(t => result(t.Result));
-                }
-            }));
+                        response.Content.ReadAsStringAsync().ContinueWith(t =>
+                        {
+                            return Parser.ParseCharacterList(t.Result, account);
+                        }).ContinueWith(t => result(t.Result));
+                    }
+                    else
+                    {
+                        throw new HttpRequestException($"Received a {response.StatusCode}: {response.ReasonPhrase}");
+                    }
+                }));
+            }
+            else
+            {
+
+            }
         }
 
-        public static void getCharacterInfo(Character character, Action<Info> result)
+        public static void GetCharacterInfo(Character character, Action<Info> result)
         {
-            HttpHelper.get(@"/eve/CharacterInfo.xml.aspx", character.getCharacterQuery(), new Action<HttpResponseMessage>(response =>
+            if (NetworkInterface.GetIsNetworkAvailable())
             {
-                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                HttpHelper.Get(@"/eve/CharacterInfo.xml.aspx", character.getCharacterQuery(), new Action<HttpResponseMessage>(response =>
                 {
-                    response.Content.ReadAsStringAsync().ContinueWith(t =>
+                    if (response.IsSuccessStatusCode)
                     {
-                        Info info = Parser.parseCharacterInfo(t.Result);
-                        info.CharacterId = character.CharacterId;
-                        info.CharacterName = character.CharacterName;
-                        return info;
-                    }).ContinueWith(t => result(t.Result));
-                }
-            }));
+                        response.Content.ReadAsStringAsync().ContinueWith(t =>
+                        {
+                            Info info = Parser.ParseCharacterInfo(t.Result);
+                            info.CharacterId = character.CharacterId;
+                            info.CharacterName = character.CharacterName;
+                            return info;
+                        }).ContinueWith(t => result(t.Result));
+                    }
+                    else
+                    {
+                        throw new HttpRequestException($"Received a {response.StatusCode}: {response.ReasonPhrase}");
+                    }
+                }));
+            }
+            else
+            {
+
+            }
         }
 
-        public static void getCharacterSheet(Character character, Action<Character> result)
+        public static void GetCharacterSheet(Character character, Action<Character> result)
         {
-            HttpHelper.get(@"/char/CharacterSheet.xml.aspx", character.getCharacterQuery(), new Action<HttpResponseMessage>(response =>
+            if (NetworkInterface.GetIsNetworkAvailable())
             {
-                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                HttpHelper.Get(@"/char/CharacterSheet.xml.aspx", character.getCharacterQuery(), new Action<HttpResponseMessage>(response =>
                 {
-                    response.Content.ReadAsStringAsync().ContinueWith(t =>
+                    if (response.IsSuccessStatusCode)
                     {
-                        return Parser.parseCharacterSheet(t.Result, character);;
-                    }).ContinueWith(t => result(t.Result));
-                }
-            }));
+                        response.Content.ReadAsStringAsync().ContinueWith(t =>
+                        {
+                            return Parser.ParseCharacterSheet(t.Result, character);;
+                        }).ContinueWith(t => result(t.Result));
+                    }
+                    else
+                    {
+                        throw new HttpRequestException($"Received a {response.StatusCode}: {response.ReasonPhrase}");
+                    }
+                }));
+            }
+            else
+            {
+
+            }
         }
 
-        public static void getSkillTree(Action<Dictionary<long, SkillGroup>> result)
+        public static void GetSkillTree(Action<Dictionary<long, SkillGroup>> result)
         {
-            HttpHelper.get(@"/eve/SkillTree.xml.aspx", null, new Action<HttpResponseMessage>(response =>
+            if (NetworkInterface.GetIsNetworkAvailable())
             {
-                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                HttpHelper.Get(@"/eve/SkillTree.xml.aspx", null, new Action<HttpResponseMessage>(response =>
                 {
-                    response.Content.ReadAsStringAsync().ContinueWith(t =>
+                    if (response.IsSuccessStatusCode)
                     {
-                        return Parser.parseSkillTree(t.Result);
-                    }).ContinueWith(t => result(t.Result));
-                }
-            }));
+                        response.Content.ReadAsStringAsync().ContinueWith(t =>
+                        {
+                            return Parser.ParseSkillTree(t.Result);
+                        }).ContinueWith(t => result(t.Result));
+                    }
+                    else
+                    {
+                        throw new HttpRequestException($"Received a {response.StatusCode}: {response.ReasonPhrase}");
+                    }
+                }));
+            }
+            else
+            {
+
+            }
         }
 
-        public static void getCharacterMail(Character character, Action<Character> result)
+        public static void GetCharacterMail(Character character, Action<Character> result)
         {
-            HttpHelper.get(@"/char/MailMessages.xml.aspx", character.getCharacterQuery(), new Action<HttpResponseMessage>(response =>
+            if (NetworkInterface.GetIsNetworkAvailable())
             {
-                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                HttpHelper.Get(@"/char/MailMessages.xml.aspx", character.getCharacterQuery(), new Action<HttpResponseMessage>(response =>
                 {
-                    response.Content.ReadAsStringAsync().ContinueWith(t =>
+                    if (response.IsSuccessStatusCode)
                     {
-                        Dictionary<long, Mail> mails = Parser.parseMailHeaders(t.Result);
-                        ManualResetEvent manualResetEvent = new ManualResetEvent(false);
+                        response.Content.ReadAsStringAsync().ContinueWith(t =>
+                        {
+                            Dictionary<long, Mail> mails = Parser.ParseMailHeaders(t.Result);
+                            ManualResetEvent manualResetEvent = new ManualResetEvent(false);
 
-                        getMailBodies(character, mails, new Action<Dictionary<long, Mail>> (bodyResult => {
-                            character.Attributes.Add(Enums.CharacterAttributes.Mail, bodyResult);
-                            manualResetEvent.Set();
-                        }));
+                            GetMailBodies(character, mails, new Action<Dictionary<long, Mail>> (bodyResult => {
+                                character.Attributes.Add(Enums.CharacterAttributes.Mail, bodyResult);
+                                manualResetEvent.Set();
+                            }));
 
-                        manualResetEvent.WaitOne();
-                        return character;
-                    }).ContinueWith(t => result(t.Result));
-                }
-            }));
+                            manualResetEvent.WaitOne();
+                            return character;
+                        }).ContinueWith(t => result(t.Result));
+                    }
+                    else
+                    {
+                        throw new HttpRequestException($"Received a {response.StatusCode}: {response.ReasonPhrase}");
+                    }
+                }));
+            }
+            else
+            {
+
+            }
         }
 
-        public static void getMailBodies(Character character, Dictionary<long, Mail> mails, Action<Dictionary<long, Mail>> result)
+        public static void GetMailBodies(Character character, Dictionary<long, Mail> mails, Action<Dictionary<long, Mail>> result)
         {
-            Dictionary<string, string> query = character.getCharacterQuery();
-            query.Add("ids", string.Join(",", mails.Keys));
-
-            HttpHelper.get(@"/char/MailBodies.xml.aspx", query, new Action<HttpResponseMessage>(response =>
+            if (NetworkInterface.GetIsNetworkAvailable())
             {
-                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                Dictionary<string, string> query = character.getCharacterQuery();
+                query.Add("ids", string.Join(",", mails.Keys));
+
+                HttpHelper.Get(@"/char/MailBodies.xml.aspx", query, new Action<HttpResponseMessage>(response =>
                 {
-                    response.Content.ReadAsStringAsync().ContinueWith(t =>
+                    if (response.IsSuccessStatusCode)
                     {
-                        return Parser.parseMailBodies(t.Result, mails);
-                    }).ContinueWith(t => result(t.Result));
-                }
-            }));
+                        response.Content.ReadAsStringAsync().ContinueWith(t =>
+                        {
+                            return Parser.ParseMailBodies(t.Result, mails);
+                        }).ContinueWith(t => result(t.Result));
+                    }
+                    else
+                    {
+                        throw new HttpRequestException($"Received a {response.StatusCode}: {response.ReasonPhrase}");
+                    }
+                }));
+            }
+            else
+            {
+
+            }
         }
 
         //public static void getSkillInTraining(int sCharacterID, string vCode, string keyid, Action<cSkillInTraining> aResult)

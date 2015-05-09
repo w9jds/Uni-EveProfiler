@@ -23,9 +23,9 @@ namespace NetworkingTests
         {
             ManualResetEvent completion = new ManualResetEvent(false);
 
-            Api.getCharacterList(_account, new Action<List<Character>>(result =>
+            Api.GetCharacterList(_account, new Action<Account>(result =>
             {
-                _account.addCharacters(result);
+                _account = result;
                 completion.Set();
             }));
 
@@ -46,7 +46,7 @@ namespace NetworkingTests
             _account.addCharacters(characters);
             ManualResetEvent completion = new ManualResetEvent(false);
 
-            Api.getCharacterInfo(_account.Characters[0], new Action<Info>(result =>
+            Api.GetCharacterInfo(_account.Characters[0], new Action<Info>(result =>
             {
                 _account.Characters[0].Attributes.Add(Enums.CharacterAttributes.Info, result);
                 completion.Set();
@@ -68,7 +68,7 @@ namespace NetworkingTests
             _account.addCharacters(characters);
             ManualResetEvent completion = new ManualResetEvent(false);
 
-            Api.getCharacterSheet(_account.Characters[0], new Action<Character>(result =>
+            Api.GetCharacterSheet(_account.Characters[0], new Action<Character>(result =>
             {
                 _account.Characters[0] = result;
                 completion.Set();
@@ -86,7 +86,7 @@ namespace NetworkingTests
 
             ManualResetEvent completion = new ManualResetEvent(false);
 
-            Api.getSkillTree(new Action<Dictionary<long, SkillGroup>>(result =>
+            Api.GetSkillTree(new Action<Dictionary<long, SkillGroup>>(result =>
             {
                 skillGroups = result;
                 completion.Set();
@@ -108,7 +108,7 @@ namespace NetworkingTests
             _account.addCharacters(characters);
             ManualResetEvent completion = new ManualResetEvent(false);
 
-            Api.getCharacterMail(_account.Characters[0], new Action<Character>(result =>
+            Api.GetCharacterMail(_account.Characters[0], new Action<Character>(result =>
             {
                 _account.Characters[0] = result;
                 completion.Set();

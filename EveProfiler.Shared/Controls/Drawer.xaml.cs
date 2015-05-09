@@ -5,14 +5,14 @@ using Windows.UI.Xaml.Input;
 
 namespace EveProfiler.Controls
 {
-    public sealed partial class ucDrawer : UserControl
+    public sealed partial class Drawer : UserControl
     {
         public delegate void DrawerItemTappedEventHandler(object oUserControl);
         public event DrawerItemTappedEventHandler DrawerItemTapped;
 
-        public ucDrawer()
+        public Drawer()
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
             //imgActiveCharacter.UriSource = new Uri(string.Format(@"http://image.eveonline.com/Character/{0}_{1}.jpg",
             //    App.thisAccount.getActiveCharacter().characterID, 256));
@@ -20,22 +20,22 @@ namespace EveProfiler.Controls
 
         private void Info_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            DrawerItemTapped.Invoke(new ucInfo());
+            DrawerItemTapped.Invoke(new Info());
         }
 
         private void Mail_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            DrawerItemTapped.Invoke(new ucMail());
+            DrawerItemTapped.Invoke(new Mail());
         }
 
         private void Skills_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            DrawerItemTapped.Invoke(new ucSkills());
+            DrawerItemTapped.Invoke(new Skills());
         }
 
         private void Wallet_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            DrawerItemTapped.Invoke(new ucWallet());
+            DrawerItemTapped.Invoke(new Wallet());
         }
 
         private void Assets_Tapped(object sender, TappedRoutedEventArgs e)
@@ -50,7 +50,7 @@ namespace EveProfiler.Controls
 
         private void UpcomingEvents_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            DrawerItemTapped.Invoke(new ucUpcomingCalendarEvents());
+            DrawerItemTapped.Invoke(new CalendarEvents());
         }
     }
 }

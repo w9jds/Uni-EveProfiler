@@ -8,12 +8,12 @@ using Windows.UI.Xaml.Data;
 
 namespace EveProfiler.Controls
 {
-    public sealed partial class ucInfo : UserControl
+    public sealed partial class Info : UserControl
     {
         private ApplicationDataContainer _LocalSettings = ApplicationData.Current.LocalSettings;
         //private cBase _ActiveCharacter = App.thisAccount.getActiveCharacter();
 
-        public ucInfo()
+        public Info()
         {
             InitializeComponent();
         }

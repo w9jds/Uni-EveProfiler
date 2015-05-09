@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using Windows.Storage;
+﻿using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -8,14 +6,14 @@ using Windows.UI.Xaml.Controls;
 
 namespace EveProfiler.Controls
 {
-    public sealed partial class ucWallet : UserControl
+    public sealed partial class Wallet : UserControl
     {
         private ApplicationDataContainer _LocalSettings = ApplicationData.Current.LocalSettings;
         //private cBase _ActiveCharacter = App.thisAccount.getActiveCharacter();
 
-        public ucWallet()
+        public Wallet()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)

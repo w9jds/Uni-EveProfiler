@@ -17,16 +17,6 @@
 
     <Grid>
         
-        <Ellipse Height="70" Width="70" HorizontalAlignment="Left" VerticalAlignment="Top">
-            <Ellipse.Fill>
-                <ImageBrush>
-                    <ImageBrush.ImageSource>
-                        <BitmapImage x:Name="characterImage" UriSource="{Binding CharacterId, Converter={StaticResource CharacterImageUriConverter}}" />
-                    </ImageBrush.ImageSource>
-                </ImageBrush>
-            </Ellipse.Fill>
-        </Ellipse>
-        
         <Grid Name="cardTop" Background="#FFFFFF" Margin="20,20">
         	<Grid.RenderTransform>
         		<CompositeTransform/>
@@ -68,6 +58,17 @@
                 </Grid>
 
             </Grid>
+
+            <Ellipse Height="70" Width="70" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Ellipse.Fill>
+                    <ImageBrush>
+                        <ImageBrush.ImageSource>
+                            <BitmapImage x:Name="characterImage" UriSource="{Binding CharacterId, Converter={StaticResource CharacterImageUriConverter}}" />
+                        </ImageBrush.ImageSource>
+                    </ImageBrush>
+                </Ellipse.Fill>
+            </Ellipse>
+
         </Grid>
         <!--<Grid Name="gCardBottom" Background="#FFFFFF" Margin="20,5">
         	<Grid.RenderTransform>
