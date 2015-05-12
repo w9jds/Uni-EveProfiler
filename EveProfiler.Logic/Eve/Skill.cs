@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace EveProfiler.Logic.Eve
 {
-    public class Skill : CharacterAttributes.Skill, INotifyPropertyChanged
+    public class Skill : CharacterAttributes.Skill
     {
         private string _typeName;
         private int _published;
@@ -18,7 +18,6 @@ namespace EveProfiler.Logic.Eve
         private List<double> _skillPointsPerLevel = new List<double>();
 
         public long GroupId { get; set; }
-        public long TypeId { get; }
 
         public Dictionary<long, RequiredSkill> RequiredSkills { get; private set; }
         public Dictionary<string, double> SkillBonuses { get; }
@@ -130,25 +129,13 @@ namespace EveProfiler.Logic.Eve
 
         public Skill(long typeId) : base(typeId)
         {
-            TypeId = typeId;
         }
 
         public Skill(long typeId, List<RequiredSkill> requiredSkills) : base(typeId)
         {
-            TypeId = typeId;
-            foreach( RequiredSkill requiredSkill in requiredSkills)
+            foreach(RequiredSkill requiredSkill in requiredSkills)
             {
                 RequiredSkills.Add(requiredSkill.TypeId, requiredSkill);
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }

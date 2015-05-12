@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace EveProfiler.BusinessLogic
+namespace EveProfiler.Logic
 {
     public class ServerStatus : ICallMetadata, INotifyPropertyChanged
     {

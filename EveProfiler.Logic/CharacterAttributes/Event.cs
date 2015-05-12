@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace EveProfiler.BusinessLogic.CharacterAttributes
+namespace EveProfiler.Logic.CharacterAttributes
 {
     public class Event : Character, INotifyPropertyChanged
     {

@@ -1,5 +1,5 @@
-﻿using EveProfiler.BusinessLogic;
-using EveProfiler.BusinessLogic.CharacterAttributes;
+﻿using EveProfiler.Logic;
+using EveProfiler.Logic.CharacterAttributes;
 using EveProfiler.Logic.Eve;
 using System;
 using System.Collections.Generic;
@@ -13,18 +13,16 @@ namespace EveProfiler.DataAccess
         private static DateTime GetCachedUntil(XDocument doc) => doc.Descendants("eveapi")
             .Select(x => (DateTime)x.Element("cachedUntil")).Single();
 
-        public static Account ParseCharacterList(string xml, Account account)
+        public static List<Character> ParseCharacterList(string xml)
         {
             XDocument doc = XDocument.Parse(xml);
 
-            account.addCharacters(doc.Descendants("row").Select(x => new Character
+            return doc.Descendants("row").Select(x => new Character
             {
                 CharacterName = (string)x.Attribute("name") ?? string.Empty,
-                CharacterId = (int)x.Attribute("characterID")
-            }).ToList());
-
-            account.CachedUntil = GetCachedUntil(doc);
-            return account;
+                CharacterId = (int)x.Attribute("characterID"),
+                CachedUntil = GetCachedUntil(doc)
+            }).ToList();
         }
 
         public static Info ParseCharacterInfo(string xml)
@@ -53,11 +51,11 @@ namespace EveProfiler.DataAccess
 
         }
 
-        public static Character ParseCharacterSheet(string xml, Character character)
+        public static Tuple<Sheet, List<Logic.Eve.Skill>> ParseCharacterSheet(string xml)
         {
             XDocument doc = XDocument.Parse(xml);
 
-            character.Attributes.Add(Enums.CharacterAttributes.Sheet, doc.Descendants("result").Select(x => new Sheet
+            Sheet sheet = doc.Descendants("result").Select(x => new Sheet
             {
                 Race = x.Element("race")?.Value,
                 DateofBirth = (DateTime)x.Element("DoB"),
@@ -67,24 +65,19 @@ namespace EveProfiler.DataAccess
                 Balance = (double)x.Element("balance"),
                 FreeRespecs = int.Parse(x.Element("freeRespecs").Value),
                 CachedUntil = GetCachedUntil(doc)
-            }).FirstOrDefault());
+            }).FirstOrDefault();
 
-            List<Skill> skills = doc.Descendants("rowset")
+            List<Logic.Eve.Skill> skills = doc.Descendants("rowset")
                 .Where(x => x.Attribute("name").Value == "skills")
                 .Elements()
-                .Select(x => new Skill((long)x.Attribute("typeID"))
+                .Select(x => new Logic.Eve.Skill((long)x.Attribute("typeID"))
                 {
                     Skillpoints = long.Parse(x.Attribute("skillpoints").Value),
                     Level = int.Parse(x.Attribute("level").Value),
                     Published = int.Parse(x.Attribute("published").Value)
                 }).ToList();
 
-            foreach (Skill skill in skills)
-            {
-                character.Skills.Add(skill.TypeId, skill);
-            }
-
-            return character;
+            return new Tuple<Sheet, List<Logic.Eve.Skill>>(sheet, skills);
         }
 
         public static Dictionary<long, SkillGroup> ParseSkillTree(string xml)
@@ -92,10 +85,10 @@ namespace EveProfiler.DataAccess
             Dictionary<long, SkillGroup> skillGroups = new Dictionary<long, SkillGroup>();
             XDocument doc = XDocument.Parse(xml);
 
-            List<Skill> skills =
+            List<Logic.Eve.Skill> skills =
                 doc.Descendants("row")
                     .Where(x => x.FirstAttribute.Name.LocalName == "typeName")
-                    .Select(x => new Skill((long)x.Attribute("typeID"), GetRequiredSkills(x))
+                    .Select(x => new Logic.Eve.Skill((long)x.Attribute("typeID"), GetRequiredSkills(x))
                     {
                         TypeName = (string)x.Attribute("typeName"),
                         GroupId = (int)x.Attribute("groupID"),
@@ -105,7 +98,7 @@ namespace EveProfiler.DataAccess
                         //mainAttributes = getSkillAttributes(x.Element("requiredAttributes").Descendants()),
                     }).ToList();
 
-            foreach (Skill skill in skills)
+            foreach (Logic.Eve.Skill skill in skills)
             {
                 if (!skillGroups.ContainsKey(skill.GroupId))
                 {
@@ -170,8 +163,7 @@ namespace EveProfiler.DataAccess
 
             return mail;
         }
-
-
+        
 
 
 

@@ -144,7 +144,7 @@
       <Name>EveProfiler.DataAccess</Name>
     </ProjectReference>
     <ProjectReference Include="..\EveProfiler.Logic\EveProfiler.Logic.csproj">
-      <Project>{ac2c0e78-28da-4dfe-967a-7dabbf408428}</Project>
+      <Project>{c4bbd6f1-d7ea-46a3-82d3-dd71aa48fdf0}</Project>
       <Name>EveProfiler.Logic</Name>
     </ProjectReference>
   </ItemGroup>

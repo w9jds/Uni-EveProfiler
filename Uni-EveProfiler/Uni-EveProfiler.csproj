@@ -150,10 +150,6 @@
       <Project>{ff535772-41cd-41fd-a108-52f56b3eea44}</Project>
       <Name>EveProfiler.DataAccess</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EveProfiler.Logic\EveProfiler.Logic.csproj">
-      <Project>{ac2c0e78-28da-4dfe-967a-7dabbf408428}</Project>
-      <Name>EveProfiler.Logic</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="..\EveProfiler.Shared\EveProfiler.Shared.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

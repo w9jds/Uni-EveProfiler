@@ -1,5 +1,5 @@
-﻿using EveProfiler.BusinessLogic;
-using EveProfiler.DataAccess;
+﻿using EveProfiler.DataAccess;
+using EveProfiler.Logic;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -55,21 +55,18 @@ namespace EveProfiler.Pages
 
         }
 
-        private void SaveSettings(Account account)
+        private void SaveSettings()
         {
-            Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            _localSettings.Values["account"] = JsonConvert.SerializeObject(_localSettings);
+            progressBar.IsIndeterminate = false;
+            if (Frame.CanGoBack)
             {
-                _localSettings.Values["account"] = JsonConvert.SerializeObject(account);
-                progressBar.IsIndeterminate = false;
-                if (Frame.CanGoBack)
-                {
-                    Frame.GoBack();
-                }
-                else
-                {
-                    Frame.Navigate(typeof(CharacterList));
-                }
-            });
+                Frame.GoBack();
+            }
+            else
+            {
+                Frame.Navigate(typeof(CharacterList));
+            }
         }  
 
         private void saveButton_Click(object sender, RoutedEventArgs e)
@@ -83,9 +80,13 @@ namespace EveProfiler.Pages
 
                 try
                 {
-                    Api.GetCharacterList(_currentAccount, new Action<Account>(response =>
+                    Api.GetCharacterList(_currentAccount, new Action<List<Character>>(response =>
                     {
-                        SaveSettings(_currentAccount);
+                        Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                        {
+                            _currentAccount.addCharacters(response);
+                            SaveSettings();
+                        });
                     }));
                 }
                 catch (HttpRequestException exception)

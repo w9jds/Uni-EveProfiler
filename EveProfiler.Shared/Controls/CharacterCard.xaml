@@ -10,14 +10,10 @@
 
     <UserControl.Resources>
         <Classes:CharacterImageUriConverter x:Key="CharacterImageUriConverter"/>
-        <!--<Classes:ByteArrayConverter x:Key="ByteArrayConverter"/>
-        <Classes:SkillTimeLeftConverter x:Key="SkillTimeLeftConverter"/>
-        <Classes:RaceConverter x:Key="RaceConverter"/>-->
     </UserControl.Resources>
 
     <Grid>
-        
-        <Grid Name="cardTop" Background="#FFFFFF" Margin="20,20">
+        <Grid Background="#FFFFFF" Margin="20,20">
         	<Grid.RenderTransform>
         		<CompositeTransform/>
         	</Grid.RenderTransform>
@@ -28,7 +24,8 @@
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <!--<Image Width="40" Height="40" Margin="10" Source="{Binding characterInfo.race, Converter={StaticResource RaceConverter}}" Stretch="UniformToFill"/>-->
-                <TextBlock Text="{Binding Name}" FontSize="17" Foreground="Black" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding CharacterName}" FontSize="17"
+                           VerticalAlignment="Center" Foreground="Black"/>
             </StackPanel>
 
             <Grid Grid.Row="1">
@@ -56,41 +53,17 @@
                     <TextBlock Grid.Row="1" Text="{Binding skillInTraining.skillTimeLeft, Converter={StaticResource SkillTimeLeftConverter}}" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontSize="13"/>-->
 
                 </Grid>
-
             </Grid>
-
-            <Ellipse Height="70" Width="70" HorizontalAlignment="Left" VerticalAlignment="Top">
-                <Ellipse.Fill>
-                    <ImageBrush>
-                        <ImageBrush.ImageSource>
-                            <BitmapImage x:Name="characterImage" UriSource="{Binding CharacterId, Converter={StaticResource CharacterImageUriConverter}}" />
-                        </ImageBrush.ImageSource>
-                    </ImageBrush>
-                </Ellipse.Fill>
-            </Ellipse>
-
         </Grid>
-        <!--<Grid Name="gCardBottom" Background="#FFFFFF" Margin="20,5">
-        	<Grid.RenderTransform>
-        		<CompositeTransform ScaleX="0"/>
-        	</Grid.RenderTransform>
-            
-            <GridView Margin="20"
-                      HorizontalAlignment="Center" VerticalAlignment="Center">
 
-                <GridView.Items>
-                    <GridViewItem Margin="15,10" Tapped="Mail_Tapped"> 
-                        <Border BorderBrush="Black" BorderThickness="1">
-                            <Image Source="/Assets/Images/mail_icon.png" Height="60" Width="60"/>
-                        </Border>
-                    </GridViewItem>
-                    <GridViewItem Margin="5" Tapped="Skill_Tapped">
-                        <Border BorderBrush="Black" BorderThickness="1">
-                            <Image Source="/Assets/Images/skills_icon.png" Height="60" Width="60"/>
-                        </Border>
-                    </GridViewItem>
-                </GridView.Items>
-            </GridView>
-        </Grid>-->
+        <Ellipse Height="70" Width="70" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Ellipse.Fill>
+                <ImageBrush>
+                    <ImageBrush.ImageSource>
+                        <BitmapImage x:Name="characterImage" UriSource="{Binding CharacterId, Converter={StaticResource CharacterImageUriConverter}}" />
+                    </ImageBrush.ImageSource>
+                </ImageBrush>
+            </Ellipse.Fill>
+        </Ellipse>
     </Grid>
 </UserControl>

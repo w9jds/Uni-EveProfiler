@@ -6,13 +6,15 @@ namespace EveProfiler.Logic.CharacterAttributes
     {
         public Skill(long typeId)
         {
-
+            TypeId = typeId;
         }
 
         private long _skillpoints;
         private int _level = 0;
         private double _trainingProgress;
         private double _skillPointsPerMinute;
+
+        public long TypeId { get; }
 
         public long Skillpoints
         {
@@ -51,12 +53,10 @@ namespace EveProfiler.Logic.CharacterAttributes
             }
         }
 
-        // Declare the PropertyChanged event.
+
         public event PropertyChangedEventHandler PropertyChanged;
 
-        // NotifyPropertyChanged will fire the PropertyChanged event, 
-        // passing the source property that is being updated.
-        private void NotifyPropertyChanged(string propertyName)
+        protected void NotifyPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)
             {

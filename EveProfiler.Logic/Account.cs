@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace EveProfiler.BusinessLogic
+namespace EveProfiler.Logic
 {
     public class Account : ICallMetadata, INotifyPropertyChanged
     {
@@ -60,6 +60,7 @@ namespace EveProfiler.BusinessLogic
 
         public void addCharacters(List<Character> characters)
         {
+            CachedUntil = characters[0].CachedUntil;
             foreach (Character character in characters)
             {
                 character.vCode = vCode;
@@ -72,7 +73,6 @@ namespace EveProfiler.BusinessLogic
         {
             addCharacters(new List<Character> { character });
         }
-
 
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -5,11 +5,11 @@
     <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AC2C0E78-28DA-4DFE-967A-7DABBF408428}</ProjectGuid>
+    <ProjectGuid>{C4BBD6F1-D7EA-46A3-82D3-DD71AA48FDF0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EveProfiler.Logic</RootNamespace>
-    <AssemblyName>EveProfiler.Logic</AssemblyName>
+    <RootNamespace>EveProfiler.BusinessLogic</RootNamespace>
+    <AssemblyName>EveProfiler.BusinessLogic</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -33,6 +33,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .NET Framework is automatically included -->
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Account.cs" />
     <Compile Include="Character.cs" />

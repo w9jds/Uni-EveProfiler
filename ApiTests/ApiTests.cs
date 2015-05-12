@@ -1,10 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-using EveProfiler.BusinessLogic;
 using EveProfiler.DataAccess;
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using EveProfiler.BusinessLogic.CharacterAttributes;
+using EveProfiler.Logic;
+using EveProfiler.Logic.CharacterAttributes;
 using EveProfiler.Logic.Eve;
 
 namespace NetworkingTests
@@ -68,8 +68,9 @@ namespace NetworkingTests
             _account.addCharacters(characters);
             ManualResetEvent completion = new ManualResetEvent(false);
 
-            Api.GetCharacterSheet(_account.Characters[0], new Action<Character>(result =>
+            Api.GetCharacterSheet(_account.Characters[0], new Action<Tuple<Sheet, List<SkillGroup>>>(result =>
             {
+            _account.Characters[0].addAttribute(Enums.CharacterAttributes.Info, result.);
                 _account.Characters[0] = result;
                 completion.Set();
             }));

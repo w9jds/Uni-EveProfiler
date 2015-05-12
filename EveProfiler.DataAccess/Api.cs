@@ -1,6 +1,6 @@
-﻿using EveProfiler.BusinessLogic;
-using EveProfiler.BusinessLogic.CharacterAttributes;
-using EveProfiler.Core;
+﻿using EveProfiler.Core;
+using EveProfiler.Logic;
+using EveProfiler.Logic.CharacterAttributes;
 using EveProfiler.Logic.Eve;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ namespace EveProfiler.DataAccess
 {
     public class Api
     {
-        public static void GetCharacterList(Account account, Action<Account> result)
+        public static void GetCharacterList(Account account, Action<List<Character>> result)
         {
             if (NetworkInterface.GetIsNetworkAvailable())
             {
@@ -22,7 +22,7 @@ namespace EveProfiler.DataAccess
                     {
                         response.Content.ReadAsStringAsync().ContinueWith(t =>
                         {
-                            return Parser.ParseCharacterList(t.Result, account);
+                            return Parser.ParseCharacterList(t.Result);
                         }).ContinueWith(t => result(t.Result));
                     }
                     else
@@ -65,7 +65,7 @@ namespace EveProfiler.DataAccess
             }
         }
 
-        public static void GetCharacterSheet(Character character, Action<Character> result)
+        public static void GetCharacterSheet(Character character, Action<Tuple<Sheet, List<Logic.Eve.Skill>>> result)
         {
             if (NetworkInterface.GetIsNetworkAvailable())
             {
@@ -75,7 +75,7 @@ namespace EveProfiler.DataAccess
                     {
                         response.Content.ReadAsStringAsync().ContinueWith(t =>
                         {
-                            return Parser.ParseCharacterSheet(t.Result, character);;
+                            return Parser.ParseCharacterSheet(t.Result);;
                         }).ContinueWith(t => result(t.Result));
                     }
                     else
@@ -115,7 +115,7 @@ namespace EveProfiler.DataAccess
             }
         }
 
-        public static void GetCharacterMail(Character character, Action<Character> result)
+        public static void GetCharacterMail(Character character, Action<Dictionary<long, Mail>> result)
         {
             if (NetworkInterface.GetIsNetworkAvailable())
             {
@@ -129,12 +129,12 @@ namespace EveProfiler.DataAccess
                             ManualResetEvent manualResetEvent = new ManualResetEvent(false);
 
                             GetMailBodies(character, mails, new Action<Dictionary<long, Mail>> (bodyResult => {
-                                character.Attributes.Add(Enums.CharacterAttributes.Mail, bodyResult);
+                                mails = bodyResult;
                                 manualResetEvent.Set();
                             }));
 
                             manualResetEvent.WaitOne();
-                            return character;
+                            return mails;
                         }).ContinueWith(t => result(t.Result));
                     }
                     else

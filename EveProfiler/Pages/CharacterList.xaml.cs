@@ -1,10 +1,12 @@
-﻿using EveProfiler.BusinessLogic;
-using EveProfiler.BusinessLogic.CharacterAttributes;
-using EveProfiler.DataAccess;
+﻿using EveProfiler.DataAccess;
+using EveProfiler.Logic;
+using EveProfiler.Logic.CharacterAttributes;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using Windows.Storage;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
@@ -50,10 +52,14 @@ namespace EveProfiler.Pages
 
         private void GetCharacterList()
         {
-            Api.GetCharacterList(_account, new Action<Account>(result =>
+            Api.GetCharacterList(_account, new Action<List<Character>>(result =>
                 {
-                    _account = result;
-                    PopulateGrid();
+                    Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
+                        _account.Characters.Clear();
+                        _account.addCharacters(result);
+                        PopulateGrid();
+                    });
                 }));
         }
 
@@ -93,7 +99,10 @@ namespace EveProfiler.Pages
             {
                 Api.GetCharacterInfo(character, new Action<Info>(result =>
                     {
-                        character.addAttribute(Enums.CharacterAttributes.Info, result);
+                        Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                        {
+                            character.addAttribute(Enums.CharacterAttributes.Info, result);
+                        });
                     }));
 
                 //Api.getSkillInTraining(character.characterID, _LocalSettings.Values["vCode"].ToString(),

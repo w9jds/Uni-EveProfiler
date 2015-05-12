@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace EveProfiler.BusinessLogic.CharacterAttributes
+namespace EveProfiler.Logic.CharacterAttributes
 {
     public class Info : Character, INotifyPropertyChanged, ICallMetadata
     {

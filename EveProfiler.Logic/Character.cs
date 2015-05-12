@@ -1,31 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 
-namespace EveProfiler.BusinessLogic
+namespace EveProfiler.Logic
 {
-    public class Character : Account, ICallMetadata
+    public class Character : Account
     {
         #region Properties
 
-        private Dictionary<Enums.CharacterAttributes, object> _attributes = new Dictionary<Enums.CharacterAttributes, object>();
-        private Dictionary<long, Logic.Eve.Skill> _skills = new Dictionary<long, Logic.Eve.Skill>();
+        private Dictionary<AttributeTypes, object> _attributes = new Dictionary<AttributeTypes, object>();
+        private Dictionary<long, Eve.Skill> _skills = new Dictionary<long, Eve.Skill>();
 
-        //public long AccountId { get; set; }
-        public DateTime CachedUntil { get; set; }
         public long CharacterId { get; set; }
         public string CharacterName { get; set; }
-        public DateTime LastPulled { get; set; }
-        public Dictionary<Enums.CharacterAttributes, object> Attributes => _attributes;
-        public Dictionary<long, Logic.Eve.Skill> Skills => _skills;
+        public Dictionary<AttributeTypes, object> Attributes => _attributes;
+        public Dictionary<long, Eve.Skill> Skills => _skills;
 
-        public void addAttribute(Enums.CharacterAttributes key, object value)
+        public void addAttribute(AttributeTypes key, object value)
         {
             _attributes.Add(key, value);
             NotifyPropertyChanged("Attributes");
         }
 
-        public void addSkill(long key, Logic.Eve.Skill value)
+        public void addSkill(long key, Eve.Skill value)
         {
             _skills.Add(key, value);
             NotifyPropertyChanged("Skills");
