@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EveProfiler.Logic.Eve;
+using System;
 using System.Collections.Generic;
 
 namespace EveProfiler.Logic
@@ -8,12 +9,12 @@ namespace EveProfiler.Logic
         #region Properties
 
         private Dictionary<AttributeTypes, object> _attributes = new Dictionary<AttributeTypes, object>();
-        private Dictionary<long, Eve.Skill> _skills = new Dictionary<long, Eve.Skill>();
+        private Dictionary<long, Skill> _skills = new Dictionary<long, Skill>();
 
         public long CharacterId { get; set; }
         public string CharacterName { get; set; }
         public Dictionary<AttributeTypes, object> Attributes => _attributes;
-        public Dictionary<long, Eve.Skill> Skills => _skills;
+        public Dictionary<long, Skill> Skills => _skills;
 
         public void addAttribute(AttributeTypes key, object value)
         {
@@ -21,10 +22,18 @@ namespace EveProfiler.Logic
             NotifyPropertyChanged("Attributes");
         }
 
-        public void addSkill(long key, Eve.Skill value)
+        public void addSkill(long key, Skill value)
         {
             _skills.Add(key, value);
             NotifyPropertyChanged("Skills");
+        }
+
+        public void addSkills(List<Skill> skills)
+        { 
+            foreach(Skill skill in skills)
+            {
+                addSkill(skill.TypeId, skill);
+            }
         }
 
         #endregion

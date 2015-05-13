@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace EveProfiler.Logic.CharacterAttributes
 {
-    public class Event : Character, INotifyPropertyChanged
+    public class Event : Character
     {
         private string _ownerName;
         private DateTime _eventDate;
@@ -62,16 +62,6 @@ namespace EveProfiler.Logic.CharacterAttributes
             {
                 _eventText = value;
                 NotifyPropertyChanged("EventText");
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }

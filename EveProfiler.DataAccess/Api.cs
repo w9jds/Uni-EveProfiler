@@ -177,52 +177,51 @@ namespace EveProfiler.DataAccess
             }
         }
 
-        //public static void getSkillInTraining(int sCharacterID, string vCode, string keyid, Action<cSkillInTraining> aResult)
-        //{
-        //    List<KeyValuePair<string, string>> Parms = new List<KeyValuePair<string, string>>()
-        //    {
-        //        new KeyValuePair<string, string>("keyid", keyid),
-        //        new KeyValuePair<string, string>("vCode", vCode),
-        //        new KeyValuePair<string, string>("characterID", sCharacterID.ToString())
-        //    };
+        public static void getSkillInTraining(Character character, Action<cSkillInTraining> result)
+        {
+            if (NetworkInterface.GetIsNetworkAvailable())
+            {
+                HttpHelper.Get(@"/char/SkillInTraining.xml.aspx", character.getCharacterQuery(), new Action<HttpResponseMessage>(response =>
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        response.Content.ReadAsStringAsync().ContinueWith(t =>
+                        {
+                            return cParse.parseSkillInTraining(t.Result);
+                        }).ContinueWith(t => result(t.Result));
+                    }
+                }));
+            }
+            else
+            {
 
+            }
+        }
 
-        //    Core.cHttp.get(@"/char/SkillInTraining.xml.aspx", Parms, new Action<HttpResponseMessage>(tResponse =>
-        //    {
-        //        if (tResponse.StatusCode == System.Net.HttpStatusCode.OK)
-        //        {
-        //            tResponse.Content.ReadAsStringAsync().ContinueWith(t =>
-        //            {
-        //                return cParse.parseSkillInTraining(t.Result);
-        //            }).ContinueWith( t => aResult(t.Result));
-        //        }
-        //    }));
-        //}
+        public static void getMarketOrders(Character character, Action<Dictionary<long, MarketOrder>> result)
+        {
+            if (NetworkInterface.GetIsNetworkAvailable())
+            {
+                HttpHelper.Get(@"/char/MarketOrders.xml.aspx", character.getCharacterQuery(), new Action<HttpResponseMessage>(result =>
+                {
+                    if (result.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        result.Content.ReadAsStringAsync().ContinueWith(t =>
+                        {
+                            return cParse.parseMarketOrders(t.Result);
+                        }).ContinueWith(t => result(t.Result));
+                    }
+                }));
+            }
+            else
+            {
 
-        //public static void getMarketOrders(int sCharacterID, string vCode, string keyid, Action<ObservableCollection<cOrders>> aResult)
-        //{
-        //    List<KeyValuePair<string,string>> Parms = new List<KeyValuePair<string, string>>()
-        //    {
-        //        new KeyValuePair<string, string>("keyid", keyid),
-        //        new KeyValuePair<string, string>("vCode", vCode),
-        //        new KeyValuePair<string, string>("characterID", sCharacterID.ToString())
-        //    };
-
-        //    Core.cHttp.get(@"/char/MarketOrders.xml.aspx", Parms, new Action<HttpResponseMessage>(tResponse => 
-        //    {
-        //        if (tResponse.StatusCode == System.Net.HttpStatusCode.OK)
-        //        {
-        //            tResponse.Content.ReadAsStringAsync().ContinueWith(t => 
-        //            {
-        //                return cParse.parseMarketOrders(t.Result);
-        //            }).ContinueWith(t => aResult(t.Result));
-        //        }
-        //    }));
-        //}
+            }
+        }
 
         //public static void getWalletTransactions(int sCharacterID, string vCode, string keyid, Action<ObservableCollection<cWalletTransaction>> aResult)
         //{
-        //    List<KeyValuePair<string, string>> Parms = new List<KeyValuePair<string, string>> 
+        //    List<KeyValuePair<string, string>> Parms = new List<KeyValuePair<string, string>>
         //    {
         //        new KeyValuePair<string, string>("keyid", keyid),
         //        new KeyValuePair<string, string>("vCode", vCode),
@@ -237,7 +236,7 @@ namespace EveProfiler.DataAccess
         //            tResponse.Content.ReadAsStringAsync().ContinueWith(t =>
         //            {
         //                return cParse.parseWalletTransactions(t.Result);
-        //            }).ContinueWith(t =>  aResult(t.Result));
+        //            }).ContinueWith(t => aResult(t.Result));
         //        }
         //    }));
         //}
@@ -287,148 +286,74 @@ namespace EveProfiler.DataAccess
         //    }));
         //}
 
-        //public static void getTypeName(int typeId, Action<List<cId>> aResult)
-        //{
-        //    List<KeyValuePair<string, string>> Parms = new List<KeyValuePair<string, string>>()
-        //    {
-        //        new KeyValuePair<string, string>("ids", typeId.ToString())
-        //    };
+        public static void getTypeName(List<int> typeIds, Action<List<Dictionary<long, string>>> result)
+        {
+            if (NetworkInterface.GetIsNetworkAvailable())
+            {
+                List<KeyValuePair<string, string>> Parms = new List<KeyValuePair<string, string>>()
+                {
+                    new KeyValuePair<string, string>("ids", string.Join(",", typeIds.ToArray()))
+                };
 
-        //    Core.cHttp.get(@"/eve/TypeName.xml.aspx", Parms, new Action<HttpResponseMessage>(tResponse =>
-        //    {
-        //        if (tResponse.StatusCode == System.Net.HttpStatusCode.OK)
-        //        {
-        //            tResponse.Content.ReadAsStringAsync().ContinueWith(t =>
-        //            {
-        //                return cParse.parseTypeIds(t.Result);
-        //            }).ContinueWith( t => aResult(t.Result));
-        //        }
-        //    }));
-        //}
+                HttpHelper.Get(@"/eve/TypeName.xml.aspx", Parms, new Action<HttpResponseMessage>(response =>
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        response.Content.ReadAsStringAsync().ContinueWith(t =>
+                        {
+                            return cParse.parseTypeIds(t.Result);
+                        }).ContinueWith(t => result(t.Result));
+                    }
+                }));
+            }
+            else
+            {
 
+            }
+        }
 
+        public static void GetUpcomingCalendarEvents(Character character, Action<Dictionary<long, Event>> result)
+        {
+            if (NetworkInterface.GetIsNetworkAvailable())
+            {
+                HttpHelper.Get(@"/char/UpcomingCalendarEvents.xml.aspx", character.getCharacterQuery(), new Action<HttpResponseMessage>(response =>
+                    {
+                        if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                        {
+                            response.Content.ReadAsStringAsync().ContinueWith(t =>
+                            {
+                                return cParse.parseUpcomingCalendarEvents(t.Result);
+                            }).ContinueWith(t => result(t.Result));
+                        }
+                    }));
+            }
+            else
+            {
 
-        //public static void getMailBody(int sCharacterID, String vCode, String keyid, int sMailid, Action<string> aResult)
-        //{
-        //    List<KeyValuePair<string, string>> Parms = new List<KeyValuePair<string, string>>()
-        //    {
-        //        new KeyValuePair<string, string>("keyid", keyid),
-        //        new KeyValuePair<string, string>("vCode", vCode),
-        //        new KeyValuePair<string, string>("characterID", sCharacterID.ToString()),
-        //        new KeyValuePair<string, string>("ids", sMailid.ToString())
-        //    };
+            }
+        }
 
-        //    Core.cHttp.get(@"/char/MailBodies.xml.aspx", Parms, new Action<HttpResponseMessage>(tResponse =>
-        //    {
-        //        if (tResponse.StatusCode == System.Net.HttpStatusCode.OK)
-        //        {
-        //            tResponse.Content.ReadAsStringAsync().ContinueWith(t =>
-        //            {
-        //                return cParse.parseMailBody(t.Result);
-        //            }).ContinueWith(t => aResult(t.Result));
-        //        }
-        //    }));
-        //}
+        public static void getServerStatus(Action<ServerStatus> result)
+        {
+            if (NetworkInterface.GetIsNetworkAvailable())
+            {
+                HttpHelper.Get(@"/server/ServerStatus.xml.aspx", new Action<HttpResponseMessage>(response =>
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        response.Content.ReadAsStringAsync().ContinueWith(t =>
+                        {
+                            return cParse.parseServerStatus(t.Result);
+                        }).ContinueWith(t => result(t.Result));
+                    }
+                }));
+            }
+            else
+            {
 
-        //public static void getUpcomingCalendarEvents(int characterId, string vCode, string keyId, Action<ObservableCollection<cCalendarEvent>> result) 
-        //{
-        //    List<KeyValuePair<string, string>> Params = new List<KeyValuePair<string, string>> 
-        //    {
-        //        new KeyValuePair<string, string>("keyid", keyId),
-        //        new KeyValuePair<string, string>("vCode", vCode),
-        //        new KeyValuePair<string, string>("characterID", characterId.ToString())
-        //    };
+            }
 
-        //    Core.cHttp.get(
-        //        @"/char/UpcomingCalendarEvents.xml.aspx", 
-        //        Params, 
-        //        new Action<HttpResponseMessage>(response => 
-        //        {
-        //            if (response.StatusCode == System.Net.HttpStatusCode.OK)
-        //            {
-        //                response.Content.ReadAsStringAsync().ContinueWith(t => 
-        //                {
-        //                    return cParse.parseUpcomingCalendarEvents(t.Result);
-        //                }).ContinueWith(t => result(t.Result));
-        //            }
-        //        }));
-        //}
+        }
 
-        //public static void getCharacterNamefromID(string characterIDs, Action<List<cId>> aResult)
-        //{
-        //    List<KeyValuePair<string, string>> Parms = new List<KeyValuePair<string, string>>()
-        //    {
-        //        new KeyValuePair<string, string>("ids", characterIDs)
-        //    };
-
-        //    Core.cHttp.get(@"/eve/CharacterName.xml.aspx", Parms, new Action<HttpResponseMessage>(tResponse =>
-        //    {
-        //        if (tResponse.StatusCode == System.Net.HttpStatusCode.OK)
-        //        {
-        //            tResponse.Content.ReadAsStringAsync().ContinueWith(t =>
-        //            {
-        //                return cParse.parseCharacterNames(t.Result);
-        //            }).ContinueWith(t => aResult(t.Result));
-        //        }
-        //    }));
-        //}
-
-        //public static void getServerStatus(Action<ServerStatus> aResult)
-        //{
-        //    Core.cHttp.get(@"/server/ServerStatus.xml.aspx", new Action<HttpResponseMessage>(tResponse =>
-        //    {
-        //        if (tResponse.StatusCode == System.Net.HttpStatusCode.OK)
-        //        {
-        //            tResponse.Content.ReadAsStringAsync().ContinueWith(t =>
-        //            {
-        //                return cParse.parseServerStatus(t.Result);
-        //            }).ContinueWith(t => aResult(t.Result));
-        //        }
-        //    }));
-        //}
-
-        //public static void getCharacterPortrait(int sCharacterID, int nSize, Action<byte[]> aResult)
-        //{
-        //    Core.cHttp.get(@"/Character/", sCharacterID.ToString(), nSize, new Action<HttpResponseMessage>(tResponse =>
-        //    {
-        //        if (tResponse.StatusCode == System.Net.HttpStatusCode.OK)
-        //        {
-        //            tResponse.Content.ReadAsByteArrayAsync().ContinueWith(t =>
-        //            {
-        //                return t.Result;
-        //            }).ContinueWith(t => aResult(t.Result));
-        //        }
-
-        //    }));
-        //}
-
-        //public static void getCorporationPortrait(int sCorpID, int nSize, Action<byte[]> aResult)
-        //{
-        //    Core.cHttp.get(@"/Corporation/", sCorpID.ToString(), nSize, new Action<HttpResponseMessage>(tResponse =>
-        //    {
-        //        if (tResponse.StatusCode == System.Net.HttpStatusCode.OK)
-        //        {
-        //            tResponse.Content.ReadAsByteArrayAsync().ContinueWith(t =>
-        //            {
-        //                return t.Result;
-        //            }).ContinueWith(t => aResult(t.Result));
-        //        }
-        //    }));
-        //}
-
-        //public static void getAlliancePortrait(int sAllianceID, int nSize, Action<byte[]> aResult)
-        //{
-        //    Core.cHttp.get(@"/Alliance/", sAllianceID.ToString(), nSize, new Action<HttpResponseMessage>(tResponse =>
-        //    {
-        //        if (tResponse.StatusCode == System.Net.HttpStatusCode.OK)
-        //        {
-        //            tResponse.Content.ReadAsByteArrayAsync().ContinueWith(t =>
-        //            {
-        //                return t.Result;
-        //            }).ContinueWith(t => aResult(t.Result));
-        //        }
-
-        //    }));
-        //}
     }
 }

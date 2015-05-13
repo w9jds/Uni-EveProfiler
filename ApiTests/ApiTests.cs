@@ -23,9 +23,9 @@ namespace NetworkingTests
         {
             ManualResetEvent completion = new ManualResetEvent(false);
 
-            Api.GetCharacterList(_account, new Action<Account>(result =>
+            Api.GetCharacterList(_account, new Action<List<Character>>(result =>
             {
-                _account = result;
+                _account.addCharacters(result);
                 completion.Set();
             }));
 
@@ -48,12 +48,12 @@ namespace NetworkingTests
 
             Api.GetCharacterInfo(_account.Characters[0], new Action<Info>(result =>
             {
-                _account.Characters[0].Attributes.Add(Enums.CharacterAttributes.Info, result);
+                _account.Characters[0].Attributes.Add(AttributeTypes.Info, result);
                 completion.Set();
             }));
 
             completion.WaitOne();
-            Assert.AreEqual(_account.Characters[0].Attributes.ContainsKey(Enums.CharacterAttributes.Info), true);
+            Assert.AreEqual(_account.Characters[0].Attributes.ContainsKey(AttributeTypes.Info), true);
         }
 
         [TestMethod]
@@ -68,16 +68,16 @@ namespace NetworkingTests
             _account.addCharacters(characters);
             ManualResetEvent completion = new ManualResetEvent(false);
 
-            Api.GetCharacterSheet(_account.Characters[0], new Action<Tuple<Sheet, List<SkillGroup>>>(result =>
+            Api.GetCharacterSheet(_account.Characters[0], new Action<Tuple<Sheet, List<EveProfiler.Logic.Eve.Skill>>>(result =>
             {
-            _account.Characters[0].addAttribute(Enums.CharacterAttributes.Info, result.);
-                _account.Characters[0] = result;
+                _account.Characters[0].addAttribute(AttributeTypes.Sheet, result);
+                _account.Characters[0].addSkill(result);
                 completion.Set();
             }));
 
             completion.WaitOne();
             Assert.AreNotEqual(_account.Characters[0].Skills.Count, 0);
-            Assert.AreEqual(_account.Characters[0].Attributes.ContainsKey(Enums.CharacterAttributes.Sheet), true);
+            Assert.AreEqual(_account.Characters[0].Attributes.ContainsKey(AttributeTypes.Sheet), true);
         }
 
         [TestMethod]
@@ -109,14 +109,29 @@ namespace NetworkingTests
             _account.addCharacters(characters);
             ManualResetEvent completion = new ManualResetEvent(false);
 
-            Api.GetCharacterMail(_account.Characters[0], new Action<Character>(result =>
+            Api.GetCharacterMail(_account.Characters[0], new Action<Dictionary<long, Mail>>(result =>
             {
-                _account.Characters[0] = result;
+                _account.Characters[0].Attributes.Add(AttributeTypes.Mail, result);
                 completion.Set();
             }));
 
             completion.WaitOne();
-            Assert.AreEqual(_account.Characters[0].Attributes.ContainsKey(Enums.CharacterAttributes.Mail), true);
+            Assert.AreEqual(_account.Characters[0].Attributes.ContainsKey(AttributeTypes.Mail), true);
+        }
+
+        [TestMethod]
+        public void getCharacterSkillQueue()
+        {
+            List<Character> characters = new List<Character>()
+            {
+                new Character { CharacterId = 254186884 },
+                new Character { CharacterId = 93265700 }
+            };
+
+            _account.addCharacters(characters);
+            ManualResetEvent completion = new ManualResetEvent(false);
+
+            
         }
     }
 }
