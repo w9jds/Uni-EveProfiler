@@ -46,7 +46,8 @@ namespace EveProfiler.Classes
 
     public class CharacterImageUriConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, string language) => $"https://image.eveonline.com/Character/{value}_256.jpg";
+        public object Convert(object value, Type targetType, object parameter, string language) => 
+            $"https://image.eveonline.com/Character/{value}_256.jpg";
 
         // No need to implement converting back on a one-way binding 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
@@ -79,8 +80,8 @@ namespace EveProfiler.Classes
         {
             if (value != null)
             {
-                Sheet thisCharacter = value as Sheet;
-                return $"{thisCharacter.Gender} - {thisCharacter.Race} - {thisCharacter.BloodLine} - {thisCharacter.Ancestry}";
+                Sheet characterSheet = value as Sheet;
+                return $"{characterSheet.Gender} - {characterSheet.Race} - {characterSheet.BloodLine} - {characterSheet.Ancestry}";
             }
 
             return null;
@@ -170,9 +171,13 @@ namespace EveProfiler.Classes
             DateTime mailDate = (DateTime)value;
 
             if (thisDate.Date == mailDate.Date)
+            {
                 return mailDate.ToString("T");
+            }
             else
+            {
                 return mailDate.ToString("m");
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string culture)
@@ -239,19 +244,19 @@ namespace EveProfiler.Classes
     {
         public object Convert(object value, Type targetType, object parameter, string culture)
         {
-            //HtmlDocument doc;
-            //ObservableCollection<cTitleId> ocTitles = value as ObservableCollection<cTitleId>;
+            HtmlDocument doc;
+            ObservableCollection<cTitleId> ocTitles = value as ObservableCollection<cTitleId>;
 
-            //if (ocTitles.Count > 0)
-            //{
-            //    doc = new HtmlDocument();
-            //    doc.LoadHtml(ocTitles[0].titleName);
-            //    return doc.DocumentNode.InnerText;
-            //}
-            //else
+            if (ocTitles.Count > 0)
+            {
+                doc = new HtmlDocument();
+                doc.LoadHtml(ocTitles[0].titleName);
+                return doc.DocumentNode.InnerText;
+            }
+            else
+            {
                 return string.Empty;
-
-            
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string culture)
@@ -262,7 +267,8 @@ namespace EveProfiler.Classes
 
     public class DateTime2DateConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, string culture) => ((DateTime)value).ToString("d");
+        public object Convert(object value, Type targetType, object parameter, string culture) => 
+            ((DateTime)value).ToString("d");
 
         public object ConvertBack(object value, Type targetType, object parameter, string culture)
         {
@@ -274,23 +280,18 @@ namespace EveProfiler.Classes
     {
         public object Convert(object value, Type targetType, object parameter, string culture)
         {
-            //HtmlDocument doc;
+            if (value != null)
+            {
+                string html = ((string)value).Replace("<br>", "\r\n");
 
-            //if (value != null)
-            //{
-            //    string sHtml = (string)value;
-
-            //    sHtml = sHtml.Replace("<br>", "\r\n");
-
-            //    doc = new HtmlDocument();
-            //    doc.LoadHtml(sHtml);
-            //    string test = doc.DocumentNode.InnerText;
-            //    return doc.DocumentNode.InnerText;
-            //}
-            //else
+                HtmlDocument doc = new HtmlDocument();
+                doc.LoadHtml(html);
+                return doc.DocumentNode.InnerText;
+            }
+            else
+            {
                 return string.Empty;
-
-
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string culture)
@@ -301,7 +302,8 @@ namespace EveProfiler.Classes
 
     public class AttributeConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, string culture) => (int)value + " points";
+        public object Convert(object value, Type targetType, object parameter, string culture) => 
+            $"{value} points";
 
         public object ConvertBack(object value, Type targetType, object parameter, string culture)
         {
@@ -332,9 +334,13 @@ namespace EveProfiler.Classes
         public object Convert(object value, Type targetType, object parameter, string culture)
         {
             if ((int)value != 0)
-                return ((int)value).ToString("##,#") + " Points";
+            {
+                return $"{((int)value).ToString("##,#")} Points";
+            }
             else
+            {
                 return "0 Points";
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string culture)
@@ -349,7 +355,7 @@ namespace EveProfiler.Classes
         {
             if ((int)value != 0)
             {
-                return string.Format("SP: {0}", ((int)value).ToString("##,#"));
+                return $"SP: {((int)value).ToString("##,#")}";
             }
             else
             {

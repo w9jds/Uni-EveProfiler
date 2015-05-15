@@ -1,4 +1,11 @@
-﻿using Windows.UI.Xaml;
+﻿using EveProfiler.DataAccess;
+using EveProfiler.Logic;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Windows.Storage;
+using Windows.UI.Core;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 
@@ -8,7 +15,8 @@ namespace EveProfiler.Controls
 {
     public sealed partial class Mail : UserControl
     {
-        //private ApplicationDataContainer _LocalSettings = ApplicationData.Current.LocalSettings;
+        private ApplicationDataContainer _localSettings = ApplicationData.Current.LocalSettings;
+        ObservableCollection<Mail> _currentMails = new ObservableCollection<Mail>();
         //private cBase _ActiveCharacter = App.thisAccount.getActiveCharacter();
 
         public Mail()
@@ -18,6 +26,7 @@ namespace EveProfiler.Controls
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+
             //cEveProfiler.getMailHeaders(_ActiveCharacter.characterID, _LocalSettings.Values["vCode"].ToString(),
             //    _LocalSettings.Values["keyId"].ToString(), new Action<ObservableCollection<cMailHeaderItem>>(ocmhiResult =>
             //{
@@ -65,6 +74,20 @@ namespace EveProfiler.Controls
             //            }));
             //    }
             //}));
+
+        }
+
+        private void LoadCharacterMail(Character character)
+        {
+
+            Api.GetCharacterMail(character, new Action<Tuple<DateTime, Dictionary<long, Logic.CharacterAttributes.Mail>>>(result =>
+            {
+                Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    
+                });
+            }));
+
         }
 
         private void ucMailItem_Tapped(object sender, TappedRoutedEventArgs e)

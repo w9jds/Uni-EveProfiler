@@ -18,7 +18,7 @@
     <Grid>
         <Grid Background="#DDFFFFFF" Margin="10,5">
             <Grid.RowDefinitions>
-                <RowDefinition/>
+                <RowDefinition Height="100"/>
                 <RowDefinition Height="{Binding isExpanded, Converter={StaticResource ExtendedConverter}}"/>
             </Grid.RowDefinitions>
 
@@ -27,7 +27,9 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <Ellipse Width="75" Height="75" HorizontalAlignment="Left" Margin="20,15,15,15">
+            <Ellipse Width="70" Height="70"
+                     HorizontalAlignment="Left" 
+                     Margin="20,15,15,15">
                 <Ellipse.Fill>
                     <ImageBrush>
                         <ImageBrush.ImageSource>
@@ -52,7 +54,7 @@
                 <TextBlock Grid.Row="2" Text="{Binding title}" Margin="10,0,20,0" FontSize="13" TextWrapping="Wrap" Foreground="Black" HorizontalAlignment="Left" VerticalAlignment="Top"/>
             </Grid>
 
-            <TextBlock Name="tbMailBody" FontSize="15" Grid.Row="1" Grid.ColumnSpan="2" Margin="20,15" Foreground="Black" TextWrapping="Wrap" Text="{Binding messageBody, Converter={StaticResource MailBodyConverter}}"/>
+            <TextBlock Name="messageBody" FontSize="15" Grid.Row="1" Grid.ColumnSpan="2" Margin="20,15" Foreground="Black" TextWrapping="Wrap" Text="{Binding messageBody, Converter={StaticResource MailBodyConverter}}"/>
         </Grid>
     </Grid>
 </UserControl>
