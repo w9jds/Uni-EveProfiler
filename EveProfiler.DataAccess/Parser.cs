@@ -126,7 +126,7 @@ namespace EveProfiler.DataAccess
                     SkillLevel = (int)y.Attribute("skillLevel")
                 }).ToList();
 
-        public static Dictionary<long, Mail> ParseMailHeaders(string xml)
+        public static Tuple<DateTime, Dictionary<long, Mail>> ParseMailHeaders(string xml)
         {
             XDocument doc = XDocument.Parse(xml);
 
@@ -149,7 +149,7 @@ namespace EveProfiler.DataAccess
                 mails.Add(item.MessageID, item);
             }
 
-            return mails;
+            return new Tuple<DateTime, Dictionary<long, Mail>>(GetCachedUntil(doc), mails);
         }
 
         public static Dictionary<long, Mail> ParseMailBodies(string xml, Dictionary<long, Mail> mail)

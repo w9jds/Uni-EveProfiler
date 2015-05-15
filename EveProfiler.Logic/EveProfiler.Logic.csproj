@@ -44,10 +44,12 @@
     <Compile Include="CharacterAttributes\Mail.cs" />
     <Compile Include="CharacterAttributes\Sheet.cs" />
     <Compile Include="CharacterAttributes\Skill.cs" />
+    <Compile Include="CharacterAttributes\SkillQueue.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Eve\RequiredSkill.cs" />
     <Compile Include="Eve\Skill.cs" />
     <Compile Include="Eve\SkillGroup.cs" />
+    <Compile Include="Eve\SkillQueueItem.cs" />
     <Compile Include="ICallMetadata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerStatus.cs" />

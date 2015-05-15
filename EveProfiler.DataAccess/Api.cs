@@ -115,7 +115,7 @@ namespace EveProfiler.DataAccess
             }
         }
 
-        public static void GetCharacterMail(Character character, Action<Dictionary<long, Mail>> result)
+        public static void GetCharacterMail(Character character, Action<Tuple<DateTime, Dictionary<long, Mail>>> result)
         {
             if (NetworkInterface.GetIsNetworkAvailable())
             {
@@ -125,16 +125,17 @@ namespace EveProfiler.DataAccess
                     {
                         response.Content.ReadAsStringAsync().ContinueWith(t =>
                         {
-                            Dictionary<long, Mail> mails = Parser.ParseMailHeaders(t.Result);
+                            Tuple<DateTime, Dictionary<long, Mail>> mails = Parser.ParseMailHeaders(t.Result);
                             ManualResetEvent manualResetEvent = new ManualResetEvent(false);
 
-                            GetMailBodies(character, mails, new Action<Dictionary<long, Mail>> (bodyResult => {
-                                mails = bodyResult;
+                            Dictionary<long, Mail> fullMails = new Dictionary<long, Mail>();
+                            GetMailBodies(character, mails.Item2, new Action<Dictionary<long, Mail>> (bodyResult => {
+                                fullMails = bodyResult;
                                 manualResetEvent.Set();
                             }));
 
                             manualResetEvent.WaitOne();
-                            return mails;
+                            return new Tuple<DateTime, Dictionary<long, Mail>>(mails.Item1, fullMails);
                         }).ContinueWith(t => result(t.Result));
                     }
                     else
@@ -177,47 +178,47 @@ namespace EveProfiler.DataAccess
             }
         }
 
-        public static void getSkillInTraining(Character character, Action<cSkillInTraining> result)
-        {
-            if (NetworkInterface.GetIsNetworkAvailable())
-            {
-                HttpHelper.Get(@"/char/SkillInTraining.xml.aspx", character.getCharacterQuery(), new Action<HttpResponseMessage>(response =>
-                {
-                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        response.Content.ReadAsStringAsync().ContinueWith(t =>
-                        {
-                            return cParse.parseSkillInTraining(t.Result);
-                        }).ContinueWith(t => result(t.Result));
-                    }
-                }));
-            }
-            else
-            {
+        //public static void getSkillInTraining(Character character, Action<cSkillInTraining> result)
+        //{
+        //    if (NetworkInterface.GetIsNetworkAvailable())
+        //    {
+        //        HttpHelper.Get(@"/char/SkillInTraining.xml.aspx", character.getCharacterQuery(), new Action<HttpResponseMessage>(response =>
+        //        {
+        //            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+        //            {
+        //                response.Content.ReadAsStringAsync().ContinueWith(t =>
+        //                {
+        //                    return cParse.parseSkillInTraining(t.Result);
+        //                }).ContinueWith(t => result(t.Result));
+        //            }
+        //        }));
+        //    }
+        //    else
+        //    {
 
-            }
-        }
+        //    }
+        //}
 
-        public static void getMarketOrders(Character character, Action<Dictionary<long, MarketOrder>> result)
-        {
-            if (NetworkInterface.GetIsNetworkAvailable())
-            {
-                HttpHelper.Get(@"/char/MarketOrders.xml.aspx", character.getCharacterQuery(), new Action<HttpResponseMessage>(result =>
-                {
-                    if (result.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        result.Content.ReadAsStringAsync().ContinueWith(t =>
-                        {
-                            return cParse.parseMarketOrders(t.Result);
-                        }).ContinueWith(t => result(t.Result));
-                    }
-                }));
-            }
-            else
-            {
+        //public static void getMarketOrders(Character character, Action<Dictionary<long, MarketOrder>> result)
+        //{
+        //    if (NetworkInterface.GetIsNetworkAvailable())
+        //    {
+        //        HttpHelper.Get(@"/char/MarketOrders.xml.aspx", character.getCharacterQuery(), new Action<HttpResponseMessage>(result =>
+        //        {
+        //            if (result.StatusCode == System.Net.HttpStatusCode.OK)
+        //            {
+        //                result.Content.ReadAsStringAsync().ContinueWith(t =>
+        //                {
+        //                    return cParse.parseMarketOrders(t.Result);
+        //                }).ContinueWith(t => result(t.Result));
+        //            }
+        //        }));
+        //    }
+        //    else
+        //    {
 
-            }
-        }
+        //    }
+        //}
 
         //public static void getWalletTransactions(int sCharacterID, string vCode, string keyid, Action<ObservableCollection<cWalletTransaction>> aResult)
         //{
@@ -286,74 +287,74 @@ namespace EveProfiler.DataAccess
         //    }));
         //}
 
-        public static void getTypeName(List<int> typeIds, Action<List<Dictionary<long, string>>> result)
-        {
-            if (NetworkInterface.GetIsNetworkAvailable())
-            {
-                List<KeyValuePair<string, string>> Parms = new List<KeyValuePair<string, string>>()
-                {
-                    new KeyValuePair<string, string>("ids", string.Join(",", typeIds.ToArray()))
-                };
+        //public static void getTypeName(List<int> typeIds, Action<List<Dictionary<long, string>>> result)
+        //{
+        //    if (NetworkInterface.GetIsNetworkAvailable())
+        //    {
+        //        List<KeyValuePair<string, string>> Parms = new List<KeyValuePair<string, string>>()
+        //        {
+        //            new KeyValuePair<string, string>("ids", string.Join(",", typeIds.ToArray()))
+        //        };
 
-                HttpHelper.Get(@"/eve/TypeName.xml.aspx", Parms, new Action<HttpResponseMessage>(response =>
-                {
-                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        response.Content.ReadAsStringAsync().ContinueWith(t =>
-                        {
-                            return cParse.parseTypeIds(t.Result);
-                        }).ContinueWith(t => result(t.Result));
-                    }
-                }));
-            }
-            else
-            {
+        //        HttpHelper.Get(@"/eve/TypeName.xml.aspx", Parms, new Action<HttpResponseMessage>(response =>
+        //        {
+        //            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+        //            {
+        //                response.Content.ReadAsStringAsync().ContinueWith(t =>
+        //                {
+        //                    return cParse.parseTypeIds(t.Result);
+        //                }).ContinueWith(t => result(t.Result));
+        //            }
+        //        }));
+        //    }
+        //    else
+        //    {
 
-            }
-        }
+        //    }
+        //}
 
-        public static void GetUpcomingCalendarEvents(Character character, Action<Dictionary<long, Event>> result)
-        {
-            if (NetworkInterface.GetIsNetworkAvailable())
-            {
-                HttpHelper.Get(@"/char/UpcomingCalendarEvents.xml.aspx", character.getCharacterQuery(), new Action<HttpResponseMessage>(response =>
-                    {
-                        if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                        {
-                            response.Content.ReadAsStringAsync().ContinueWith(t =>
-                            {
-                                return cParse.parseUpcomingCalendarEvents(t.Result);
-                            }).ContinueWith(t => result(t.Result));
-                        }
-                    }));
-            }
-            else
-            {
+        //public static void GetUpcomingCalendarEvents(Character character, Action<Dictionary<long, Event>> result)
+        //{
+        //    if (NetworkInterface.GetIsNetworkAvailable())
+        //    {
+        //        HttpHelper.Get(@"/char/UpcomingCalendarEvents.xml.aspx", character.getCharacterQuery(), new Action<HttpResponseMessage>(response =>
+        //            {
+        //                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+        //                {
+        //                    response.Content.ReadAsStringAsync().ContinueWith(t =>
+        //                    {
+        //                        return cParse.parseUpcomingCalendarEvents(t.Result);
+        //                    }).ContinueWith(t => result(t.Result));
+        //                }
+        //            }));
+        //    }
+        //    else
+        //    {
 
-            }
-        }
+        //    }
+        //}
 
-        public static void getServerStatus(Action<ServerStatus> result)
-        {
-            if (NetworkInterface.GetIsNetworkAvailable())
-            {
-                HttpHelper.Get(@"/server/ServerStatus.xml.aspx", new Action<HttpResponseMessage>(response =>
-                {
-                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        response.Content.ReadAsStringAsync().ContinueWith(t =>
-                        {
-                            return cParse.parseServerStatus(t.Result);
-                        }).ContinueWith(t => result(t.Result));
-                    }
-                }));
-            }
-            else
-            {
+        //public static void getServerStatus(Action<ServerStatus> result)
+        //{
+        //    if (NetworkInterface.GetIsNetworkAvailable())
+        //    {
+        //        HttpHelper.Get(@"/server/ServerStatus.xml.aspx", new Action<HttpResponseMessage>(response =>
+        //        {
+        //            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+        //            {
+        //                response.Content.ReadAsStringAsync().ContinueWith(t =>
+        //                {
+        //                    return cParse.parseServerStatus(t.Result);
+        //                }).ContinueWith(t => result(t.Result));
+        //            }
+        //        }));
+        //    }
+        //    else
+        //    {
 
-            }
+        //    }
 
-        }
+        //}
 
     }
 }
