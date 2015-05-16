@@ -11,7 +11,7 @@
     Loaded="UserControl_Loaded">
 
     <Grid>
-        <ListView x:Name="lbHeaders" Background="Transparent" ScrollViewer.VerticalScrollBarVisibility="Hidden">
+        <ListView x:Name="mailList" Background="Transparent" ScrollViewer.VerticalScrollBarVisibility="Hidden">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>

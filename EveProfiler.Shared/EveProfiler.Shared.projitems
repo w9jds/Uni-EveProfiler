@@ -39,7 +39,6 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Classes\Converters.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Classes\StorageSerialization.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Classes\Selectors.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Classes\TemplateSelector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\CharacterCard.xaml.cs">

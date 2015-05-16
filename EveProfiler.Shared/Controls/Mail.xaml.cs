@@ -1,6 +1,6 @@
 ﻿using EveProfiler.DataAccess;
-using EveProfiler.Logic;
 using System;
+using EveProfiler.Logic;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Windows.Storage;
@@ -8,6 +8,7 @@ using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Data;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -16,8 +17,7 @@ namespace EveProfiler.Controls
     public sealed partial class Mail : UserControl
     {
         private ApplicationDataContainer _localSettings = ApplicationData.Current.LocalSettings;
-        ObservableCollection<Mail> _currentMails = new ObservableCollection<Mail>();
-        //private cBase _ActiveCharacter = App.thisAccount.getActiveCharacter();
+        ObservableCollection<Logic.CharacterAttributes.Mail> _currentMails = new ObservableCollection<Logic.CharacterAttributes.Mail>();
 
         public Mail()
         {
@@ -26,55 +26,39 @@ namespace EveProfiler.Controls
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            Account account = JsonConvert.DeserializeObject<Account>((string)_localSettings.Values["account"]);
+            mailList.SetBinding(ItemsControl.ItemsSourceProperty, new Binding() { Source = _currentMails });
 
-            //cEveProfiler.getMailHeaders(_ActiveCharacter.characterID, _LocalSettings.Values["vCode"].ToString(),
-            //    _LocalSettings.Values["keyId"].ToString(), new Action<ObservableCollection<cMailHeaderItem>>(ocmhiResult =>
-            //{
-            //    ocmhiResult = new ObservableCollection<cMailHeaderItem>((from x in ocmhiResult orderby x.sentDate select x).Reverse().ToList());
+            LoadStoredMail();
+            LoadCharacterMail();
+        }
 
-            //    _ActiveCharacter.characterMail = ocmhiResult;
+        private void LoadStoredMail(Character character)
+        {
+            if (_localSettings.Containers.ContainsKey("Mail"))
+            {
+                if (_localSettings.Containers["Mail"].Containers.ContainsKey(character.CharacterName))
+                {
+                    ApplicationDataContainer characterMail = _localSettings.Containers["Mail"].Containers[character.CharacterName];
 
-            //    Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-            //    {
-            //        lbHeaders.SetBinding(ListBox.ItemsSourceProperty, new Binding() { Source = _ActiveCharacter.characterMail });
-            //    }).AsTask().Wait();
-
-            //    foreach (cMailHeaderItem mhiItem in _ActiveCharacter.characterMail)
-            //    {
-            //        if (mhiItem.senderPic == null)
-            //        {
-            //            cEveProfiler.getCharacterPortrait(mhiItem.senderID, 1024, new Action<byte[]>(baResult =>
-            //            {
-            //                List<cMailHeaderItem> sameCharacter = _ActiveCharacter.characterMail.Where(x => x.senderID == mhiItem.senderID).ToList();
-
-            //                foreach (cMailHeaderItem mdiMail in sameCharacter)
-            //                {
-            //                    mdiMail.senderPic = baResult;
-            //                }                          
-            //            }));
-            //        }
-
-            //        if (string.IsNullOrEmpty(mhiItem.senderName))
-            //        {
-            //            cEveProfiler.getCharacterNamefromID(mhiItem.senderID.ToString(), new Action<List<cId>>(cResult =>
-            //            {
-            //                List<cMailHeaderItem> sameCharacter = _ActiveCharacter.characterMail.Where(x => x.senderID == mhiItem.senderID).ToList();
-
-            //                foreach (cMailHeaderItem mdiMail in sameCharacter)
-            //                {
-            //                    mdiMail.senderName = cResult[0].name;
-            //                }
-            //            }));
-            //        }
-
-            //        cEveProfiler.getMailBody(_ActiveCharacter.characterID, _LocalSettings.Values["vCode"].ToString(),
-            //            _LocalSettings.Values["keyId"].ToString(), mhiItem.messageID, new Action<string>(sResult =>
-            //            {
-            //                mhiItem.messageBody = sResult;
-            //            }));
-            //    }
-            //}));
-
+                    foreach(string key in characterMail.Values.Keys)
+                    {
+                        if (!string.IsNullOrEmpty(characterMail.Values[key].ToString()))
+                        {
+                            _currentMails.Add(JsonConvert.DeserializeObject<Logic.CharacterAttributes.Mail>(characterMail.Values[key]));
+                        }
+                    }
+                }
+                else
+                {
+                    _localSettings.Containers["Mail"].CreateContainer(character.CharacterName, ApplicationDataCreateDisposition.Always);
+                }
+            }
+            else
+            {
+                _localSettings.CreateContainer("Mail", ApplicationDataCreateDisposition.Always);
+                _localSettings.Containers["Mail"].CreateContainer(character.CharacterName, ApplicationDataCreateDisposition.Always);
+            }
         }
 
         private void LoadCharacterMail(Character character)
@@ -84,10 +68,19 @@ namespace EveProfiler.Controls
             {
                 Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    
+                    ApplicationDataContainer characterMailStore = _localSettings.Containers["Mail"].Containers[character.CharacterName];
+                    Dictionary<long, Logic.CharacterAttributes.Mail> mails = result.Item2;
+                    foreach(long key in mails.Keys)
+                    {
+                        if (!characterMailStore.Values.ContainsKey(key.ToString()))
+                        {
+                            _currentMails.Add(mails[key]);
+                        }
+                    }
                 });
             }));
 
+            
         }
 
         private void ucMailItem_Tapped(object sender, TappedRoutedEventArgs e)
