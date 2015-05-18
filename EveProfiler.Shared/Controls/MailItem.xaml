@@ -1,9 +1,9 @@
 ﻿<UserControl
-    x:Class="EveProfiler.Controls.MailItem"
+    x:Class="EveProfiler.Shared.Controls.MailItem"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:EveProfiler.Controls"
-    xmlns:Classes="using:EveProfiler.Classes"
+    xmlns:local="using:EveProfiler.Shared.Controls"
+    xmlns:Classes="using:EveProfiler.Shared.Classes"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -19,7 +19,7 @@
         <Grid Background="#DDFFFFFF" Margin="10,5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="100"/>
-                <RowDefinition Height="{Binding isExpanded, Converter={StaticResource ExtendedConverter}}"/>
+                <RowDefinition Height="{Binding IsExtended, Converter={StaticResource ExtendedConverter}}"/>
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
@@ -33,13 +33,16 @@
                 <Ellipse.Fill>
                     <ImageBrush>
                         <ImageBrush.ImageSource>
-                            <BitmapImage UriSource="{Binding SenderId, Converter={StaticResource CharacterImageUriConverter}}" />
+                            <BitmapImage UriSource="{Binding SenderID, Converter={StaticResource CharacterImageUriConverter}}" />
                         </ImageBrush.ImageSource>
                     </ImageBrush>
                 </Ellipse.Fill>
             </Ellipse>
 
-            <Line x:Name="lBreak" Visibility="Collapsed" HorizontalAlignment="Center" Margin="15,0" Grid.ColumnSpan="3" VerticalAlignment="Bottom" X1="0" Y1="0" X2="1" Y2="0" Stretch="Fill" Stroke="Black" StrokeThickness="1" />
+            <Line x:Name="linebreak"
+                  HorizontalAlignment="Center" Margin="15,0" Grid.ColumnSpan="3" 
+                  VerticalAlignment="Bottom" X1="0" Y1="0" X2="1" Y2="0" 
+                  Stretch="Fill" Stroke="Black" StrokeThickness="1" />
 
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
@@ -49,12 +52,12 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Foreground="Black" Text="{Binding sentDate, Converter={StaticResource DateConverter}}" FontSize="13" Margin="0,0,15,0" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
-                <TextBlock Grid.Row="1" Text="{Binding senderName}" Margin="10,5,0,5" FontSize="17" FontWeight="SemiBold" Foreground="Black" HorizontalAlignment="Left"/>
-                <TextBlock Grid.Row="2" Text="{Binding title}" Margin="10,0,20,0" FontSize="13" TextWrapping="Wrap" Foreground="Black" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <TextBlock Foreground="Black" Text="{Binding SentDate, Converter={StaticResource DateConverter}}" FontSize="13" Margin="0,0,15,0" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+                <TextBlock Grid.Row="1" Text="{Binding SenderName}" Margin="10,5,0,5" FontSize="17" FontWeight="SemiBold" Foreground="Black" HorizontalAlignment="Left"/>
+                <TextBlock Grid.Row="2" Text="{Binding Title}" Margin="10,0,20,0" FontSize="13" TextWrapping="Wrap" Foreground="Black" HorizontalAlignment="Left" VerticalAlignment="Top"/>
             </Grid>
 
-            <TextBlock Name="messageBody" FontSize="15" Grid.Row="1" Grid.ColumnSpan="2" Margin="20,15" Foreground="Black" TextWrapping="Wrap" Text="{Binding messageBody, Converter={StaticResource MailBodyConverter}}"/>
+            <TextBlock Name="messageBody" FontSize="15" Grid.Row="1" Grid.ColumnSpan="2" Margin="20,15" Foreground="Black" TextWrapping="Wrap" Text="{Binding MessageBody, Converter={StaticResource MailBodyConverter}}"/>
         </Grid>
     </Grid>
 </UserControl>

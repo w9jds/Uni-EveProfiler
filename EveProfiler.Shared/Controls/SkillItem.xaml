@@ -1,15 +1,15 @@
 ﻿<UserControl
-    x:Class="EveProfiler.Controls.SkillItem"
+    x:Class="EveProfiler.Shared.Controls.SkillItem"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:EveProfiler.Controls"
-    xmlns:Classes="using:EveProfiler.Classes"
+    xmlns:local="using:EveProfiler.Shared.Controls"
+    xmlns:Classes="using:EveProfiler.Shared.Classes"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Loaded="UserControl_Loaded">
 
-    <UserControl.Resources>
+    <!--<UserControl.Resources>
         <Classes:AttributeIconConverter x:Key="AttributeIconConverter"/>
         <Classes:ExtensionConverter x:Key="ExtendedConverter"/>
         <Classes:SkillSkillPointsConverter x:Key="SkillSkillPointsConverter"/>
@@ -176,5 +176,5 @@
 
             </Pivot>
         </Grid>
-    </Grid>
+    </Grid>-->
 </UserControl>

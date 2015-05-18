@@ -1,10 +1,9 @@
-﻿<UserControl
-    x:Class="EveProfiler.Controls.Mail"
+﻿<local:CharacterControlBase
+    x:Class="EveProfiler.Shared.Controls.CharacterMail"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:EveProfiler.Controls"
-    xmlns:Controls="using:EveProfiler.Controls"
-    xmlns:Classes="using:EveProfiler.Classes"
+    xmlns:local="using:EveProfiler.Shared.Controls"
+    xmlns:Classes="using:EveProfiler.Shared.Classes"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -20,11 +19,11 @@
 
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Controls:MailItem Tapped="ucMailItem_Tapped"/>
+                    <local:MailItem Tapped="ucMailItem_Tapped"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
 
         </ListView>
 
     </Grid>
-</UserControl>
+</local:CharacterControlBase>

@@ -1,16 +1,19 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Reflection;
 
 namespace EveProfiler.Logic.CharacterAttributes
 {
-    public class Sheet : Character, INotifyPropertyChanged, ICallMetadata
+    public class Sheet : Info, ICallMetadata
     {
         private DateTime _dateOfBirth;
+        private DateTime _jumpActivation;
+        private DateTime _jumpFatigue;
+        private DateTime _jumpLastUpdate;
         private string _bloodLine;
         private string _ancestry;
         private string _gender;
         private string _race;
-        private double _balance;
         private int _freeRespecs;
         private int _intelligence;
         private int _memory;
@@ -18,7 +21,9 @@ namespace EveProfiler.Logic.CharacterAttributes
         private int _perception;
         private int _willpower;
 
+        #region Properties
         public long HomeStationId { get; set; }
+
         public DateTime DateofBirth
         {
             get { return _dateOfBirth; }
@@ -28,6 +33,7 @@ namespace EveProfiler.Logic.CharacterAttributes
                 NotifyPropertyChanged("DateofBirth");
             }
         }
+
         public string BloodLine
         {
             get { return _bloodLine; }
@@ -37,6 +43,7 @@ namespace EveProfiler.Logic.CharacterAttributes
                 NotifyPropertyChanged("BloodLine");
             }
         }
+
         public string Ancestry
         {
             get { return _ancestry; }
@@ -46,6 +53,7 @@ namespace EveProfiler.Logic.CharacterAttributes
                 NotifyPropertyChanged("Ancestry");
             }
         }
+
         public string Gender
         {
             get { return _gender; }
@@ -55,6 +63,7 @@ namespace EveProfiler.Logic.CharacterAttributes
                 NotifyPropertyChanged("Gender");
             }
         }
+
         public string Race
         {
             get { return _race; }
@@ -64,20 +73,14 @@ namespace EveProfiler.Logic.CharacterAttributes
                 NotifyPropertyChanged("Race");
             }
         }
-        public double Balance
-        {
-            get { return _balance; }
-            set
-            {
-                _balance = value;
-                NotifyPropertyChanged("Balance");
-            }
-        }
+
+        public string Family => $"{Gender} - {Race} - {BloodLine} - {Ancestry}";
+
         public int FreeRespecs
         {
             get
             {
-                return FreeRespecs;
+                return _freeRespecs;
             }
             set
             {
@@ -86,17 +89,134 @@ namespace EveProfiler.Logic.CharacterAttributes
             }
         }
 
-        public DateTime LastPulled { get; set; }
-        public DateTime CachedUntil { get; set; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged(string propertyName)
+        public DateTime JumpActivation
         {
-            if (PropertyChanged != null)
+            get
             {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                return _jumpActivation;
+            }
+
+            set
+            {
+                _jumpActivation = value;
+                NotifyPropertyChanged("JumpActivation");
             }
         }
+
+        public DateTime JumpFatigue
+        {
+            get
+            {
+                return _jumpFatigue;
+            }
+
+            set
+            {
+                _jumpFatigue = value;
+                NotifyPropertyChanged("JumpFatigue");
+            }
+        }
+
+        public DateTime JumpLastUpdate
+        {
+            get
+            {
+                return _jumpLastUpdate;
+            }
+
+            set
+            {
+                _jumpLastUpdate = value;
+                NotifyPropertyChanged("JumpLastUpdate");
+            }
+        }
+
+        public int Intelligence
+        {
+            get
+            {
+                return _intelligence;
+            }
+
+            set
+            {
+                _intelligence = value;
+                NotifyPropertyChanged("Intelligence");
+            }
+        }
+
+        public int Memory
+        {
+            get
+            {
+                return _memory;
+            }
+
+            set
+            {
+                _memory = value;
+                NotifyPropertyChanged("Memory");
+            }
+        }
+
+        public int Charisma
+        {
+            get
+            {
+                return _charisma;
+            }
+
+            set
+            {
+                _charisma = value;
+                NotifyPropertyChanged("Charisma");
+            }
+        }
+
+        public int Perception
+        {
+            get
+            {
+                return _perception;
+            }
+
+            set
+            {
+                _perception = value;
+                NotifyPropertyChanged("Perception");
+            }
+        }
+
+        public int Willpower
+        {
+            get
+            {
+                return _willpower;
+            }
+
+            set
+            {
+                _willpower = value;
+                NotifyPropertyChanged("Willpower");
+            }
+        }
+
+        public DateTime LastPulled { get; set; }
+
+        public DateTime CachedUntil { get; set; }
+        #endregion
+
+        private void InitInhertedProperties(object baseClassInstance)
+        {
+            foreach (PropertyInfo propertyInfo in baseClassInstance.GetType().GetRuntimeProperties())
+            {
+                object value = propertyInfo.GetValue(baseClassInstance, null);
+                if (null != value)
+                {
+                    propertyInfo.SetValue(this, value, null);
+                }
+            }
+        }
+
     }
 }

@@ -1,11 +1,12 @@
-﻿using Windows.UI.Xaml.Controls;
+﻿using EveProfiler.Logic;
+using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace EveProfiler.Controls
+namespace EveProfiler.Shared.Controls
 {
-    public sealed partial class Drawer : UserControl
+    public sealed partial class Drawer : CharacterControlBase
     {
         public delegate void DrawerItemTappedEventHandler(object oUserControl);
         public event DrawerItemTappedEventHandler DrawerItemTapped;
@@ -13,19 +14,21 @@ namespace EveProfiler.Controls
         public Drawer()
         {
             InitializeComponent();
+        }
 
-            //imgActiveCharacter.UriSource = new Uri(string.Format(@"http://image.eveonline.com/Character/{0}_{1}.jpg",
-            //    App.thisAccount.getActiveCharacter().characterID, 256));
+        public override void SetCharacter(Character character)
+        {
+            SetBinding(DataContextProperty, new Binding() { Source = character });
         }
 
         private void Info_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            DrawerItemTapped.Invoke(new Info());
+            DrawerItemTapped.Invoke(new CharacterSheet());
         }
 
         private void Mail_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            DrawerItemTapped.Invoke(new Mail());
+            DrawerItemTapped.Invoke(new CharacterMail());
         }
 
         private void Skills_Tapped(object sender, TappedRoutedEventArgs e)

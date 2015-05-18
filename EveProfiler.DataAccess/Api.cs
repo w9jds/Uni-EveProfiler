@@ -154,21 +154,45 @@ namespace EveProfiler.DataAccess
         {
             if (NetworkInterface.GetIsNetworkAvailable())
             {
-                Dictionary<string, string> query = character.getCharacterQuery();
-                query.Add("ids", string.Join(",", mails.Keys));
-
-                HttpHelper.Get(@"/char/MailBodies.xml.aspx", query, new Action<HttpResponseMessage>(response =>
+                if (mails.Keys.Count > 0)
                 {
-                    if (response.IsSuccessStatusCode)
+                    Dictionary<string, string> query = character.getCharacterQuery();
+                    query.Add("ids", string.Join(",", mails.Keys));
+
+                    HttpHelper.Get(@"/char/MailBodies.xml.aspx", query, new Action<HttpResponseMessage>(response =>
+                    {
+                        if (response.IsSuccessStatusCode)
+                        {
+                            response.Content.ReadAsStringAsync().ContinueWith(t =>
+                            {
+                                return Parser.ParseMailBodies(t.Result, mails);
+                            }).ContinueWith(t => result(t.Result));
+                        }
+                        else
+                        {
+                            throw new HttpRequestException($"Received a {response.StatusCode}: {response.ReasonPhrase}");
+                        }
+                    }));
+                }
+            }
+            else
+            {
+
+            }
+        }
+
+        public static void GetServerStatus(Action<ServerStatus> result)
+        {
+            if (NetworkInterface.GetIsNetworkAvailable())
+            {
+                HttpHelper.Get(@"/server/ServerStatus.xml.aspx", new Action<HttpResponseMessage>(response =>
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
                     {
                         response.Content.ReadAsStringAsync().ContinueWith(t =>
                         {
-                            return Parser.ParseMailBodies(t.Result, mails);
+                            return Parser.ParseServerStatus(t.Result);
                         }).ContinueWith(t => result(t.Result));
-                    }
-                    else
-                    {
-                        throw new HttpRequestException($"Received a {response.StatusCode}: {response.ReasonPhrase}");
                     }
                 }));
             }
@@ -333,28 +357,5 @@ namespace EveProfiler.DataAccess
 
         //    }
         //}
-
-        //public static void getServerStatus(Action<ServerStatus> result)
-        //{
-        //    if (NetworkInterface.GetIsNetworkAvailable())
-        //    {
-        //        HttpHelper.Get(@"/server/ServerStatus.xml.aspx", new Action<HttpResponseMessage>(response =>
-        //        {
-        //            if (response.StatusCode == System.Net.HttpStatusCode.OK)
-        //            {
-        //                response.Content.ReadAsStringAsync().ContinueWith(t =>
-        //                {
-        //                    return cParse.parseServerStatus(t.Result);
-        //                }).ContinueWith(t => result(t.Result));
-        //            }
-        //        }));
-        //    }
-        //    else
-        //    {
-
-        //    }
-
-        //}
-
     }
 }

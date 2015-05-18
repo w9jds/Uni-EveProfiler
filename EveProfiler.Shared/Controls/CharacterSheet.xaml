@@ -1,0 +1,125 @@
+﻿<local:CharacterControlBase
+    x:Class="EveProfiler.Shared.Controls.CharacterSheet"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:EveProfiler.Shared.Controls"
+    xmlns:Classes="using:EveProfiler.Shared.Classes"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <local:CharacterControlBase.Resources>
+        <Classes:AttributeIconConverter x:Key="AttributeIconConverter"/>
+        <Classes:CorporationImageUriConverter x:Key="CorporationImageUriConverter"/>
+        <Classes:TitleConverter x:Key="TitleConverter"/>
+        <Classes:DateTimeToDateConverter x:Key="DateTimeToDateConverter"/>
+        <Classes:AttributeConverter x:Key="AttributeConverter"/>
+        <Classes:BalanceConverter x:Key="BalanceConverter"/>
+        <Classes:BirthdayConverter x:Key="BirthdayConverter"/>
+        <Classes:SecStatusConverter x:Key="SecStatusConverter"/>
+    </local:CharacterControlBase.Resources>
+
+    <ScrollViewer>
+        <StackPanel>
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" 
+                       Margin="0,10" Foreground="White" 
+                       Text="{Binding Family}" FontSize="17"/>
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" 
+                       Margin="0,10" Foreground="White" 
+                       Text="{Binding AccountBalance, Converter={StaticResource BalanceConverter}}" FontSize="17"/>
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" 
+                       Margin="0,10" Foreground="White" 
+                       Text="{Binding DateofBirth, Converter={StaticResource BirthdayConverter}}" FontSize="17"/>
+
+            <Grid Margin="0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width=".25*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width=".25*"/>
+                </Grid.ColumnDefinitions>
+
+                <Rectangle Height="100" Width="100" Grid.Column="1"
+                           Margin="0,0,10,0">
+                    <Rectangle.Fill>
+                        <ImageBrush>
+                            <ImageBrush.ImageSource>
+                                <BitmapImage UriSource="{Binding CorporationID, Converter={StaticResource CorporationImageUriConverter}}" />
+                            </ImageBrush.ImageSource>
+                        </ImageBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+                
+                <!--<Image Height="100" Width="100" Grid.Column="1" Margin="0,0,10,0" Stretch="UniformToFill" Source="{Binding corporationImage, Converter={StaticResource ByteArrayConverter}}"/>-->
+
+                <Grid Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="1" HorizontalAlignment="Center" 
+                               TextAlignment="Center" FontSize="17" 
+                               TextWrapping="Wrap" FontWeight="SemiBold" 
+                               Text="{Binding Corporation}" Margin="0,5"/>
+                    <TextBlock Grid.Row="2" HorizontalAlignment="Center" 
+                               TextAlignment="Center" FontSize="17" 
+                               Text="{Binding characterSheet.corporationTitles, Converter={StaticResource TitleConverter}}"/>
+                    <TextBlock Grid.Row="3" HorizontalAlignment="Center" 
+                               TextAlignment="Center" Text="{Binding CorporationDate, Converter={StaticResource DateTimeToDateConverter}}" 
+                               Margin="0,5" FontSize="17"/>
+
+                </Grid>
+
+            </Grid>
+
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" 
+                       Margin="0,10" Foreground="White" 
+                       Text="{Binding SecurityStatus, Converter={StaticResource SecStatusConverter}}" 
+                       FontSize="17"/>
+
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" 
+                       Margin="0,15,0,0" Foreground="White" Text="Active Ship:" 
+                       FontSize="17"/>
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" 
+                       Margin="0,0,0,10" Foreground="White" TextAlignment="Center" 
+                       TextWrapping="Wrap" Text="{Binding ActiveShip}" 
+                       FontSize="17"/>
+
+            <ItemsControl ItemsSource="{Binding characterSheet.attributes}" 
+                          Margin="0,10,0,0">
+                
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0,10,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="20"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <Image Source="{Binding attribute, Converter={StaticResource AttributeIconConverter}}" 
+                                       Height="40" Width="40" Margin="0,0,10,0" Stretch="UniformToFill"/>
+                                <TextBlock FontSize="17" HorizontalAlignment="Left" 
+                                           VerticalAlignment="Center" Text="{Binding attribute}"/>
+                            </StackPanel>
+
+                            <TextBlock FontSize="17" Grid.Column="3" 
+                                       HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                       TextAlignment="Center" 
+                                       Text="{Binding basePoints, Converter={StaticResource AttributeConverter}}"/>
+                        </Grid>
+                    </DataTemplate>
+
+                </ItemsControl.ItemTemplate>
+                
+            </ItemsControl>
+        </StackPanel>
+    </ScrollViewer>
+</local:CharacterControlBase>

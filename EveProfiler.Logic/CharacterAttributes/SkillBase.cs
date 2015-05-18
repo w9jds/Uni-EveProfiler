@@ -2,9 +2,9 @@
 
 namespace EveProfiler.Logic.CharacterAttributes
 {
-    public abstract class Skill : INotifyPropertyChanged
+    public abstract class SkillBase : INotifyPropertyChanged
     {
-        public Skill(long typeId)
+        public SkillBase(long typeId)
         {
             TypeId = typeId;
         }

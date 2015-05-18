@@ -1,10 +1,10 @@
-﻿using System;
+﻿using EveProfiler.Logic.CharacterAttributes;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace EveProfiler.Logic.Eve
 {
-    public class Skill : CharacterAttributes.Skill
+    public class Skill : SkillBase
     {
         private string _typeName;
         private int _published;

@@ -1,4 +1,8 @@
-﻿using Windows.UI.Xaml.Controls;
+﻿using EveProfiler.Logic;
+using EveProfiler.Shared.Controls;
+using System;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
 
@@ -11,14 +15,23 @@ namespace EveProfiler.Pages
     /// </summary>
     public sealed partial class Main : Page
     {
-        //private cBase _ActiveCharacter = App.thisAccount.getActiveCharacter();
+        private Character _activeCharacter { get; set; }
 
         public Main()
         {
             InitializeComponent();
 
-            ucDrawerChild.DrawerItemTapped += ucDrawerChild_DrawerItemTapped;
+            Drawer.DrawerItemTapped += Drawer_DrawerItemTapped; ;
         }
+
+        private void Drawer_DrawerItemTapped(object newControl)
+        {
+            DrawerPopup.IsOpen = false;
+
+            ((CharacterControlBase)newControl).SetCharacter(_activeCharacter);
+            mainFrame.Content = newControl;
+        }
+
 
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
@@ -27,22 +40,16 @@ namespace EveProfiler.Pages
         /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            //tbCharacterName.Text = _ActiveCharacter.name;
-            //ccContent.Content = e.Parameter;
+            Tuple<CharacterControlBase, Character> parameter = (Tuple<CharacterControlBase, Character>)e.Parameter;
+            _activeCharacter = parameter.Item2;
+            parameter.Item1.SetCharacter(_activeCharacter);
+            mainFrame.Content = parameter.Item1;
+            SetBinding(DataContextProperty, new Binding() { Source = _activeCharacter });
         }
 
-        void ucDrawerChild_DrawerItemTapped(object oUserControl)
+        private void drawerToggle_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            pDrawer.IsOpen = false;
-            ccContent.Content = oUserControl;
-        }
-
-        private void btnDrawer_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            if (!pDrawer.IsOpen)
-                pDrawer.IsOpen = true;
-            else
-                pDrawer.IsOpen = false;
+            DrawerPopup.IsOpen = !DrawerPopup.IsOpen;
         }
     }
 }

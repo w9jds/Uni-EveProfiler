@@ -24,7 +24,6 @@ namespace EveProfiler.BusinessLogic.CharacterAttributes
 
             }
         }
-
         public DateTime LastPulled
         {
             get

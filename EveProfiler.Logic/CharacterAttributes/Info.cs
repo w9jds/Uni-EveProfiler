@@ -5,7 +5,7 @@ namespace EveProfiler.Logic.CharacterAttributes
 {
     public class Info : Character, INotifyPropertyChanged, ICallMetadata
     {
-        private string _accountBalance;
+        private double _accountBalance;
         private int _skillPoints;
         private string _shipName;
         private string _shipTypeName;
@@ -17,7 +17,7 @@ namespace EveProfiler.Logic.CharacterAttributes
         private double _securityStatus;
 
 
-        public string AccountBalance
+        public double AccountBalance
         {
             get { return _accountBalance; }
             set
@@ -110,6 +110,7 @@ namespace EveProfiler.Logic.CharacterAttributes
                 NotifyPropertyChanged("SecurityStatus");
             }
         }
+        public string ActiveShip => $"{ShipTypeName} [{ShipName}]";
 
         public DateTime LastPulled { get; set; }
         public DateTime CachedUntil { get; set; }

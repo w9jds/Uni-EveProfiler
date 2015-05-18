@@ -1,4 +1,5 @@
 ﻿using EveProfiler.Logic.CharacterAttributes;
+using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -6,50 +7,25 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media.Imaging;
 
-namespace EveProfiler.Classes
+namespace EveProfiler.Shared.Classes
 {
-    //public class ByteArrayConverter : IValueConverter
-    //{
-    //    // This converts the DateTime object to the string to display.
-    //    public object Convert(object value, Type targetType, object parameter, string language)
-    //    {
-    //        if (value != null && value is byte[])
-    //        {
-    //            byte[] baImage = (byte[])value;
-
-    //            BitmapImage biImage = new BitmapImage();
-
-    //            InMemoryRandomAccessStream imraStream = CreateStream(baImage).Result;
-    //            imraStream.Seek(0);
-
-    //            biImage.SetSource(imraStream);
-    //            return biImage;
-    //        }
-
-    //        return null;
-    //    }
-
-    //    // No need to implement converting back on a one-way binding 
-    //    public object ConvertBack(object value, Type targetType, object parameter, string language)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-
-    //    private async Task<InMemoryRandomAccessStream> CreateStream(byte[] baImage)
-    //    {
-    //        InMemoryRandomAccessStream imraStream = new InMemoryRandomAccessStream();
-    //        await imraStream.WriteAsync(CryptographicBuffer.CreateFromByteArray(baImage));
-
-    //        return imraStream;
-    //    }
-    //}
-
     public class CharacterImageUriConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language) => 
             $"https://image.eveonline.com/Character/{value}_256.jpg";
 
         // No need to implement converting back on a one-way binding 
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class CorporationImageUriConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language) =>
+            $"http://image.eveonline.com/Corporation/{value}_256.png";
+
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
             throw new NotImplementedException();
@@ -74,25 +50,6 @@ namespace EveProfiler.Classes
         }
     }
 
-    public class FamilyConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, string culture)
-        {
-            if (value != null)
-            {
-                Sheet characterSheet = value as Sheet;
-                return $"{characterSheet.Gender} - {characterSheet.Race} - {characterSheet.BloodLine} - {characterSheet.Ancestry}";
-            }
-
-            return null;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, string culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
     public class BalanceConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string culture)
@@ -102,24 +59,6 @@ namespace EveProfiler.Classes
                 return $"Balance: {((double)value).ToString("##,#.##")} ISK";
             }
                 
-            return null;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, string culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class ActiveShipConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, string culture)
-        {
-            if (value != null)
-            {
-                Info characterInfo = value as Info;
-                return $"{characterInfo.ShipTypeName} [{characterInfo.ShipName}]";
-            }
             return null;
         }
 
@@ -167,10 +106,9 @@ namespace EveProfiler.Classes
     {
         public object Convert(object value, Type targetType, object parameter, string culture)
         {
-            DateTime thisDate = DateTime.UtcNow;
             DateTime mailDate = (DateTime)value;
 
-            if (thisDate.Date == mailDate.Date)
+            if (DateTime.UtcNow == mailDate.Date)
             {
                 return mailDate.ToString("T");
             }
@@ -245,18 +183,18 @@ namespace EveProfiler.Classes
         public object Convert(object value, Type targetType, object parameter, string culture)
         {
             HtmlDocument doc;
-            ObservableCollection<cTitleId> ocTitles = value as ObservableCollection<cTitleId>;
+            //ObservableCollection<cTitleId> ocTitles = value as ObservableCollection<cTitleId>;
 
-            if (ocTitles.Count > 0)
-            {
-                doc = new HtmlDocument();
-                doc.LoadHtml(ocTitles[0].titleName);
-                return doc.DocumentNode.InnerText;
-            }
-            else
-            {
-                return string.Empty;
-            }
+            //if (ocTitles.Count > 0)
+            //{
+            //    doc = new HtmlDocument();
+            //    doc.LoadHtml(ocTitles[0].titleName);
+            //    return doc.DocumentNode.InnerText;
+            //}
+            //else
+            //{
+            return string.Empty;
+            //}
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string culture)
@@ -265,7 +203,7 @@ namespace EveProfiler.Classes
         }
     }
 
-    public class DateTime2DateConverter : IValueConverter
+    public class DateTimeToDateConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string culture) => 
             ((DateTime)value).ToString("d");

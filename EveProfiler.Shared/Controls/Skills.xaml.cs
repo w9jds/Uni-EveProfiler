@@ -5,9 +5,9 @@ using Windows.UI.Xaml.Input;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace EveProfiler.Controls
+namespace EveProfiler.Shared.Controls
 {
-    public sealed partial class Skills : UserControl
+    public sealed partial class Skills : CharacterControlBase
     {
         //private cBase _ActiveCharacter = App.thisAccount.getActiveCharacter();
         private ApplicationDataContainer _LocalSettings = ApplicationData.Current.LocalSettings;

@@ -44,14 +44,15 @@
     <Compile Include="$(MSBuildThisFileDirectory)Controls\CharacterCard.xaml.cs">
       <DependentUpon>CharacterCard.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\CharacterControlBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\Drawer.xaml.cs">
       <DependentUpon>Drawer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\Info.xaml.cs">
-      <DependentUpon>Info.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\CharacterSheet.xaml.cs">
+      <DependentUpon>CharacterSheet.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\Mail.xaml.cs">
-      <DependentUpon>Mail.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\CharacterMail.xaml.cs">
+      <DependentUpon>CharacterMail.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Controls\MailItem.xaml.cs">
       <DependentUpon>MailItem.xaml</DependentUpon>
@@ -68,6 +69,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Controls\Wallet.xaml.cs">
       <DependentUpon>Wallet.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Tasks\Registration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tasks\RetrieveMailTask.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="$(MSBuildThisFileDirectory)Controls\CharacterCard.xaml">
@@ -78,11 +82,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Controls\Info.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)Controls\CharacterSheet.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Controls\Mail.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)Controls\CharacterMail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

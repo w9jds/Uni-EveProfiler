@@ -9,7 +9,7 @@ namespace EveProfiler.Logic.CharacterAttributes
         private DateTime _sentDate;
         private string _title;
         private string _messageBody;
-        //private bool _Extended;
+        private bool _extended = false;
 
         public Mail(long messageId, long senderId)
         {
@@ -57,6 +57,19 @@ namespace EveProfiler.Logic.CharacterAttributes
             {
                 _messageBody = value;
                 NotifyPropertyChanged("MessageBody");
+            }
+        }
+        public bool IsExtended
+        {
+            get
+            {
+                return _extended;
+            }
+
+            set
+            {
+                _extended = value;
+                NotifyPropertyChanged("IsExtended");
             }
         }
 

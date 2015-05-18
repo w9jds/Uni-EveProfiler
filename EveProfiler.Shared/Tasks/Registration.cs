@@ -2,7 +2,7 @@
 using System;
 using Windows.ApplicationModel.Background;
 
-namespace EveProfiler.Tasks
+namespace EveProfiler.Shared.Tasks
 {
     public class Registration
     {
@@ -21,10 +21,15 @@ namespace EveProfiler.Tasks
 
                 builder.Name = taskName;
                 builder.TaskEntryPoint = "EveProfiler.Tasks.RetrieveMailTask";
-                builder.SetTrigger(new TimeTrigger(
-                    Convert.ToUInt32(scheduledTime.Subtract(DateTime.UtcNow).TotalMinutes), true));
 
-                builder.Register();                
+                double scheduleOffset = scheduledTime.Subtract(DateTime.UtcNow).TotalMinutes;
+                if (scheduleOffset < 15)
+                {
+                    scheduleOffset = 15; 
+                }
+
+                builder.SetTrigger(new TimeTrigger(Convert.ToUInt32(scheduleOffset), true));
+                builder.Register();
             }
         }
 

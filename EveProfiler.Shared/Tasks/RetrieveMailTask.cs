@@ -10,7 +10,7 @@ using Windows.Data.Xml.Dom;
 using Windows.Storage;
 using Windows.UI.Notifications;
 
-namespace EveProfiler.Tasks
+namespace EveProfiler.Shared.Tasks
 {
     public class RetrieveMailTask : IBackgroundTask
     {
@@ -31,18 +31,19 @@ namespace EveProfiler.Tasks
                 {
                     Api.GetCharacterMail(_currentCharacter, new Action<Tuple<DateTime, Dictionary<long, Mail>>>(result =>
                     {
+                        ApplicationDataContainer characterContainer = _localSettings.Containers[_currentCharacter.CharacterName];
                         Dictionary<long, Mail> mails = result.Item2;
 
-                        if (!_localSettings.Containers.ContainsKey("Mail"))
+                        if (!characterContainer.Containers.ContainsKey(AttributeTypes.Mail.ToString()))
                         {
-                            _localSettings.CreateContainer("Mail", ApplicationDataCreateDisposition.Always);
+                            characterContainer.CreateContainer(AttributeTypes.Mail.ToString(), ApplicationDataCreateDisposition.Always);
                         }
-                        if (!_localSettings.Containers["Mail"].Containers.ContainsKey(_currentCharacter.CharacterName))
+                        if (!characterContainer.Containers[AttributeTypes.Mail.ToString()].Containers.ContainsKey(_currentCharacter.CharacterName))
                         {
-                            _localSettings.Containers["Mail"].CreateContainer(_currentCharacter.CharacterName, ApplicationDataCreateDisposition.Always);
+                            characterContainer.Containers[AttributeTypes.Mail.ToString()].CreateContainer(_currentCharacter.CharacterName, ApplicationDataCreateDisposition.Always);
                         }
 
-                        ApplicationDataContainer mailContainer = _localSettings.Containers["Mail"].Containers[_currentCharacter.CharacterName];
+                        ApplicationDataContainer mailContainer = characterContainer.Containers[AttributeTypes.Mail.ToString()];
                         HashSet<Mail> newMails = new HashSet<Mail>();
 
                         foreach (long messageId in mails.Keys)

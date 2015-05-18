@@ -31,9 +31,7 @@ namespace EveProfiler.DataAccess
 
             return doc.Descendants("result").Select(x => new Info
             {
-                //race = (string)x.Element("race") ?? string.Empty,
-                //bloodline = (string)x.Element("bloodline") ?? string.Empty,
-                AccountBalance = x.Element("accountBalance")?.Value,
+                AccountBalance = (double)x.Element("accountBalance"),
                 SkillPoints = (int)x.Element("skillPoints"),
                 ShipName = x.Element("shipName")?.Value,
                 ShipTypeID = (int)x.Element("shipTypeID"),
@@ -57,12 +55,18 @@ namespace EveProfiler.DataAccess
 
             Sheet sheet = doc.Descendants("result").Select(x => new Sheet
             {
+                CharacterId = (long)x.Element("characterID"),
+                CharacterName = x.Element("name").Value,
                 Race = x.Element("race")?.Value,
                 DateofBirth = (DateTime)x.Element("DoB"),
                 BloodLine = x.Element("bloodLine")?.Value,
                 Ancestry = x.Element("ancestry")?.Value,
                 Gender = x.Element("gender")?.Value,
-                Balance = (double)x.Element("balance"),
+                Corporation = x.Element("corporationName")?.Value,
+                CorporationID = (int)x.Element("corporationID"),
+                Alliance = x.Element("allianceName")?.Value,
+                AllianceID = (int?)x.Element("allianceID") ?? null,
+                AccountBalance = (double)x.Element("balance"),
                 FreeRespecs = int.Parse(x.Element("freeRespecs").Value),
                 CachedUntil = GetCachedUntil(doc)
             }).FirstOrDefault();
@@ -163,14 +167,17 @@ namespace EveProfiler.DataAccess
 
             return mail;
         }
-        
 
+        public static ServerStatus ParseServerStatus(string xml)
+        {
+            XDocument doc = XDocument.Parse(xml);
 
-
-
-
-
-
+            return doc.Descendants("result").Select(x => new ServerStatus
+            {
+                OnlinePlayerCount = (int)x.Element("onlinePlayers"),
+                ServerOpen = (bool)x.Element("serverOpen")
+            }).SingleOrDefault();
+        }
 
         //public static ObservableCollection<cCalendarEvent> parseUpcomingCalendarEvents(string xml)
         //{
@@ -352,17 +359,6 @@ namespace EveProfiler.DataAccess
         //        Id = (int)x.Attribute("characterID"),
         //        name = (string)x.Attribute("name")
         //    }).ToList();
-        //}
-
-        //public static ServerStatus parseServerStatus(string xml)
-        //{
-        //    XDocument doc = XDocument.Parse(xml);
-
-        //    return doc.Descendants("result").Select(x => new ServerStatus
-        //    {
-        //        onlinePlayers = (int)x.Element("onlinePlayers"),
-        //        serverOpen = (bool)x.Element("serverOpen")
-        //    }).SingleOrDefault();
         //}
     }
 }

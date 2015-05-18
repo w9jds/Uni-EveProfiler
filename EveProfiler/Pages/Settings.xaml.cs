@@ -57,7 +57,7 @@ namespace EveProfiler.Pages
 
         private void SaveSettings()
         {
-            _localSettings.Values["account"] = JsonConvert.SerializeObject(_localSettings);
+            _localSettings.Values["account"] = JsonConvert.SerializeObject(_currentAccount);
             progressBar.IsIndeterminate = false;
             if (Frame.CanGoBack)
             {
@@ -84,6 +84,7 @@ namespace EveProfiler.Pages
                     {
                         Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                         {
+                            _currentAccount.Characters.Clear();
                             _currentAccount.addCharacters(response);
                             SaveSettings();
                         });

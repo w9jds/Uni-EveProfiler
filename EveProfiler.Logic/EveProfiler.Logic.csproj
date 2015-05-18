@@ -43,7 +43,7 @@
     <Compile Include="CharacterAttributes\Info.cs" />
     <Compile Include="CharacterAttributes\Mail.cs" />
     <Compile Include="CharacterAttributes\Sheet.cs" />
-    <Compile Include="CharacterAttributes\Skill.cs" />
+    <Compile Include="CharacterAttributes\SkillBase.cs" />
     <Compile Include="CharacterAttributes\SkillQueue.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Eve\RequiredSkill.cs" />

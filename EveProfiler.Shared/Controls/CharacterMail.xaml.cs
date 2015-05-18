@@ -9,19 +9,25 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Data;
+using Newtonsoft.Json;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace EveProfiler.Controls
+namespace EveProfiler.Shared.Controls
 {
-    public sealed partial class Mail : UserControl
+    public sealed partial class CharacterMail : CharacterControlBase
     {
         private ApplicationDataContainer _localSettings = ApplicationData.Current.LocalSettings;
         ObservableCollection<Logic.CharacterAttributes.Mail> _currentMails = new ObservableCollection<Logic.CharacterAttributes.Mail>();
 
-        public Mail()
+        public CharacterMail()
         {
             InitializeComponent();
+        }
+
+        public override void SetCharacter(Character character)
+        {
+            base.SetCharacter(character);
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -29,8 +35,8 @@ namespace EveProfiler.Controls
             Account account = JsonConvert.DeserializeObject<Account>((string)_localSettings.Values["account"]);
             mailList.SetBinding(ItemsControl.ItemsSourceProperty, new Binding() { Source = _currentMails });
 
-            LoadStoredMail();
-            LoadCharacterMail();
+            //LoadStoredMail();
+            //LoadCharacterMail();
         }
 
         private void LoadStoredMail(Character character)
@@ -45,7 +51,7 @@ namespace EveProfiler.Controls
                     {
                         if (!string.IsNullOrEmpty(characterMail.Values[key].ToString()))
                         {
-                            _currentMails.Add(JsonConvert.DeserializeObject<Logic.CharacterAttributes.Mail>(characterMail.Values[key]));
+                            _currentMails.Add(JsonConvert.DeserializeObject<Logic.CharacterAttributes.Mail>(characterMail.Values[key].ToString()));
                         }
                     }
                 }
@@ -63,7 +69,6 @@ namespace EveProfiler.Controls
 
         private void LoadCharacterMail(Character character)
         {
-
             Api.GetCharacterMail(character, new Action<Tuple<DateTime, Dictionary<long, Logic.CharacterAttributes.Mail>>>(result =>
             {
                 Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
@@ -75,12 +80,11 @@ namespace EveProfiler.Controls
                         if (!characterMailStore.Values.ContainsKey(key.ToString()))
                         {
                             _currentMails.Add(mails[key]);
+                            characterMailStore.Values.Add(key.ToString(), JsonConvert.SerializeObject(mails[key]));
                         }
                     }
                 });
             }));
-
-            
         }
 
         private void ucMailItem_Tapped(object sender, TappedRoutedEventArgs e)

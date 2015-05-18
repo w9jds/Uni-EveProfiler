@@ -4,13 +4,16 @@ using Windows.ApplicationModel.Activation;
 
 #if WINDOWS_PHONE_APP
 using Windows.Phone.UI.Input;
-
 #endif
 
 using Windows.Storage;
+using Windows.UI;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
@@ -50,6 +53,9 @@ namespace EveProfiler
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
+            StatusBar statusBar = StatusBar.GetForCurrentView();
+            statusBar.BackgroundColor = Color.FromArgb(0xFF, 0x00, 0x00, 0x00);
+            statusBar.BackgroundOpacity = 0.5;
 
 #if WINDOWS_UAP
             //Windows.UI.Core.SystemNavigationManager.GetForCurrentView().BackRequested += Back_Requested;
@@ -74,11 +80,11 @@ namespace EveProfiler
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
 
-                //rootFrame.Background = new ImageBrush() 
-                //{
-                //    ImageSource = new BitmapImage() { UriSource = new Uri("ms-appx:///Assets/space_background.jpg") }, 
-                //    Stretch = Stretch.UniformToFill 
-                //};
+                rootFrame.Background = new ImageBrush()
+                {
+                    ImageSource = new BitmapImage() { UriSource = new Uri("ms-appx:///Assets/space_background.jpg") },
+                    Stretch = Stretch.UniformToFill
+                };
 
                 // TODO: change this value to a cache size that is appropriate for your application
                 rootFrame.CacheSize = 1;

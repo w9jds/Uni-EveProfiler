@@ -1,7 +1,7 @@
 ﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace EveProfiler.Classes
+namespace EveProfiler.Shared.Classes
 {
     public abstract class TemplateSelector : ContentControl
     {

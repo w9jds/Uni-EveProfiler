@@ -70,8 +70,8 @@ namespace NetworkingTests
 
             Api.GetCharacterSheet(_account.Characters[0], new Action<Tuple<Sheet, List<EveProfiler.Logic.Eve.Skill>>>(result =>
             {
-                _account.Characters[0].addAttribute(AttributeTypes.Sheet, result);
-                _account.Characters[0].addSkill(result);
+                _account.Characters[0].addAttribute(AttributeTypes.Sheet, result.Item1);
+                _account.Characters[0].addSkills(result.Item2);
                 completion.Set();
             }));
 
@@ -109,9 +109,9 @@ namespace NetworkingTests
             _account.addCharacters(characters);
             ManualResetEvent completion = new ManualResetEvent(false);
 
-            Api.GetCharacterMail(_account.Characters[0], new Action<Dictionary<long, Mail>>(result =>
+            Api.GetCharacterMail(_account.Characters[0], new Action<Tuple<DateTime, Dictionary<long, Mail>>>(result =>
             {
-                _account.Characters[0].Attributes.Add(AttributeTypes.Mail, result);
+                _account.Characters[0].Attributes.Add(AttributeTypes.Mail, result.Item2);
                 completion.Set();
             }));
 
