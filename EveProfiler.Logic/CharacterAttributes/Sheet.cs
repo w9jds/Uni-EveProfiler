@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Reflection;
 
 namespace EveProfiler.Logic.CharacterAttributes

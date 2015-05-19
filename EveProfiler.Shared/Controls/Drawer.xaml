@@ -8,6 +8,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
+    <local:CharacterControlBase.Resources>
+        <Classes:CharacterImageUriConverter x:Key="CharacterImageUriConverter"/>
+    </local:CharacterControlBase.Resources>
 
     <Grid Name="drawer" Width="250">
         <Grid.RowDefinitions>
@@ -26,7 +29,7 @@
                 <Ellipse.Fill>
                     <ImageBrush>
                         <ImageBrush.ImageSource>
-                            <BitmapImage x:Name="imgActiveCharacter" />
+                            <BitmapImage UriSource="{Binding CharacterId, Converter={StaticResource CharacterImageUriConverter}}"/>
                         </ImageBrush.ImageSource>
                     </ImageBrush>
                 </Ellipse.Fill>
@@ -48,8 +51,10 @@
                             <ColumnDefinition Width="auto" />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <Image Height="35" Width="35" Margin="20, 5" VerticalAlignment="Center" Source="/Assets/Images/charactersheet.png"/>
-                        <TextBlock Grid.Column="2" Text="Character Sheet" Margin="10 0 0 0" FontSize="15" VerticalAlignment="Center"/>
+                        <Image Height="35" Width="35" Margin="20, 5" VerticalAlignment="Center" 
+                               Source="/Assets/Images/charactersheet.png"/>
+                        <TextBlock Grid.Column="2" Text="Character Sheet" Margin="10 0 0 0" FontSize="15" 
+                                   VerticalAlignment="Center"/>
                     </Grid>
                 </ListViewItem>
                 <ListViewItem Tapped="Mail_Tapped">

@@ -90,32 +90,22 @@ namespace EveProfiler.Pages
             PreFetchCharacterData();
         }
 
-        private void StoreCharacterValue(string characterName, string key, object value)
-        {
-            if (!_localSettings.Containers.ContainsKey(characterName))
-            {
-                _localSettings.CreateContainer(characterName, ApplicationDataCreateDisposition.Always);
-            }
-
-            _localSettings
-                .Containers[characterName]
-                .Values[key] = JsonConvert.SerializeObject(value);
-        }
-
         private void PreFetchCharacterData()
         {
             foreach (Character character in _account.Characters)
             {
                 if (!_localSettings.Containers.ContainsKey(character.CharacterName))
                 {
+                    ApplicationDataContainer characterContainer = _localSettings.CreateContainer(character.CharacterName, ApplicationDataCreateDisposition.Always);
+
                     GetCharacterInfo(character);
                     GetCharacterSheet(character);
-                    GetCharacterMail(character);
+                    GetCharacterMail(character,
+                        characterContainer.CreateContainer(AttributeTypes.Mail.ToString(), ApplicationDataCreateDisposition.Always));
                 }
                 else
                 {
                     ApplicationDataContainer characterContainer = _localSettings.Containers[character.CharacterName];
-
                     if (characterContainer.Values.ContainsKey(AttributeTypes.Info.ToString()))
                     {
                         Info info = JsonConvert.DeserializeObject<Info>(characterContainer.Values[AttributeTypes.Info.ToString()].ToString());
@@ -153,7 +143,8 @@ namespace EveProfiler.Pages
                     }
                     if (!characterContainer.Containers.ContainsKey(AttributeTypes.Mail.ToString()))
                     {
-                        GetCharacterMail(character);
+                        GetCharacterMail(character, 
+                            characterContainer.CreateContainer(AttributeTypes.Mail.ToString(), ApplicationDataCreateDisposition.Always));
                     }
                 }
             }
@@ -169,22 +160,26 @@ namespace EveProfiler.Pages
                     character.addAttribute(AttributeTypes.Info, result);
                 });
 
-                StoreCharacterValue(character.CharacterName, AttributeTypes.Info.ToString(), result);
+                _localSettings.Containers[character.CharacterName].Values[AttributeTypes.Info.ToString()] = 
+                    JsonConvert.SerializeObject(result);
             }));
         }
 
-        private void GetCharacterMail(Character character)
+        private void GetCharacterMail(Character character, ApplicationDataContainer mailContainer )
         {
             Api.GetCharacterMail(character, new Action<Tuple<DateTime, Dictionary<long, Mail>>>(result =>
             {
                 foreach (long key in result.Item2.Keys)
                 {
-
+                    if (!mailContainer.Values.ContainsKey(key.ToString()))
+                    {
+                        mailContainer.Values[key.ToString()] = JsonConvert.SerializeObject(result.Item2[key]);
+                    }
                 }
 
                 Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    character.addAttribute(AttributeTypes.Mail, result.Item2.Values.);
+                    character.addAttribute(AttributeTypes.Mail, result.Item2);
                 });
 
                 Shared.Tasks.Registration taskRegister = new Shared.Tasks.Registration();
@@ -202,7 +197,8 @@ namespace EveProfiler.Pages
                     character.addSkills(result.Item2);
                 });
 
-                StoreCharacterValue(character.CharacterName, AttributeTypes.Sheet.ToString(), result.Item1);
+                _localSettings.Containers[character.CharacterName].Values[AttributeTypes.Sheet.ToString()] = 
+                    JsonConvert.SerializeObject(result.Item1);
             }));
         }
 

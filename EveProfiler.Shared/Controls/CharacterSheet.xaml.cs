@@ -7,6 +7,8 @@ namespace EveProfiler.Shared.Controls
 {
     public sealed partial class CharacterSheet : CharacterControlBase
     {
+        private Character _currentCharacter { get; set; }
+
         public CharacterSheet()
         {
             InitializeComponent();
@@ -14,6 +16,7 @@ namespace EveProfiler.Shared.Controls
 
         public override void SetCharacter(Character character)
         {
+            _currentCharacter = character;
             SetBinding(DataContextProperty, new Binding() { Source = character.Attributes[AttributeTypes.Sheet] });
         }
     }

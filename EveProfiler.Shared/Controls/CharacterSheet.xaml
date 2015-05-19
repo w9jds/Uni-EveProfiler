@@ -49,8 +49,6 @@
                         </ImageBrush>
                     </Rectangle.Fill>
                 </Rectangle>
-                
-                <!--<Image Height="100" Width="100" Grid.Column="1" Margin="0,0,10,0" Stretch="UniformToFill" Source="{Binding corporationImage, Converter={StaticResource ByteArrayConverter}}"/>-->
 
                 <Grid Grid.Column="2">
                     <Grid.RowDefinitions>
@@ -76,6 +74,7 @@
 
             </Grid>
 
+            <Border  ></Border>
             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" 
                        Margin="0,10" Foreground="White" 
                        Text="{Binding SecurityStatus, Converter={StaticResource SecStatusConverter}}" 

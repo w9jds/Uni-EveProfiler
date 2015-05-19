@@ -56,9 +56,10 @@
             </Popup.ChildTransitions>
 
             <Border Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
-                <Controls:Drawer x:Name="Drawer"
-                    Height="{Binding ElementName=DrawerPopup, Path=ActualHeight}" 
-                    Width="250"/>
+                <Controls:Drawer x:Name="Drawer" 
+                                 DataContext="{Binding Path=DataContext}"
+                                 Height="{Binding ElementName=DrawerPopup, Path=ActualHeight}" 
+                                 Width="250"/>
             </Border>
         </Popup>
 
@@ -76,7 +77,7 @@
                     Margin="10,0,0,0" Style="{StaticResource DrawerButtonStyle}" 
                     Tapped="drawerToggle_Tapped"/>
 
-            <TextBlock Name="characterTitle" 
+            <TextBlock Name="characterTitle"  Text="{Binding CharacterName}"
                        HorizontalAlignment="Center" VerticalAlignment="Top" 
                        FontWeight="Bold" FontSize="17" Margin="0,15"/>
 
