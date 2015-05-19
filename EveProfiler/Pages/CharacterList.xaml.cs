@@ -60,10 +60,14 @@ namespace EveProfiler.Pages
                     {
                         _account.Characters.Clear();
                         _account.addCharacters(result);
-                        PopulateGrid();
                     });
 
                     _localSettings.Values["account"] = JsonConvert.SerializeObject(_account);
+
+                    Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
+                        PopulateGrid();
+                    });
                 }));
         }
 
@@ -177,6 +181,11 @@ namespace EveProfiler.Pages
                 {
 
                 }
+
+                Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    character.addAttribute(AttributeTypes.Mail, result.Item2.Values.);
+                });
 
                 Shared.Tasks.Registration taskRegister = new Shared.Tasks.Registration();
                 taskRegister.RegisterNewMailTimer(result.Item1, character);

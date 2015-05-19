@@ -11,7 +11,7 @@ namespace EveProfiler.Shared.Tasks
 
         }
 
-        public void RegisterNewMailTimer(DateTime scheduledTime, Character character)
+        public async void RegisterNewMailTimer(DateTime scheduledTime, Character character)
         {
             string taskName = $"RetrieveMailTask_{character.CharacterId}";
 
@@ -28,6 +28,7 @@ namespace EveProfiler.Shared.Tasks
                     scheduleOffset = 15; 
                 }
 
+                await BackgroundExecutionManager.RequestAccessAsync();
                 builder.SetTrigger(new TimeTrigger(Convert.ToUInt32(scheduleOffset), true));
                 builder.Register();
             }

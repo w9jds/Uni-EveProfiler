@@ -4,7 +4,7 @@
 
 namespace EveProfiler.Shared.Controls
 {
-    public sealed partial class MailItem : UserControl
+    public sealed partial class MailItem : ListViewItem
     {
         public MailItem()
         {

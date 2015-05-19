@@ -27,13 +27,13 @@ namespace EveProfiler.Shared.Controls
 
         public override void SetCharacter(Character character)
         {
-            base.SetCharacter(character);
+            mailList.SetBinding(ItemsControl.ItemsSourceProperty, new Binding() { Source = character.Attributes[AttributeTypes.Mail] });
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             Account account = JsonConvert.DeserializeObject<Account>((string)_localSettings.Values["account"]);
-            mailList.SetBinding(ItemsControl.ItemsSourceProperty, new Binding() { Source = _currentMails });
+            //mailList.SetBinding(ItemsControl.ItemsSourceProperty, new Binding() { Source = _currentMails });
 
             //LoadStoredMail();
             //LoadCharacterMail();

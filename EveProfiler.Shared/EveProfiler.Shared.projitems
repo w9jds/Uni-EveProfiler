@@ -31,6 +31,7 @@
     <Content Include="$(MSBuildThisFileDirectory)Assets\space_background.jpg" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\SplashScreen.scale-240.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Square170x170.scale-240.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\StoreLogo.scale-140.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\StoreLogo.scale-240.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\WideLogo.scale-240.png" />
   </ItemGroup>
