@@ -36,7 +36,12 @@ namespace EveProfiler.Shared.Controls
             mailList.SetBinding(ItemsControl.ItemsSourceProperty, new Binding() { Source = _currentMails });
         }
 
-        private void ucMailItem_Tapped(object sender, TappedRoutedEventArgs e)
+        private void FilterDeletedItems(Character character)
+        {
+            //_localSettings.Containers[character.CharacterName]
+        }
+
+        private void MailItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
             ((MailItem)sender).extendItem();
         }

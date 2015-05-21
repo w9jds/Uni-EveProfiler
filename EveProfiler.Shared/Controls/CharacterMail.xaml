@@ -19,7 +19,7 @@
 
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <local:MailItem Tapped="ucMailItem_Tapped"/>
+                    <local:MailItem Tapped="MailItem_Tapped"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
 

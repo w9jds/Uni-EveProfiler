@@ -173,9 +173,21 @@ namespace EveProfiler.Pages
                 {
                     if (!mailContainer.Values.ContainsKey(key.ToString()))
                     {
-                        mailContainer.Values[key.ToString()] = JsonConvert.SerializeObject(result.Item2[key]);
+                        mailContainer.Values[key.ToString()] = true;
                     }
                 }
+
+                string fileName = $"mail_{character.CharacterName}";
+                ApplicationData.Current.LocalFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting)
+                    .AsTask().ContinueWith((file) =>
+                    {
+                        
+                        file.Result.OpenTransactedWriteAsync().AsTask().ContinueWith((stream) =>
+                        {
+                            serializer.WriteObject(stream.Result.Stream.AsStreamForWrite(), serializeItem);
+                            stream.Result.CommitAsync();
+                        });
+                    });
 
                 Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {

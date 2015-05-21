@@ -34,6 +34,7 @@ namespace EveProfiler.Logic
             {
                 addSkill(skill.TypeId, skill);
             }
+            NotifyPropertyChanged("Skills");
         }
 
         #endregion

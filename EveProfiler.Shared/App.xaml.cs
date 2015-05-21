@@ -1,6 +1,7 @@
 ﻿using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Core;
 
 #if WINDOWS_PHONE_APP
 using Windows.Phone.UI.Input;
@@ -41,7 +42,18 @@ namespace EveProfiler
 #if WINDOWS_PHONE_APP
         private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
         {
-            goBack();
+            Frame thisFrame = Window.Current.Content as Frame;
+
+            if (!(thisFrame.Content is Pages.CharacterList))
+            {
+                if (thisFrame.CanGoBack)
+                {
+                    thisFrame.GoBack();
+                    return true;
+                }
+            }
+
+            return false;
         }
 #endif
 
@@ -150,32 +162,6 @@ namespace EveProfiler
             rootFrame.Navigated -= RootFrame_FirstNavigated;
         }
 
-        //private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
-        //{
-        //    e.Handled = goBack();
-        //}
-
-        private bool goBack()
-        {
-            Frame thisFrame = Window.Current.Content as Frame;
-
-            //if (!(thisFrame.Content is Pages.pCharacterList))
-            //{
-            //    //CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-            //    //{
-            //    //    thisFrame.Navigate(typeof(Pages.pCharacterList));
-            //    //});
-
-            //    if (thisFrame.CanGoBack)
-            //    {
-            //        thisFrame.GoBack();
-            //        return true;
-            //    }
-            //}
-
-            return false;
-        }
-
         /// <summary>
         /// Invoked when application execution is being suspended.  Application state is saved
         /// without knowing whether the application will be terminated or resumed with the contents
@@ -195,11 +181,15 @@ namespace EveProfiler
         {
             Frame thisFrame = Window.Current.Content as Frame;
 
-            //thisFrame.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-            //{
-            //    if (!(thisFrame.Content is Pages.pSettings))
-            //        thisFrame.Navigate(typeof(Pages.pCharacterList));
-            //});
+#if WINDOWS_PHONE_APP
+            thisFrame.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            {
+                if (!(thisFrame.Content is Pages.Settings))
+                {
+                    thisFrame.Navigate(typeof(Pages.CharacterList));
+                }
+            });
+#endif
         }
     }
 }

@@ -11,6 +11,7 @@ namespace EveProfiler.Logic.Eve
         public Dictionary<long, Skill> Skills { get; }
 
         public long GroupId { get; }
+
         public string GroupName
         {
             get
@@ -24,6 +25,7 @@ namespace EveProfiler.Logic.Eve
                 NotifyPropertyChanged("GroupName");
             }
         }
+
         public int TotalSkillPoints
         {
             get

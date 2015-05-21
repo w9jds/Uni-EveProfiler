@@ -6,22 +6,20 @@
     xmlns:Classes="using:EveProfiler.Shared.Classes"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Loaded="UserControl_Loaded" 
-    Unloaded="UserControl_Unloaded">
+    mc:Ignorable="d" Loaded="UserControl_Loaded" Unloaded="UserControl_Unloaded">
 
     <local:CharacterControlBase.Resources>
-        <CollectionViewSource x:Name="cvsGroupSkills" IsSourceGrouped="true" ItemsPath="groupSkills"/>
+        <CollectionViewSource x:Name="skillGroups" IsSourceGrouped="true" ItemsPath="Skills"/>
         <Classes:SkillCountConverter x:Key="SkillCountConverter"/>
         <Classes:GroupSkillPointsConverter x:Key="GroupSkillPointsConverter"/>
     </local:CharacterControlBase.Resources>
 
     <Grid x:Name="LayoutRoot">
-        <ProgressBar x:Name="pbProgress" VerticalAlignment="Top" Background="Transparent" />
+        <!--<ProgressBar x:Name="progress" VerticalAlignment="Top" Background="Transparent" />-->
 
-        <ListView x:Name="lbSkillGroups"
+        <ListView x:Name="skillsList"
                   SelectionMode="None"
-                  ItemsSource="{Binding Source={StaticResource cvsGroupSkills}}" 
+                  ItemsSource="{Binding Source={StaticResource skillGroups}}" 
                   Background="Transparent">
             
             <ListView.GroupStyle>
@@ -34,13 +32,14 @@
                     <GroupStyle.HeaderTemplate>
                         <DataTemplate>
                             
-                            <Grid Background="#FFFFFF" Margin="5,2.5" Height="60">
+                            <Grid Background="#FFFFFF" Margin="0,2.5" Height="60">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock Name="tbGroupName" Text="{Binding groupName}" Foreground="Black" Margin="20,0,0,0" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="18"/>
+                                <TextBlock Text="{Binding GroupName}" Foreground="Black" Margin="20,0,0,0" FontWeight="Bold" 
+                                           HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="18"/>
 
                                 <Grid Grid.Column="1">
                                     <Grid.RowDefinitions>
@@ -48,8 +47,12 @@
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
                                     
-                                    <TextBlock Name="tbSkillCount" Text="{Binding groupSkills, Converter={StaticResource SkillCountConverter}}" Foreground="Black" Margin="0,0,20,1.5" HorizontalAlignment="Right" VerticalAlignment="Bottom" FontSize="16"/>
-                                    <TextBlock Name="tbSkillPoints" Grid.Row="1" Text="{Binding groupSkillPoints, Converter={StaticResource GroupSkillPointsConverter}}" Foreground="Black" Margin="0,1.5,20,0" HorizontalAlignment="Right" VerticalAlignment="Top" FontSize="16"/>
+                                    <TextBlock Text="{Binding groupSkills, Converter={StaticResource SkillCountConverter}}" 
+                                               Foreground="Black" Margin="0,0,20,1.5" HorizontalAlignment="Right" 
+                                               VerticalAlignment="Bottom" FontSize="16"/>
+                                    <TextBlock Grid.Row="1" Text="{Binding groupSkillPoints, Converter={StaticResource GroupSkillPointsConverter}}" 
+                                               Foreground="Black" Margin="0,1.5,20,0" HorizontalAlignment="Right" 
+                                               VerticalAlignment="Top" FontSize="16"/>
                                 </Grid>
 
                             </Grid>
@@ -63,7 +66,6 @@
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                     <Setter Property="Background" Value="Transparent"/>
-                    
                 </Style>
             </ListView.ItemContainerStyle>
             
