@@ -70,8 +70,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Controls\Wallet.xaml.cs">
       <DependentUpon>Wallet.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Tasks\Registration.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Tasks\RetrieveMailTask.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils.cs" />
   </ItemGroup>
   <ItemGroup>

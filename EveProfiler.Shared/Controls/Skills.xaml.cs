@@ -20,7 +20,7 @@ namespace EveProfiler.Shared.Controls
 
         public override void SetCharacter(Character character)
         {
-            skillGroups.Source = character.Skills
+            skillGroups.Source = character.Skills;
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -41,10 +41,10 @@ namespace EveProfiler.Shared.Controls
 
             filterButton.Tapped += (send, args) =>
             {
-                skillGroups.View = item =>
-                {
+                //skillGroups.View = item =>
+                //{
 
-                };
+                //};
             };
 
             commandBar.PrimaryCommands.Add(filterButton);

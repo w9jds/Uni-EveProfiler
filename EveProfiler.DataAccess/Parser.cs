@@ -142,8 +142,7 @@ namespace EveProfiler.DataAccess
                     Title = x.Attribute("title")?.Value,
                     ToCharacterIDs = x.Attribute("toCharacterIDs")?.Value,
                     ToCorpOrAllianceID = x.Attribute("toCorpOrAllianceID")?.Value,
-                    ToListID = x.Attribute("toListID")?.Value,
-                    CachedUntil = GetCachedUntil(doc)
+                    ToListID = x.Attribute("toListID")?.Value
                 }).ToList();
 
             Dictionary<long, Mail> mails = new Dictionary<long, Mail>();

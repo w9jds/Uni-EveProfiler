@@ -3,6 +3,7 @@ using EveProfiler.Logic;
 using EveProfiler.Logic.CharacterAttributes;
 using EveProfiler.Logic.Eve;
 using EveProfiler.Shared.Controls;
+using EveProfiler.Tasks;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -141,11 +142,11 @@ namespace EveProfiler.Pages
                     {
                         GetCharacterSheet(character);
                     }
-                    if (!characterContainer.Containers.ContainsKey(AttributeTypes.Mail.ToString()))
-                    {
+                    //if (!characterContainer.Containers.ContainsKey(AttributeTypes.Mail.ToString()))
+                    //{
                         GetCharacterMail(character, 
                             characterContainer.CreateContainer(AttributeTypes.Mail.ToString(), ApplicationDataCreateDisposition.Always));
-                    }
+                    //}
                 }
             }
         }
@@ -182,11 +183,12 @@ namespace EveProfiler.Pages
                     .AsTask().ContinueWith((file) =>
                     {
                         
-                        file.Result.OpenTransactedWriteAsync().AsTask().ContinueWith((stream) =>
-                        {
-                            serializer.WriteObject(stream.Result.Stream.AsStreamForWrite(), serializeItem);
-                            stream.Result.CommitAsync();
-                        });
+                        
+                        //file.Result.OpenTransactedWriteAsync().AsTask().ContinueWith((stream) =>
+                        //{
+                        //    serializer.WriteObject(stream.Result.Stream.AsStreamForWrite(), serializeItem);
+                        //    stream.Result.CommitAsync();
+                        //});
                     });
 
                 Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
@@ -194,7 +196,7 @@ namespace EveProfiler.Pages
                     character.addAttribute(AttributeTypes.Mail, result.Item2);
                 });
 
-                Shared.Tasks.Registration taskRegister = new Shared.Tasks.Registration();
+                Registration taskRegister = new Registration();
                 taskRegister.RegisterNewMailTimer(result.Item1, character);
             }));
         }

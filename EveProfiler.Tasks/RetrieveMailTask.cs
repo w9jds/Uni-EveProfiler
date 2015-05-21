@@ -10,7 +10,7 @@ using Windows.Data.Xml.Dom;
 using Windows.Storage;
 using Windows.UI.Notifications;
 
-namespace EveProfiler.Shared.Tasks
+namespace EveProfiler.Tasks
 {
     public class RetrieveMailTask : IBackgroundTask
     {

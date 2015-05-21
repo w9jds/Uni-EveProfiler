@@ -49,11 +49,8 @@ namespace EveProfiler
                 if (thisFrame.CanGoBack)
                 {
                     thisFrame.GoBack();
-                    return true;
                 }
             }
-
-            return false;
         }
 #endif
 

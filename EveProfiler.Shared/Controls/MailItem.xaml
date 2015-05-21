@@ -19,7 +19,7 @@
         <Grid Background="#DDFFFFFF" Margin="5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
-                <RowDefinition Height="{Binding Converter={StaticResource ExtendedConverter}}"/>
+                <RowDefinition Height="{Binding IsExtended, Converter={StaticResource ExtendedConverter}}"/>
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>

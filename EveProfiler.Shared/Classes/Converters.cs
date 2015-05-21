@@ -128,10 +128,15 @@ namespace EveProfiler.Shared.Classes
     {
         public object Convert(object value, Type targetType, object parameter, string culture)
         {
-            if (!(bool)value)
+            Mail item = value as Mail;
+            if (item == null || !item.IsExtended)
+            {
                 return new GridLength(0);
+            }
             else
+            {
                 return GridLength.Auto;
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string culture)

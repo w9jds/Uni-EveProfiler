@@ -146,6 +146,7 @@
     </Page>
   </ItemGroup>
   <Import Project="..\EveProfiler.Shared\EveProfiler.Shared.projitems" Label="Shared" />
+  <Import Project="..\EveProfiler.Tasks\EveProfiler.Tasks.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

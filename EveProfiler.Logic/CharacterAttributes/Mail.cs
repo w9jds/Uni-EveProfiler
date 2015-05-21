@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace EveProfiler.Logic.CharacterAttributes
 {
-    public class Mail : Character, INotifyPropertyChanged
+    public class Mail : INotifyPropertyChanged
     {
         private string _senderName;
         private DateTime _sentDate;
@@ -18,7 +18,9 @@ namespace EveProfiler.Logic.CharacterAttributes
         }
 
         public long MessageID { get; }
+
         public long SenderID { get; }
+
         public string SenderName
         {
             get { return _senderName; }
@@ -28,6 +30,7 @@ namespace EveProfiler.Logic.CharacterAttributes
                 NotifyPropertyChanged("SenderName");
             }
         }
+
         public DateTime SentDate
         {
             get { return _sentDate; }
@@ -37,6 +40,7 @@ namespace EveProfiler.Logic.CharacterAttributes
                 NotifyPropertyChanged("SentDate");
             }
         }
+
         public string Title
         {
             get { return _title; }
@@ -46,10 +50,15 @@ namespace EveProfiler.Logic.CharacterAttributes
                 NotifyPropertyChanged("Title");
             }
         }
+
         public string ToCorpOrAllianceID { get; set; }
+
         public string ToCharacterIDs { get; set; }
+
         public string ToListID { get; set; }
+
         public string SenderTypeID { get; set; }
+
         public string MessageBody
         {
             get { return _messageBody; }
@@ -59,6 +68,7 @@ namespace EveProfiler.Logic.CharacterAttributes
                 NotifyPropertyChanged("MessageBody");
             }
         }
+
         public bool IsExtended
         {
             get

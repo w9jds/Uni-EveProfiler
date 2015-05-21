@@ -2,7 +2,7 @@
 using System;
 using Windows.ApplicationModel.Background;
 
-namespace EveProfiler.Shared.Tasks
+namespace EveProfiler.Tasks
 {
     public class Registration
     {
