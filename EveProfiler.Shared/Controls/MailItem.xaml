@@ -29,7 +29,7 @@
 
             <Ellipse Width="50" Height="50"
                      HorizontalAlignment="Left" 
-                     Margin="20,15,15,15">
+                     Margin="15,15,15,15">
                 <Ellipse.Fill>
                     <ImageBrush>
                         <ImageBrush.ImageSource>
@@ -44,7 +44,7 @@
                   VerticalAlignment="Bottom" X1="0" Y1="0" X2="1" Y2="0" 
                   Stretch="Fill" Stroke="Black" StrokeThickness="1" />
 
-            <Grid Grid.Column="1">
+            <Grid Grid.Column="1" Margin="0, 10, 0, 15">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition Height="Auto"/>
@@ -52,11 +52,18 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Foreground="Black" Text="{Binding SentDate, Converter={StaticResource DateConverter}}" FontSize="13" Margin="0,0,15,0" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
-                <TextBlock Grid.Row="1" Text="{Binding SenderName}" Margin="10,5,0,5" FontSize="17" FontWeight="SemiBold" Foreground="Black" HorizontalAlignment="Left"/>
-                <TextBlock Grid.Row="2" Text="{Binding Title}" Margin="10,0,20,0" FontSize="13" TextWrapping="Wrap" Foreground="Black" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <TextBlock Grid.Row="1" Text="{Binding SenderName}" HorizontalAlignment="Left"
+                           Margin="10,5,0,5" FontSize="15" FontWeight="SemiBold" 
+                           Foreground="Black" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="2" Text="{Binding Title}" Margin="10,0,15,0" TextTrimming="WordEllipsis"
+                           FontSize="13" Foreground="Black" TextWrapping="NoWrap"
+                           HorizontalAlignment="Left" VerticalAlignment="Top" />
             </Grid>
 
+            <TextBlock Foreground="Black" Grid.Column="1"
+                       Text="{Binding SentDate, Converter={StaticResource DateConverter}}" 
+                       FontSize="13" Margin="0,10,15,0" HorizontalAlignment="Right" 
+                       VerticalAlignment="Top"/>
             <TextBlock Name="messageBody" FontSize="15" Grid.Row="1" Grid.ColumnSpan="2" Margin="20,15" Foreground="Black" TextWrapping="Wrap" Text="{Binding MessageBody, Converter={StaticResource MailBodyConverter}}"/>
         </Grid>
     </Grid>

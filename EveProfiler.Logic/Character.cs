@@ -1,6 +1,7 @@
-﻿using EveProfiler.Logic.Eve;
-using System;
+﻿using EveProfiler.Logic.CharacterAttributes;
+using EveProfiler.Logic.Eve;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace EveProfiler.Logic
 {
@@ -10,11 +11,29 @@ namespace EveProfiler.Logic
 
         private Dictionary<AttributeTypes, object> _attributes = new Dictionary<AttributeTypes, object>();
         private Dictionary<long, Skill> _skills = new Dictionary<long, Skill>();
+        private ObservableCollection<Mail> _mail = new ObservableCollection<Mail>();
 
         public long CharacterId { get; set; }
+
         public string CharacterName { get; set; }
+
         public Dictionary<AttributeTypes, object> Attributes => _attributes;
+
         public Dictionary<long, Skill> Skills => _skills;
+
+        public ObservableCollection<Mail> Mail
+        {
+            get
+            {
+                return _mail;
+            }
+            set
+            {
+                _mail = value;
+                NotifyPropertyChanged("Mail");
+            }
+        }
+        #endregion
 
         public void addAttribute(AttributeTypes key, object value)
         {
@@ -36,8 +55,6 @@ namespace EveProfiler.Logic
             }
             NotifyPropertyChanged("Skills");
         }
-
-        #endregion
 
         public Dictionary<string, string> getCharacterQuery() => new Dictionary<string, string>()
         {

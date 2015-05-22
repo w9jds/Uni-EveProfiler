@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
 using Windows.Data.Xml.Dom;
 using Windows.Storage;
@@ -12,7 +13,7 @@ using Windows.UI.Notifications;
 
 namespace EveProfiler.Tasks
 {
-    public class RetrieveMailTask : IBackgroundTask
+    public sealed class RetrieveMailTask : IBackgroundTask
     {
         ApplicationDataContainer _localSettings = ApplicationData.Current.LocalSettings;
         Character _currentCharacter;
@@ -32,7 +33,12 @@ namespace EveProfiler.Tasks
                     Api.GetCharacterMail(_currentCharacter, new Action<Tuple<DateTime, Dictionary<long, Mail>>>(result =>
                     {
                         ApplicationDataContainer characterContainer = _localSettings.Containers[_currentCharacter.CharacterName];
-                        Dictionary<long, Mail> mails = result.Item2;
+
+                        Dictionary<long, Mail> mails = new Dictionary<long, Mail>();
+                        foreach (Mail mail in new List<Mail>(result.Item2.Values).Where(x => x.SenderID != _currentCharacter.CharacterId))
+                        {
+                            mails.Add(mail.MessageID, mail);
+                        }
 
                         if (!characterContainer.Containers.ContainsKey(AttributeTypes.Mail.ToString()))
                         {
@@ -51,13 +57,13 @@ namespace EveProfiler.Tasks
                             if (!mailContainer.Values.ContainsKey(messageId.ToString()))
                             {
                                 newMails.Add(mails[messageId]);
-                                mailContainer.Values.Add(messageId.ToString(), JsonConvert.SerializeObject(mails[messageId]));
+                                mailContainer.Values.Add(messageId.ToString(), true);
                             }
                         }
 
                         if (newMails.Count > 0)
                         {
-                            foreach(Mail mail in newMails)
+                            foreach (Mail mail in newMails)
                             {
                                 XmlDocument toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastImageAndText02);
 
@@ -73,13 +79,19 @@ namespace EveProfiler.Tasks
                             }
                         }
 
-                        Registration taskRegister = new Registration();
-                        taskRegister.RegisterNewMailTimer(result.Item1, _currentCharacter);
+                        SaveSerializedToLocalFile($"mail_{_currentCharacter.CharacterName}", JsonConvert.SerializeObject(new List<Mail>(mails.Values)));
 
+                        Register.RegisterNewMailTimer(result.Item1, _currentCharacter.CharacterName);
                         _deferral.Complete();
                     }));
                 }
             }
+        }
+
+        public async void SaveSerializedToLocalFile(string filename, string content)
+        {
+            StorageFile file = await ApplicationData.Current.LocalFolder.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
+            await FileIO.WriteTextAsync(file, content);
         }
     }
 }

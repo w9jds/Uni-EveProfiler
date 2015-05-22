@@ -6,6 +6,7 @@ using EveProfiler.Shared.Controls;
 using EveProfiler.Tasks;
 using Newtonsoft.Json;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using Windows.Storage;
@@ -15,6 +16,8 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
+using System.Collections.ObjectModel;
+using EveProfiler.Shared;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -142,11 +145,16 @@ namespace EveProfiler.Pages
                     {
                         GetCharacterSheet(character);
                     }
-                    //if (!characterContainer.Containers.ContainsKey(AttributeTypes.Mail.ToString()))
-                    //{
+                    if (!characterContainer.Containers.ContainsKey(AttributeTypes.Mail.ToString()))
+                    {
                         GetCharacterMail(character, 
                             characterContainer.CreateContainer(AttributeTypes.Mail.ToString(), ApplicationDataCreateDisposition.Always));
-                    //}
+                    }
+                    else
+                    {
+                        character.Mail = new ObservableCollection<Mail>(JsonConvert.DeserializeObject<List<Mail>>(
+                            Utils.GetSerializedFromLocalFile($"mail_{character.CharacterName}").Result));
+                    }
                 }
             }
         }
@@ -170,34 +178,27 @@ namespace EveProfiler.Pages
         {
             Api.GetCharacterMail(character, new Action<Tuple<DateTime, Dictionary<long, Mail>>>(result =>
             {
-                foreach (long key in result.Item2.Keys)
+                List<Mail> mails = new List<Mail>(result.Item2.Values)
+                    .Where(x => x.SenderID != character.CharacterId)
+                    .OrderByDescending(x => x.SentDate).ToList();
+
+                foreach (Mail mail in mails)
                 {
-                    if (!mailContainer.Values.ContainsKey(key.ToString()))
+                    if (!mailContainer.Values.ContainsKey(mail.MessageID.ToString()))
                     {
-                        mailContainer.Values[key.ToString()] = true;
+                        mailContainer.Values[mail.MessageID.ToString()] = true;
                     }
                 }
 
                 string fileName = $"mail_{character.CharacterName}";
-                ApplicationData.Current.LocalFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting)
-                    .AsTask().ContinueWith((file) =>
-                    {
-                        
-                        
-                        //file.Result.OpenTransactedWriteAsync().AsTask().ContinueWith((stream) =>
-                        //{
-                        //    serializer.WriteObject(stream.Result.Stream.AsStreamForWrite(), serializeItem);
-                        //    stream.Result.CommitAsync();
-                        //});
-                    });
+                Utils.SaveSerializedToLocalFile(fileName, JsonConvert.SerializeObject(mails));
 
                 Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    character.addAttribute(AttributeTypes.Mail, result.Item2);
+                    character.Mail = new ObservableCollection<Mail>(mails);
                 });
 
-                Registration taskRegister = new Registration();
-                taskRegister.RegisterNewMailTimer(result.Item1, character);
+                Register.RegisterNewMailTimer(result.Item1, character.CharacterName);
             }));
         }
 

@@ -4,20 +4,15 @@ using Windows.ApplicationModel.Background;
 
 namespace EveProfiler.Tasks
 {
-    public class Registration
+    public sealed class Register
     {
-        public Registration()
+        public static async void RegisterNewMailTimer(DateTimeOffset scheduledTime, string characterName)
         {
-
-        }
-
-        public async void RegisterNewMailTimer(DateTime scheduledTime, Character character)
-        {
-            string taskName = $"RetrieveMailTask_{character.CharacterId}";
+            string taskName = $"RetrieveMailTask_{characterName}";
 
             if (!IsTaskRegistered(taskName))
             {
-               BackgroundTaskBuilder builder = new BackgroundTaskBuilder();
+                BackgroundTaskBuilder builder = new BackgroundTaskBuilder();
 
                 builder.Name = taskName;
                 builder.TaskEntryPoint = "EveProfiler.Tasks.RetrieveMailTask";
@@ -25,7 +20,7 @@ namespace EveProfiler.Tasks
                 double scheduleOffset = scheduledTime.Subtract(DateTime.UtcNow).TotalMinutes;
                 if (scheduleOffset < 15)
                 {
-                    scheduleOffset = 15; 
+                    scheduleOffset = 15;
                 }
 
                 await BackgroundExecutionManager.RequestAccessAsync();
@@ -34,7 +29,7 @@ namespace EveProfiler.Tasks
             }
         }
 
-        private bool IsTaskRegistered(string taskName)
+        private static bool IsTaskRegistered(string taskName)
         {
             foreach (var task in BackgroundTaskRegistration.AllTasks)
             {

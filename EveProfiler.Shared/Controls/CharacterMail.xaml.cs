@@ -21,7 +21,6 @@ namespace EveProfiler.Shared.Controls
     public sealed partial class CharacterMail : CharacterControlBase
     {
         private ApplicationDataContainer _localSettings = ApplicationData.Current.LocalSettings;
-        ObservableCollection<Mail> _currentMails = new ObservableCollection<Mail>();
 
         public CharacterMail()
         {
@@ -30,10 +29,7 @@ namespace EveProfiler.Shared.Controls
 
         public override void SetCharacter(Character character)
         {
-            _currentMails = new ObservableCollection<Mail>(((Dictionary<long, Mail>)character.Attributes[AttributeTypes.Mail]).Values
-                .OrderByDescending(x => x.SentDate));
-
-            mailList.SetBinding(ItemsControl.ItemsSourceProperty, new Binding() { Source = _currentMails });
+            mailList.SetBinding(ItemsControl.ItemsSourceProperty, new Binding() { Source = character.Mail });
         }
 
         private void FilterDeletedItems(Character character)

@@ -1,5 +1,4 @@
-﻿using EveProfiler.Logic.CharacterAttributes;
-using HtmlAgilityPack;
+﻿using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -128,8 +127,7 @@ namespace EveProfiler.Shared.Classes
     {
         public object Convert(object value, Type targetType, object parameter, string culture)
         {
-            Mail item = value as Mail;
-            if (item == null || !item.IsExtended)
+            if (!(bool)value)
             {
                 return new GridLength(0);
             }

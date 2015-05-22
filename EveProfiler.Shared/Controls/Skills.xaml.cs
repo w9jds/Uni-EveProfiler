@@ -20,7 +20,7 @@ namespace EveProfiler.Shared.Controls
 
         public override void SetCharacter(Character character)
         {
-            skillGroups.Source = character.Skills;
+            //skillGroups.Source = character.Skills.Values;
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)

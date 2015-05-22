@@ -116,6 +116,10 @@
       <Project>{c4bbd6f1-d7ea-46a3-82d3-dd71aa48fdf0}</Project>
       <Name>EveProfiler.Logic</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EveProfiler.Tasks\EveProfiler.Tasks.csproj">
+      <Project>{67e2c772-dfb0-456e-a77b-764e4a127835}</Project>
+      <Name>EveProfiler.Tasks</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="HtmlAgilityPack-PCL, Version=1.4.6.0, Culture=neutral, processorArchitecture=MSIL">
@@ -146,7 +150,6 @@
     </Page>
   </ItemGroup>
   <Import Project="..\EveProfiler.Shared\EveProfiler.Shared.projitems" Label="Shared" />
-  <Import Project="..\EveProfiler.Tasks\EveProfiler.Tasks.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>
