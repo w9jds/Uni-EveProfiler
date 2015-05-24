@@ -7,7 +7,8 @@
         Sheet,
         Mail,
         Wallet,
-        SkillQueue
+        SkillQueue,
+        Skills
     }
 
     public enum EventResponses

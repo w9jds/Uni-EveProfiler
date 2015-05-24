@@ -64,7 +64,7 @@ namespace EveProfiler
         {
             StatusBar statusBar = StatusBar.GetForCurrentView();
             statusBar.BackgroundColor = Color.FromArgb(0xFF, 0x00, 0x00, 0x00);
-            statusBar.BackgroundOpacity = 0.5;
+            statusBar.BackgroundOpacity = 1;
 
 #if WINDOWS_UAP
             //Windows.UI.Core.SystemNavigationManager.GetForCurrentView().BackRequested += Back_Requested;

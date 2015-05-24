@@ -35,14 +35,10 @@ namespace EveProfiler.Pages
         public CharacterList()
         {
             InitializeComponent();
+            getCurrentAccount();
         }
 
-        /// <summary>
-        /// Invoked when this page is about to be displayed in a Frame.
-        /// </summary>
-        /// <param name="e">Event data that describes how this page was reached.
-        /// This parameter is typically used to configure the page.</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        public async void getCurrentAccount()
         {
             _account = JsonConvert.DeserializeObject<Account>((string)_localSettings.Values["account"]);
 
@@ -54,6 +50,16 @@ namespace EveProfiler.Pages
             {
                 PopulateGrid();
             }
+        }
+
+        /// <summary>
+        /// Invoked when this page is about to be displayed in a Frame.
+        /// </summary>
+        /// <param name="e">Event data that describes how this page was reached.
+        /// This parameter is typically used to configure the page.</param>
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+
         }
 
         private void GetCharacterList()
@@ -138,7 +144,7 @@ namespace EveProfiler.Pages
                         else
                         {
                             character.addAttribute(AttributeTypes.Sheet, sheet);
-                            //character.addSkills
+                            getCachedSkills(character);
                         }
                     }
                     else
@@ -152,13 +158,23 @@ namespace EveProfiler.Pages
                     }
                     else
                     {
-                        character.Mail = new ObservableCollection<Mail>(JsonConvert.DeserializeObject<List<Mail>>(
-                            Utils.GetSerializedFromLocalFile($"mail_{character.CharacterName}").Result));
+                        getCachedMail(character);
                     }
                 }
             }
         }
 
+        private async void getCachedSkills(Character character)
+        {
+            character.addSkills(JsonConvert.DeserializeObject<List<Skill>>(await
+                Utils.GetSerializedFromLocalFile($"skills_{character.CharacterId}")));
+        }
+
+        private async void getCachedMail(Character character)
+        {
+            character.Mail = new ObservableCollection<Mail>(JsonConvert.DeserializeObject<List<Mail>>(await
+                Utils.GetSerializedFromLocalFile($"mail_{character.CharacterId}")));
+        }
 
         private void GetCharacterInfo(Character character)
         {
@@ -190,7 +206,7 @@ namespace EveProfiler.Pages
                     }
                 }
 
-                string fileName = $"mail_{character.CharacterName}";
+                string fileName = $"mail_{character.CharacterId}";
                 Utils.SaveSerializedToLocalFile(fileName, JsonConvert.SerializeObject(mails));
 
                 Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
@@ -198,7 +214,7 @@ namespace EveProfiler.Pages
                     character.Mail = new ObservableCollection<Mail>(mails);
                 });
 
-                Register.RegisterNewMailTimer(result.Item1, character.CharacterName);
+                Register.RegisterNewMailTimer(result.Item1.AddMinutes(10), character.CharacterId);
             }));
         }
 
@@ -214,6 +230,7 @@ namespace EveProfiler.Pages
 
                 _localSettings.Containers[character.CharacterName].Values[AttributeTypes.Sheet.ToString()] = 
                     JsonConvert.SerializeObject(result.Item1);
+                Utils.SaveSerializedToLocalFile($"skills_{character.CharacterId}", JsonConvert.SerializeObject(result.Item2));
             }));
         }
 

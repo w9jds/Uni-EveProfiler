@@ -65,7 +65,7 @@ namespace EveProfiler.DataAccess
             }
         }
 
-        public static void GetCharacterSheet(Character character, Action<Tuple<Sheet, List<Logic.Eve.Skill>>> result)
+        public static void GetCharacterSheet(Character character, Action<Tuple<Sheet, List<Skill>>> result)
         {
             if (NetworkInterface.GetIsNetworkAvailable())
             {
@@ -90,7 +90,7 @@ namespace EveProfiler.DataAccess
             }
         }
 
-        public static void GetSkillTree(Action<Dictionary<long, SkillGroup>> result)
+        public static void GetSkillTree(Action<Tuple<List<Skill>, Dictionary<long, SkillGroup>>> result)
         {
             if (NetworkInterface.GetIsNetworkAvailable())
             {

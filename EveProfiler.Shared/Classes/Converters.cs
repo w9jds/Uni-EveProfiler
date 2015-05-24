@@ -143,6 +143,26 @@ namespace EveProfiler.Shared.Classes
         }
     }
 
+    public class VisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if (!(bool)value)
+            {
+                return Visibility.Collapsed;
+            }
+            else
+            {
+                return Visibility.Visible;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public class SkillTimeLeftConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string culture)
@@ -294,9 +314,9 @@ namespace EveProfiler.Shared.Classes
     {
         public object Convert(object value, Type targetType, object parameter, string culture)
         {
-            if ((int)value != 0)
+            if ((long)value != 0)
             {
-                return $"SP: {((int)value).ToString("##,#")}";
+                return $"SP: {((long)value).ToString("##,#")}";
             }
             else
             {
@@ -315,9 +335,11 @@ namespace EveProfiler.Shared.Classes
     {
         public object Convert(object value, Type targetType, object parameter, string culture)
         {
-            List<double> SkillPointsPerLevel = value as List<double>;
+            //List<double> SkillPointsPerLevel = value as List<double>;
 
-            return SkillPointsPerLevel[4].ToString("##,#");
+            //return SkillPointsPerLevel[4].ToString("##,#");
+
+            return string.Empty;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string culture)

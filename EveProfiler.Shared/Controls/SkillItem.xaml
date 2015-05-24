@@ -9,7 +9,7 @@
     mc:Ignorable="d"
     Loaded="UserControl_Loaded">
 
-    <!--<UserControl.Resources>
+    <UserControl.Resources>
         <Classes:AttributeIconConverter x:Key="AttributeIconConverter"/>
         <Classes:ExtensionConverter x:Key="ExtendedConverter"/>
         <Classes:SkillSkillPointsConverter x:Key="SkillSkillPointsConverter"/>
@@ -24,12 +24,12 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Margin="20,0,0,0" FontSize="16" Text="{Binding typeName}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="Black" TextWrapping="Wrap"/>
+                <TextBlock Margin="20,0,0,0" FontSize="16" Text="{Binding TypeName}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="Black" TextWrapping="Wrap"/>
 
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="20,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center">
-                    <TextBlock FontSize="15" Text="{Binding characterSkill.skillpoints, Converter={StaticResource SkillSkillPointsConverter}}" Foreground="Black"/>
+                    <TextBlock FontSize="15" Text="{Binding Skillpoints, Converter={StaticResource SkillSkillPointsConverter}}" Foreground="Black"/>
                     <TextBlock FontSize="15" Margin="5,0" Text="/" Foreground="Black"/>
-                    <TextBlock FontSize="15" Text="{Binding skillPointsPerLevel, Converter={StaticResource MaxSkillPointsConverter}}" Foreground="Black"/>
+                    <TextBlock FontSize="15" Text="{Binding SkillPointsPerLevel, Converter={StaticResource MaxSkillPointsConverter}}" Foreground="Black"/>
                 </StackPanel>
             </Grid>
         </DataTemplate>
@@ -41,7 +41,7 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Margin="20,0,0,0" FontSize="16" Text="{Binding typeName}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="Black" TextWrapping="Wrap"/>
+                <TextBlock Margin="20,0,0,0" FontSize="16" Text="{Binding TypeName}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="Black" TextWrapping="Wrap"/>
 
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="20,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center">
                     <TextBlock FontSize="15" Text="Not Injected" Foreground="Black"/>
@@ -69,7 +69,7 @@
 
             <Line x:Name="lBreak" Visibility="Collapsed" HorizontalAlignment="Center" Margin="15,0" Grid.ColumnSpan="3" VerticalAlignment="Bottom" X1="0" Y1="0" X2="1" Y2="0" Stretch="Fill" Stroke="Black" StrokeThickness="1" />
 
-            <Pivot Grid.Row="1" Grid.ColumnSpan="3" Name="pvtInfo"
+            <!--<Pivot Grid.Row="1" Grid.ColumnSpan="3" Name="pvtInfo"
                    ManipulationMode="TranslateX"
                    ManipulationCompleted="Pivot_ManipulationCompleted">
                 
@@ -174,7 +174,7 @@
                     </PivotItem>
                 </Pivot.Items>
 
-            </Pivot>
+            </Pivot>-->
         </Grid>
-    </Grid>-->
+    </Grid>
 </UserControl>

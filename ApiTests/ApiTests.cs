@@ -87,9 +87,9 @@ namespace NetworkingTests
 
             ManualResetEvent completion = new ManualResetEvent(false);
 
-            Api.GetSkillTree(new Action<Dictionary<long, SkillGroup>>(result =>
+            Api.GetSkillTree(new Action<Tuple<List<Skill>, Dictionary<long, SkillGroup>>>(result =>
             {
-                skillGroups = result;
+                skillGroups = result.Item2;
                 completion.Set();
             }));
 

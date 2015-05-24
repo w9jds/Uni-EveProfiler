@@ -11,6 +11,7 @@
     <Page.Resources>
         <Style x:Key="DrawerButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="MinWidth" Value="60" />
             <Setter Property="BorderBrush" Value="{StaticResource PhoneForegroundBrush}"/>
             <Setter Property="Foreground" Value="{StaticResource PhoneForegroundBrush}"/>
             <Setter Property="BorderThickness" Value="{StaticResource PhoneBorderThickness}"/>
@@ -33,10 +34,10 @@
                                     <VisualState x:Name="Disabled"/>
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
-                            <Canvas x:Name="ButtonBackground" HorizontalAlignment="Left" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}">
-                                <Line StrokeThickness="2" Stroke="White" StrokeStartLineCap="Round" StrokeEndLineCap="Round" X1="15" Y1="20" X2="45" Y2="20"/>
-                                <Line StrokeThickness="2" Stroke="White" StrokeStartLineCap="Round" StrokeEndLineCap="Round" X1="15" Y1="30" X2="45" Y2="30"/>
-                                <Line StrokeThickness="2" Stroke="White" StrokeStartLineCap="Round" StrokeEndLineCap="Round" X1="15" Y1="40" X2="45" Y2="40"/>
+                            <Canvas x:Name="ButtonBackground" HorizontalAlignment="Left" Height="{TemplateBinding Height}" Width="60">
+                                <Line StrokeThickness="6" Stroke="White" X1="15" Y1="18" X2="45" Y2="18"/>
+                                <Line StrokeThickness="6" Stroke="White" X1="15" Y1="28" X2="45" Y2="28"/>
+                                <Line StrokeThickness="6" Stroke="White" X1="15" Y1="38" X2="45" Y2="38"/>
                             </Canvas>
                         </Grid>
                     </ControlTemplate>
@@ -57,7 +58,7 @@
 
             <Border Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
                 <Controls:Drawer x:Name="Drawer" 
-                                 DataContext="{Binding Path=DataContext}"
+                                 DataContext="{Binding}"
                                  Height="{Binding ElementName=DrawerPopup, Path=ActualHeight}" 
                                  Width="250"/>
             </Border>
@@ -74,7 +75,7 @@
             </Grid.RowDefinitions>
 
             <Button Name="drawerToggle" HorizontalAlignment="Left" VerticalAlignment="Top"
-                    Margin="10,0,0,0" Style="{StaticResource DrawerButtonStyle}" 
+                    Style="{StaticResource DrawerButtonStyle}" 
                     Tapped="drawerToggle_Tapped"/>
 
             <TextBlock Name="characterTitle"  Text="{Binding CharacterName}"

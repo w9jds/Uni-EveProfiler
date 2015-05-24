@@ -61,8 +61,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Controls\SkillItem.xaml.cs">
       <DependentUpon>SkillItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\Skills.xaml.cs">
-      <DependentUpon>Skills.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\CharacterSkills.xaml.cs">
+      <DependentUpon>CharacterSkills.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Controls\CalendarEvents.xaml.cs">
       <DependentUpon>CalendarEvents.xaml</DependentUpon>
@@ -97,7 +97,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Controls\Skills.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)Controls\CharacterSkills.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

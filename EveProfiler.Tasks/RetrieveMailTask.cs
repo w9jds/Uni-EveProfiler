@@ -72,16 +72,16 @@ namespace EveProfiler.Tasks
                                 ((XmlElement)toastImageAttributes[0]).SetAttribute("alt", "alt text");
 
                                 XmlNodeList toastTextAttributes = toastXml.GetElementsByTagName("text");
-                                toastTextAttributes[0].InnerText = mail.Title;
-                                toastTextAttributes[1].InnerText = mail.MessageBody;
+                                toastTextAttributes[0].InnerText = mail.SenderName;
+                                toastTextAttributes[1].InnerText = mail.Title;
 
                                 ToastNotificationManager.CreateToastNotifier().Show(new ToastNotification(toastXml));
                             }
+
+                            SaveSerializedToLocalFile($"mail_{_currentCharacter.CharacterId}", JsonConvert.SerializeObject(new List<Mail>(mails.Values)));
                         }
 
-                        SaveSerializedToLocalFile($"mail_{_currentCharacter.CharacterName}", JsonConvert.SerializeObject(new List<Mail>(mails.Values)));
-
-                        Register.RegisterNewMailTimer(result.Item1, _currentCharacter.CharacterName);
+                        Register.RegisterNewMailTimer(result.Item1.AddMinutes(10), _currentCharacter.CharacterId);
                         _deferral.Complete();
                     }));
                 }
@@ -93,5 +93,38 @@ namespace EveProfiler.Tasks
             StorageFile file = await ApplicationData.Current.LocalFolder.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
             await FileIO.WriteTextAsync(file, content);
         }
+
+        //private void SendBadgeNotification(int count)
+        //{
+        //    XmlDocument badgeXml = BadgeUpdateManager.GetTemplateContent(BadgeTemplateType.BadgeGlyph);
+        //    XmlElement badgeElement = (XmlElement)badgeXml.SelectSingleNode("/badge");
+        //    badgeElement.SetAttribute("value", count.ToString());
+        //    BadgeNotification badge = new BadgeNotification(badgeXml);
+        //    BadgeUpdateManager.CreateBadgeUpdaterForApplication().Update(badge);
+        //}
+
+        //public void SendToastNotification(string message, string imageName)
+        //{
+        //    var notificationXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastImageAndText01);
+        //    var toastElements = notificationXml.GetElementsByTagName("text");
+        //    toastElements[0].AppendChild(notificationXml.CreateTextNode(message));
+        //    if (string.IsNullOrEmpty(imageName))
+        //    {
+        //        imageName = @"Assets/Logo.png";
+        //    }
+        //    var imageElement = notificationXml.GetElementsByTagName("image");
+        //    imageElement[0].Attributes[1].NodeValue = imageName;
+        //    var toastNotification = new ToastNotification(notificationXml);
+        //    ToastNotificationManager.CreateToastNotifier().Show(toastNotification);
+        //}
+
+        //private static void SendTileTextNotification(string tweet)
+        //{
+        //    var tileXml = TileUpdateManager.GetTemplateContent(TileTemplateType.TileWideText03);
+        //    var tileAttributes = tileXml.GetElementsByTagName("text");
+        //    tileAttributes[0].AppendChild(tileXml.CreateTextNode(tweet));
+        //    var tileNotification = new TileNotification(tileXml);
+        //    TileUpdateManager.CreateTileUpdaterForApplication().Update(tileNotification);
+        //}
     }
 }

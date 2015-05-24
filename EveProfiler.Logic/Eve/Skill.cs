@@ -1,6 +1,8 @@
 ﻿using EveProfiler.Logic.CharacterAttributes;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace EveProfiler.Logic.Eve
 {
@@ -15,11 +17,23 @@ namespace EveProfiler.Logic.Eve
         //private ObservableCollection<cRequiredSkill> _RequiredSkills = new ObservableCollection<cRequiredSkill>();
         private string _secondaryAttribute;
         private string _primaryAttribute;
+        private ObservableCollection<RequiredSkill> _requiredSkills = new ObservableCollection<RequiredSkill>();
         private List<double> _skillPointsPerLevel = new List<double>();
 
         public long GroupId { get; set; }
 
-        public Dictionary<long, RequiredSkill> RequiredSkills { get; private set; }
+        public ObservableCollection<RequiredSkill> RequiredSkills
+        {
+            get
+            {
+                return _requiredSkills;
+            }
+            set
+            {
+                _requiredSkills = value;
+                NotifyPropertyChanged("RequiredSkills");
+            }
+        }
         public Dictionary<string, double> SkillBonuses { get; }
 
         public string TypeName
@@ -127,6 +141,7 @@ namespace EveProfiler.Logic.Eve
             }
         }
 
+        [JsonConstructor]
         public Skill(long typeId) : base(typeId)
         {
         }
@@ -135,7 +150,7 @@ namespace EveProfiler.Logic.Eve
         {
             foreach(RequiredSkill requiredSkill in requiredSkills)
             {
-                RequiredSkills.Add(requiredSkill.TypeId, requiredSkill);
+                RequiredSkills.Add(requiredSkill);
             }
         }
     }

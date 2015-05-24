@@ -14,7 +14,7 @@
 
     <Grid Name="drawer" Width="250">
         <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
+            <RowDefinition Height="150"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         
@@ -25,7 +25,7 @@
             </Grid.ColumnDefinitions>
         
         
-            <Ellipse Width="50" Height="50" HorizontalAlignment="Left" Margin="20 0">
+            <Ellipse Width="75" Height="75" HorizontalAlignment="Left" Margin="20 0">
                 <Ellipse.Fill>
                     <ImageBrush>
                         <ImageBrush.ImageSource>

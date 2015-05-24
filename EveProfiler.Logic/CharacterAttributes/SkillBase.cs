@@ -10,7 +10,7 @@ namespace EveProfiler.Logic.CharacterAttributes
         }
 
         private long _skillpoints;
-        private int _level = 0;
+        private int? _level;
         private double _trainingProgress;
         private double _skillPointsPerMinute;
 
@@ -25,7 +25,7 @@ namespace EveProfiler.Logic.CharacterAttributes
                 NotifyPropertyChanged("Skillpoints");
             }
         }
-        public int Level
+        public int? Level
         {
             get { return _level; }
             set

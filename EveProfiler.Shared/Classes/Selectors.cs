@@ -1,4 +1,5 @@
-﻿using Windows.UI.Xaml;
+﻿using EveProfiler.Logic.Eve;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace EveProfiler.Shared.Classes
@@ -62,16 +63,20 @@ namespace EveProfiler.Shared.Classes
 
         protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
         {
-            //if (item != null)
-            //{
-            //    cEVESkill thisSkill = item as cEVESkill;
+            if (item != null)
+            {
+                Skill skill = item as Skill;
 
-            //    if (thisSkill.characterSkill != null)
-            //        return InjectedSkill;
-            //    else
-            //        return NotInjectedSkill;
-            //}
-                
+                if (skill.Level != null)
+                {
+                    return InjectedSkill;
+                }
+                else
+                {
+                    return NotInjectedSkill;
+                }
+            }
+
             return base.SelectTemplateCore(item, container);
         }
     }

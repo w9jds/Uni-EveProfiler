@@ -33,7 +33,7 @@ namespace EveProfiler.Shared.Controls
 
         private void Skills_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            DrawerItemTapped.Invoke(new Skills());
+            DrawerItemTapped.Invoke(new CharacterSkills());
         }
 
         private void Wallet_Tapped(object sender, TappedRoutedEventArgs e)

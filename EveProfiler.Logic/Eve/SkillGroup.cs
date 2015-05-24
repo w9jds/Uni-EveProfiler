@@ -7,8 +7,9 @@ namespace EveProfiler.Logic.Eve
     {
         private string _groupName;
         private int _totalSkillPoints = 0;
+        private List<Skill> _skills = new List<Skill>();
 
-        public Dictionary<long, Skill> Skills { get; }
+        public List<Skill> Skills => _skills;
 
         public long GroupId { get; }
 

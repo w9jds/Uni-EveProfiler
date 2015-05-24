@@ -29,6 +29,7 @@
       <Extensions>
         <Extension Category="windows.backgroundTasks" EntryPoint="EveProfiler.Tasks.RetrieveMailTask">
           <BackgroundTasks>
+            <Task Type="systemEvent" />
             <Task Type="timer" />
           </BackgroundTasks>
         </Extension>

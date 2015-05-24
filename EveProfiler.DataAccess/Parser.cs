@@ -49,7 +49,7 @@ namespace EveProfiler.DataAccess
 
         }
 
-        public static Tuple<Sheet, List<Logic.Eve.Skill>> ParseCharacterSheet(string xml)
+        public static Tuple<Sheet, List<Skill>> ParseCharacterSheet(string xml)
         {
             XDocument doc = XDocument.Parse(xml);
 
@@ -71,28 +71,28 @@ namespace EveProfiler.DataAccess
                 CachedUntil = GetCachedUntil(doc)
             }).FirstOrDefault();
 
-            List<Logic.Eve.Skill> skills = doc.Descendants("rowset")
+            List<Skill> skills = doc.Descendants("rowset")
                 .Where(x => x.Attribute("name").Value == "skills")
                 .Elements()
-                .Select(x => new Logic.Eve.Skill((long)x.Attribute("typeID"))
+                .Select(x => new Skill((long)x.Attribute("typeID"))
                 {
                     Skillpoints = long.Parse(x.Attribute("skillpoints").Value),
                     Level = int.Parse(x.Attribute("level").Value),
                     Published = int.Parse(x.Attribute("published").Value)
                 }).ToList();
 
-            return new Tuple<Sheet, List<Logic.Eve.Skill>>(sheet, skills);
+            return new Tuple<Sheet, List<Skill>>(sheet, skills);
         }
 
-        public static Dictionary<long, SkillGroup> ParseSkillTree(string xml)
+        public static Tuple<List<Skill>, Dictionary<long, SkillGroup>> ParseSkillTree(string xml)
         {
             Dictionary<long, SkillGroup> skillGroups = new Dictionary<long, SkillGroup>();
             XDocument doc = XDocument.Parse(xml);
 
-            List<Logic.Eve.Skill> skills =
+            List<Skill> skills =
                 doc.Descendants("row")
                     .Where(x => x.FirstAttribute.Name.LocalName == "typeName")
-                    .Select(x => new Logic.Eve.Skill((long)x.Attribute("typeID"), GetRequiredSkills(x))
+                    .Select(x => new Skill((long)x.Attribute("typeID"), GetRequiredSkills(x))
                     {
                         TypeName = (string)x.Attribute("typeName"),
                         GroupId = (int)x.Attribute("groupID"),
@@ -102,7 +102,7 @@ namespace EveProfiler.DataAccess
                         //mainAttributes = getSkillAttributes(x.Element("requiredAttributes").Descendants()),
                     }).ToList();
 
-            foreach (Logic.Eve.Skill skill in skills)
+            foreach (Skill skill in skills)
             {
                 if (!skillGroups.ContainsKey(skill.GroupId))
                 {
@@ -113,13 +113,12 @@ namespace EveProfiler.DataAccess
                             .FirstOrDefault()
                             .Attribute("groupName").Value,
                     });
-
                 }
 
-                skillGroups[skill.GroupId].Skills.Add(skill.TypeId, skill);
+                skillGroups[skill.GroupId].Skills.Add(skill);
             }
 
-            return skillGroups;
+            return new Tuple<List<Skill>, Dictionary<long, SkillGroup>>(skills, skillGroups);
         }
 
         private static List<RequiredSkill> GetRequiredSkills(XElement x) => x.Element("rowset")

@@ -9,6 +9,7 @@
     mc:Ignorable="d">
 
     <UserControl.Resources>
+        <Classes:VisibilityConverter x:Key="VisibilityConverter"/>
         <Classes:DateConverter x:Key="DateConverter"/>
         <Classes:MailBodyConverter x:Key="MailBodyConverter"/>
         <Classes:ExtensionConverter x:Key="ExtendedConverter"/>
@@ -39,7 +40,7 @@
                 </Ellipse.Fill>
             </Ellipse>
 
-            <Line x:Name="linebreak" Visibility="Collapsed"
+            <Line x:Name="linebreak" Visibility="{Binding IsExtended, Converter={StaticResource VisibilityConverter}}"
                   HorizontalAlignment="Center" Margin="15,0" Grid.ColumnSpan="3" 
                   VerticalAlignment="Bottom" X1="0" Y1="0" X2="1" Y2="0" 
                   Stretch="Fill" Stroke="Black" StrokeThickness="1" />

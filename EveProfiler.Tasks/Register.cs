@@ -6,9 +6,9 @@ namespace EveProfiler.Tasks
 {
     public sealed class Register
     {
-        public static async void RegisterNewMailTimer(DateTimeOffset scheduledTime, string characterName)
+        public static async void RegisterNewMailTimer(DateTimeOffset scheduledTime, long characterId)
         {
-            string taskName = $"RetrieveMailTask_{characterName}";
+            string taskName = $"RetrieveMailTask_{characterId}";
 
             if (!IsTaskRegistered(taskName))
             {

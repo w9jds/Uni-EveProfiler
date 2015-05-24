@@ -1,18 +1,12 @@
-﻿using EveProfiler.DataAccess;
-using System;
-using EveProfiler.Logic;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using EveProfiler.Logic;
 using Windows.Storage;
-using Windows.UI.Core;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Data;
-using System.Linq;
-using Newtonsoft.Json;
-
 using EveProfiler.Logic.CharacterAttributes;
+using System.Collections.ObjectModel;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
