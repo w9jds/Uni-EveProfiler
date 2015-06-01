@@ -18,11 +18,12 @@ namespace EveProfiler.Logic.Eve
             }
         }
 
-        #region Methods
-
-        public string skillName
+        public string SkillName
         {
-            get { return _skillName; }
+            get
+            {
+                return _skillName;
+            }
             set
             {
                 switch (SkillLevel)
@@ -48,8 +49,6 @@ namespace EveProfiler.Logic.Eve
                 NotifyPropertyChanged("skillName");
             }
         }
-
-        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
 

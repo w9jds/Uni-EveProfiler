@@ -86,10 +86,11 @@ namespace EveProfiler.DataAccess
 
         public static Tuple<List<Skill>, Dictionary<long, SkillGroup>> ParseSkillTree(string xml)
         {
+            Dictionary<long, Skill> skills = new Dictionary<long, Skill>();
             Dictionary<long, SkillGroup> skillGroups = new Dictionary<long, SkillGroup>();
             XDocument doc = XDocument.Parse(xml);
 
-            List<Skill> skills =
+            List<Skill> parsedSkills =
                 doc.Descendants("row")
                     .Where(x => x.FirstAttribute.Name.LocalName == "typeName")
                     .Select(x => new Skill((long)x.Attribute("typeID"), GetRequiredSkills(x))
@@ -102,8 +103,9 @@ namespace EveProfiler.DataAccess
                         //mainAttributes = getSkillAttributes(x.Element("requiredAttributes").Descendants()),
                     }).ToList();
 
-            foreach (Skill skill in skills)
+            foreach (Skill skill in parsedSkills)
             {
+                skills.Add(skill.TypeId, skill);
                 if (!skillGroups.ContainsKey(skill.GroupId))
                 {
                     skillGroups.Add(skill.GroupId, new SkillGroup(skill.GroupId)
@@ -118,7 +120,7 @@ namespace EveProfiler.DataAccess
                 skillGroups[skill.GroupId].Skills.Add(skill);
             }
 
-            return new Tuple<List<Skill>, Dictionary<long, SkillGroup>>(skills, skillGroups);
+            return new Tuple<Dictionary<long, Skill>, Dictionary<long, SkillGroup>>(skills, skillGroups);
         }
 
         private static List<RequiredSkill> GetRequiredSkills(XElement x) => x.Element("rowset")

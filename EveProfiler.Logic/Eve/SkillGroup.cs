@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 
 namespace EveProfiler.Logic.Eve
@@ -7,9 +10,9 @@ namespace EveProfiler.Logic.Eve
     {
         private string _groupName;
         private int _totalSkillPoints = 0;
-        private List<Skill> _skills = new List<Skill>();
+        private ObservableCollection<Skill> _skills = new ObservableCollection<Skill>();
 
-        public List<Skill> Skills => _skills;
+        public ObservableCollection<Skill> Skills => _skills;
 
         public long GroupId { get; }
 
@@ -44,6 +47,12 @@ namespace EveProfiler.Logic.Eve
         public SkillGroup(long groupId)
         {
             GroupId = groupId;
+            _skills.CollectionChanged += _skills_CollectionChanged;
+        }
+
+        private void _skills_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

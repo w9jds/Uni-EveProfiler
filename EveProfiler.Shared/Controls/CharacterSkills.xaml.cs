@@ -81,10 +81,14 @@ namespace EveProfiler.Shared.Controls
 
         private void BuildSkillTree()
         {
-            Api.GetSkillTree(new Action<Tuple<List<Skill>, Dictionary<long, SkillGroup>>>(result =>
+            _statusBar.ProgressIndicator.Text = "Retrieving Complete Skill Tree...";
+            //_statusBar.ProgressIndicator.ProgressValue 
+
+            Api.GetSkillTree(new Action<Tuple<Dictionary<long, Skill>, Dictionary<long, SkillGroup>>>(result =>
             {
                 foreach(long key in result.Item2.Keys)
                 {
+                    _statusBar.ProgressIndicator.Text = "Building Character Tree...";
                     SkillGroup group = result.Item2[key];
                     if (group.Skills.Count > 0)
                     {
@@ -104,6 +108,11 @@ namespace EveProfiler.Shared.Controls
                                     }
                                 }
                             }
+
+                            foreach (RequiredSkill requirement in skill.RequiredSkills)
+                            {
+                                requirement.SkillName = result.Item1[requirement.TypeId].TypeName;
+                            }
                         }
                     }
                     Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
@@ -111,7 +120,14 @@ namespace EveProfiler.Shared.Controls
                         _skillGroups.Add(group);
                     });
                 }
+
+                _statusBar.ProgressIndicator.Text = string.Empty;
             }));
+        }
+
+        private void SkillItem_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+
         }
     }
 }

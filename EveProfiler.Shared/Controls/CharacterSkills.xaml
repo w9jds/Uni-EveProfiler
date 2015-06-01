@@ -15,7 +15,6 @@
     </local:CharacterControlBase.Resources>
 
     <Grid x:Name="LayoutRoot">
-        <!--<ProgressBar x:Name="progress" VerticalAlignment="Top" Background="Transparent" />-->
 
         <ListView x:Name="skillsList"
                   SelectionMode="None"
@@ -46,8 +45,8 @@
                                         <RowDefinition/>
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
-                                    
-                                    <TextBlock Text="{Binding groupSkills, Converter={StaticResource SkillCountConverter}}" 
+
+                                    <TextBlock Text="{Binding skillGroups, Converter={StaticResource SkillCountConverter}}" 
                                                Foreground="Black" Margin="0,0,20,1.5" HorizontalAlignment="Right" 
                                                VerticalAlignment="Bottom" FontSize="16"/>
                                     <TextBlock Grid.Row="1" Text="{Binding groupSkillPoints, Converter={StaticResource GroupSkillPointsConverter}}" 
@@ -71,7 +70,7 @@
             
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <local:SkillItem Tapped="ucSkillItem_Tapped"/>
+                    <local:SkillItem Tapped="SkillItem_Tapped"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

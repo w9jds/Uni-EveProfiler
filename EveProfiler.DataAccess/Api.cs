@@ -90,7 +90,7 @@ namespace EveProfiler.DataAccess
             }
         }
 
-        public static void GetSkillTree(Action<Tuple<List<Skill>, Dictionary<long, SkillGroup>>> result)
+        public static void GetSkillTree(Action<Tuple<Dictionary<long, Skill>, Dictionary<long, SkillGroup>>> result)
         {
             if (NetworkInterface.GetIsNetworkAvailable())
             {

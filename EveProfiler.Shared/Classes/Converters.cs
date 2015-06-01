@@ -1,7 +1,10 @@
-﻿using HtmlAgilityPack;
+﻿using EveProfiler.Logic.Eve;
+using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media.Imaging;
@@ -31,23 +34,23 @@ namespace EveProfiler.Shared.Classes
         }
     }
 
-    public class RaceConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, string culture)
-        {
-            if (!string.IsNullOrEmpty((string)value))
-            {
-                return new BitmapImage(new Uri($"ms-appx:///Assets/Images/{((string)value).ToLower()}_race.png"));
-            }
+    //public class RaceConverter : IValueConverter
+    //{
+    //    public object Convert(object value, Type targetType, object parameter, string culture)
+    //    {
+    //        if (!string.IsNullOrEmpty((string)value))
+    //        {
+    //            return new BitmapImage(new Uri($"ms-appx:///Assets/Images/{((string)value).ToLower()}_race.png"));
+    //        }
 
-            return null;
-        }
+    //        return null;
+    //    }
 
-        public object ConvertBack(object value, Type targetType, object parameter, string culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
+    //    public object ConvertBack(object value, Type targetType, object parameter, string culture)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
 
     public class BalanceConverter : IValueConverter
     {
@@ -163,68 +166,68 @@ namespace EveProfiler.Shared.Classes
         }
     }
 
-    public class SkillTimeLeftConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, string culture)
-        {
-            string timeLeft = string.Empty;
+    //public class SkillTimeLeftConverter : IValueConverter
+    //{
+    //    public object Convert(object value, Type targetType, object parameter, string culture)
+    //    {
+    //        string timeLeft = string.Empty;
 
-            if (!((TimeSpan)value).Equals(TimeSpan.Zero))
-            {
-                TimeSpan timeSpan = (TimeSpan)value;
+    //        if (!((TimeSpan)value).Equals(TimeSpan.Zero))
+    //        {
+    //            TimeSpan timeSpan = (TimeSpan)value;
 
-                if (timeSpan.Days > 1)
-                    timeLeft += timeSpan.ToString(@"%d' Days '");
-                if (timeSpan.Days == 1)
-                    timeLeft += timeSpan.ToString(@"%d' Day '");
-                if (timeSpan.Hours > 1)
-                    timeLeft += timeSpan.ToString(@"%h' Hours '");
-                if (timeSpan.Hours == 1)
-                    timeLeft += timeSpan.ToString(@"%h' Hour '");
-                if (timeSpan.Minutes > 1)
-                    timeLeft += timeSpan.ToString(@"%m' Minutes '");
-                if (timeSpan.Minutes == 1)
-                    timeLeft += timeSpan.ToString(@"%m' Minute '");
+    //            if (timeSpan.Days > 1)
+    //                timeLeft += timeSpan.ToString(@"%d' Days '");
+    //            if (timeSpan.Days == 1)
+    //                timeLeft += timeSpan.ToString(@"%d' Day '");
+    //            if (timeSpan.Hours > 1)
+    //                timeLeft += timeSpan.ToString(@"%h' Hours '");
+    //            if (timeSpan.Hours == 1)
+    //                timeLeft += timeSpan.ToString(@"%h' Hour '");
+    //            if (timeSpan.Minutes > 1)
+    //                timeLeft += timeSpan.ToString(@"%m' Minutes '");
+    //            if (timeSpan.Minutes == 1)
+    //                timeLeft += timeSpan.ToString(@"%m' Minute '");
 
-                if (timeSpan.Seconds == 1)
-                    timeLeft += timeSpan.ToString(@"%s' Second'");
-                else
-                    timeLeft += timeSpan.ToString(@"%s' Seconds'");
-            }
+    //            if (timeSpan.Seconds == 1)
+    //                timeLeft += timeSpan.ToString(@"%s' Second'");
+    //            else
+    //                timeLeft += timeSpan.ToString(@"%s' Seconds'");
+    //        }
 
-            return timeLeft;
-        }
+    //        return timeLeft;
+    //    }
 
-        public object ConvertBack(object value, Type targetType, object parameter, string culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
+    //    public object ConvertBack(object value, Type targetType, object parameter, string culture)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
 
-    public class TitleConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, string culture)
-        {
-            HtmlDocument doc;
-            //ObservableCollection<cTitleId> ocTitles = value as ObservableCollection<cTitleId>;
+    //public class TitleConverter : IValueConverter
+    //{
+    //    public object Convert(object value, Type targetType, object parameter, string culture)
+    //    {
+    //        HtmlDocument doc;
+    //        //ObservableCollection<cTitleId> ocTitles = value as ObservableCollection<cTitleId>;
 
-            //if (ocTitles.Count > 0)
-            //{
-            //    doc = new HtmlDocument();
-            //    doc.LoadHtml(ocTitles[0].titleName);
-            //    return doc.DocumentNode.InnerText;
-            //}
-            //else
-            //{
-            return string.Empty;
-            //}
-        }
+    //        //if (ocTitles.Count > 0)
+    //        //{
+    //        //    doc = new HtmlDocument();
+    //        //    doc.LoadHtml(ocTitles[0].titleName);
+    //        //    return doc.DocumentNode.InnerText;
+    //        //}
+    //        //else
+    //        //{
+    //        return string.Empty;
+    //        //}
+    //    }
 
-        public object ConvertBack(object value, Type targetType, object parameter, string culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
+    //    public object ConvertBack(object value, Type targetType, object parameter, string culture)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
 
     public class DateTimeToDateConverter : IValueConverter
     {
@@ -276,12 +279,8 @@ namespace EveProfiler.Shared.Classes
     {
         public object Convert(object value, Type targetType, object parameter, string culture)
         {
-            //List<cEVESkill> injectedSkills = new HashSet<cEVESkill>(value as ObservableCollection<cEVESkill>)
-            //    .Where(x => x.characterSkill != null).ToList();
-
-            //return string.Format("{0} of {1} Skills", injectedSkills.Count, ((ObservableCollection<cEVESkill>)value).Count);
-
-            return string.Empty;
+            List<Skill> skills = new List<Skill>((Collection<Skill>)value);
+            return $"{skills.Where(x => x.Level != null).Count()} of {skills.Count}";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string culture)
