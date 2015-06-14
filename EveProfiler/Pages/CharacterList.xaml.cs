@@ -18,6 +18,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
 using System.Collections.ObjectModel;
 using EveProfiler.Shared;
+using EveProfiler.BusinessLogic.CharacterAttributes;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -110,6 +111,7 @@ namespace EveProfiler.Pages
 
                     GetCharacterInfo(character);
                     GetCharacterSheet(character);
+                    GetCharacterSkillQueue(character);
                     GetCharacterMail(character,
                         characterContainer.CreateContainer(AttributeTypes.Mail.ToString(), ApplicationDataCreateDisposition.Always));
                 }
@@ -132,6 +134,23 @@ namespace EveProfiler.Pages
                     else
                     {
                         GetCharacterInfo(character);
+                    }
+                    if (characterContainer.Values.ContainsKey(AttributeTypes.SkillQueue.ToString()))
+                    {
+                        SkillQueue queue = JsonConvert.DeserializeObject<SkillQueue>(characterContainer.Values[AttributeTypes.SkillQueue.ToString()].ToString());
+
+                        if (DateTime.UtcNow > queue.CachedUntil && NetworkInterface.GetIsNetworkAvailable())
+                        {
+                            GetCharacterSkillQueue(character);
+                        }
+                        else
+                        {
+                            getCachedSkillQueue(character);
+                        }
+                    }
+                    else
+                    {
+                        GetCharacterSkillQueue(character);
                     }
                     if (characterContainer.Values.ContainsKey(AttributeTypes.Sheet.ToString()))
                     {
@@ -176,6 +195,12 @@ namespace EveProfiler.Pages
                 Utils.GetSerializedFromLocalFile($"mail_{character.CharacterId}")));
         }
 
+        private async void getCachedSkillQueue(Character character)
+        {
+            character.addAttribute(AttributeTypes.SkillQueue, JsonConvert.DeserializeObject<SkillQueue>(await
+                Utils.GetSerializedFromLocalFile($"skillqueue_{character.CharacterId}")));
+        }
+
         private void GetCharacterInfo(Character character)
         {
             Api.GetCharacterInfo(character, new Action<Info>(result =>
@@ -188,6 +213,20 @@ namespace EveProfiler.Pages
                 _localSettings.Containers[character.CharacterName].Values[AttributeTypes.Info.ToString()] = 
                     JsonConvert.SerializeObject(result);
             }));
+        }
+
+        private void GetCharacterSkillQueue(Character character)
+        {
+            Api.GetCharacterSkillQueue(character, new Action<SkillQueue>(result =>
+            {
+                Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    character.addAttribute(AttributeTypes.SkillQueue, result);
+                });
+
+                Utils.SaveSerializedToLocalFile($"skillqueue_{character.CharacterId}", JsonConvert.SerializeObject(result));
+            }));
+            
         }
 
         private void GetCharacterMail(Character character, ApplicationDataContainer mailContainer )

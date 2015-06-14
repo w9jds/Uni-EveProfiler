@@ -48,17 +48,15 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <Grid Grid.Row="1" Name="serverStatus">
+        <Grid Grid.Row="1" Name="serverStatus" Background="#7D000000">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Name="serverOpen" Margin="10,0,0,0" 
-                       Foreground="White" FontSize="17" Text="{Binding OnlinePlayerCount}"
+            <TextBlock Margin="10,0,0,0" Foreground="White" FontSize="17" Text="{Binding PlayerCountLabel}"
                        VerticalAlignment="Center" HorizontalAlignment="Left"/>
-            <TextBlock Name="playerCount" Grid.Column="1" 
-                       Foreground="White" Margin="0,0,10,0"  Text="{Binding ServerOpen}"
+            <TextBlock Grid.Column="1" Foreground="White" Margin="0,0,10,0"  Text="{Binding Status}"
                        FontSize="17" VerticalAlignment="Center" 
                        HorizontalAlignment="Right"/>
         </Grid>

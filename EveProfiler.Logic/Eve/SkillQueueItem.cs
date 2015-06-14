@@ -7,10 +7,10 @@ namespace EveProfiler.Logic.Eve
         private int _queuePosition;
         private long _startSP;
         private long _endSP;
-        private DateTime _startTime;
-        private DateTime _endTime;
+        private DateTime? _startTime;
+        private DateTime? _endTime;
 
-        public DateTime EndTime
+        public DateTime? EndTime
         {
             get
             {
@@ -24,7 +24,7 @@ namespace EveProfiler.Logic.Eve
             }
         }
 
-        public DateTime StartTime
+        public DateTime? StartTime
         {
             get
             {

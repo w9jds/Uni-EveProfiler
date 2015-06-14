@@ -1,4 +1,5 @@
-﻿using EveProfiler.Logic;
+﻿using EveProfiler.BusinessLogic.CharacterAttributes;
+using EveProfiler.Logic;
 using EveProfiler.Logic.CharacterAttributes;
 using EveProfiler.Logic.Eve;
 using System;
@@ -68,6 +69,14 @@ namespace EveProfiler.DataAccess
                 AllianceID = (int?)x.Element("allianceID") ?? null,
                 AccountBalance = (double)x.Element("balance"),
                 FreeRespecs = int.Parse(x.Element("freeRespecs").Value),
+                JumpActivation = (DateTime)x.Element("jumpActivation"),
+                JumpFatigue = (DateTime)x.Element("jumpFatigue"),
+                JumpLastUpdate = (DateTime)x.Element("jumpLastUpdate"),
+                Intelligence = (int)x.Descendants("attributes").FirstOrDefault().Element("intelligence"),
+                Memory = (int)x.Descendants("attributes").FirstOrDefault().Element("memory"),
+                Charisma = (int)x.Descendants("attributes").FirstOrDefault().Element("charisma"),
+                Perception = (int)x.Descendants("attributes").FirstOrDefault().Element("perception"),
+                Willpower = (int)x.Descendants("attributes").FirstOrDefault().Element("willpower"),
                 CachedUntil = GetCachedUntil(doc)
             }).FirstOrDefault();
 
@@ -84,7 +93,7 @@ namespace EveProfiler.DataAccess
             return new Tuple<Sheet, List<Skill>>(sheet, skills);
         }
 
-        public static Tuple<List<Skill>, Dictionary<long, SkillGroup>> ParseSkillTree(string xml)
+        public static Tuple<Dictionary<long, Skill>, Dictionary<long, SkillGroup>> ParseSkillTree(string xml)
         {
             Dictionary<long, Skill> skills = new Dictionary<long, Skill>();
             Dictionary<long, SkillGroup> skillGroups = new Dictionary<long, SkillGroup>();
@@ -177,6 +186,28 @@ namespace EveProfiler.DataAccess
                 OnlinePlayerCount = (int)x.Element("onlinePlayers"),
                 ServerOpen = (bool)x.Element("serverOpen")
             }).SingleOrDefault();
+        }
+
+        public static SkillQueue ParseCharacterSkillQueue(string xml)
+        {
+            XDocument doc = XDocument.Parse(xml);
+
+            SkillQueue queue = new SkillQueue()
+            {
+                CachedUntil = GetCachedUntil(doc)
+            };
+
+            queue.PopulateQueue(doc.Descendants("row").Select(x => new SkillQueueItem((long)x.Attribute("typeID"))
+            {
+                QueuePosition = (int)x.Attribute("queuePosition"),
+                Level = (int?)x.Attribute("level") ?? null,
+                StartSP = (long)x.Attribute("startSP"),
+                EndSP = (long)x.Attribute("endSP"),
+                StartTime = string.IsNullOrEmpty(x.Attribute("startTime").Value) ? null : (DateTime?)x.Attribute("startTime"),
+                EndTime = string.IsNullOrEmpty(x.Attribute("endTime").Value) ? null : (DateTime?)x.Attribute("endTime")
+            }).ToList());
+
+            return queue;
         }
 
         //public static ObservableCollection<cCalendarEvent> parseUpcomingCalendarEvents(string xml)

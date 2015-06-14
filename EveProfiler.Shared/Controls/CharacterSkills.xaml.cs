@@ -81,6 +81,7 @@ namespace EveProfiler.Shared.Controls
 
         private void BuildSkillTree()
         {
+            _statusBar.ProgressIndicator.ShowAsync();
             _statusBar.ProgressIndicator.Text = "Retrieving Complete Skill Tree...";
             //_statusBar.ProgressIndicator.ProgressValue 
 
@@ -88,7 +89,10 @@ namespace EveProfiler.Shared.Controls
             {
                 foreach(long key in result.Item2.Keys)
                 {
-                    _statusBar.ProgressIndicator.Text = "Building Character Tree...";
+                    Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                    {
+                        _statusBar.ProgressIndicator.Text = "Building Character Tree...";
+                    });
                     SkillGroup group = result.Item2[key];
                     if (group.Skills.Count > 0)
                     {
@@ -121,7 +125,11 @@ namespace EveProfiler.Shared.Controls
                     });
                 }
 
-                _statusBar.ProgressIndicator.Text = string.Empty;
+                Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                {
+                    _statusBar.ProgressIndicator.HideAsync();
+                    _statusBar.ProgressIndicator.Text = string.Empty;
+                });
             }));
         }
 

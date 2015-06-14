@@ -9,6 +9,7 @@ namespace EveProfiler.BusinessLogic.CharacterAttributes
     public class SkillQueue : ICallMetadata, INotifyPropertyChanged
     {
         private DateTime _cachedUntil;
+        private DateTime _lastPulled;
         private Dictionary<long, SkillQueueItem> _queueItems = new Dictionary<long, SkillQueueItem>();
 
         public DateTime CachedUntil
@@ -20,20 +21,21 @@ namespace EveProfiler.BusinessLogic.CharacterAttributes
 
             set
             {
-                CachedUntil = value;
+                _cachedUntil = value;
 
             }
         }
+
         public DateTime LastPulled
         {
             get
             {
-                throw new NotImplementedException();
+                return _lastPulled;
             }
 
             set
             {
-                throw new NotImplementedException();
+                _lastPulled = value;
             }
         }
 

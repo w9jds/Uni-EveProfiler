@@ -1,4 +1,5 @@
-﻿using EveProfiler.Core;
+﻿using EveProfiler.BusinessLogic.CharacterAttributes;
+using EveProfiler.Core;
 using EveProfiler.Logic;
 using EveProfiler.Logic.CharacterAttributes;
 using EveProfiler.Logic.Eve;
@@ -193,6 +194,31 @@ namespace EveProfiler.DataAccess
                         {
                             return Parser.ParseServerStatus(t.Result);
                         }).ContinueWith(t => result(t.Result));
+                    }
+                }));
+            }
+            else
+            {
+
+            }
+        }
+
+        public static void GetCharacterSkillQueue(Character character, Action<SkillQueue> result)
+        {
+            if (NetworkInterface.GetIsNetworkAvailable())
+            {
+                HttpHelper.Get(@"/char/SkillQueue.xml.aspx", character.getCharacterQuery(), new Action<HttpResponseMessage>(response =>
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        response.Content.ReadAsStringAsync().ContinueWith(t =>
+                        {
+                            return Parser.ParseCharacterSkillQueue(t.Result);
+                        }).ContinueWith(t => result(t.Result));
+                    }
+                    else
+                    {
+                        throw new HttpRequestException($"Received a {response.StatusCode}: {response.ReasonPhrase}");
                     }
                 }));
             }

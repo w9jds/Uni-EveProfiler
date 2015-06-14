@@ -7,6 +7,7 @@ using System.Net.Http;
 using Windows.Storage;
 using Windows.UI.Core;
 using Windows.UI.Popups;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -58,7 +59,8 @@ namespace EveProfiler.Pages
         private void SaveSettings()
         {
             _localSettings.Values["account"] = JsonConvert.SerializeObject(_currentAccount);
-            progressBar.IsIndeterminate = false;
+            StatusBar.GetForCurrentView().HideAsync();
+            StatusBar.GetForCurrentView().ProgressIndicator.Text = string.Empty;
             if (Frame.CanGoBack)
             {
                 Frame.GoBack();
@@ -73,7 +75,8 @@ namespace EveProfiler.Pages
         {
             if (!string.IsNullOrEmpty(keyId.Text) && !string.IsNullOrEmpty(vCode.Text))
             {
-                progressBar.IsIndeterminate = true;
+                StatusBar.GetForCurrentView().ShowAsync();
+                StatusBar.GetForCurrentView().ProgressIndicator.Text = "Pulling Characters...";
 
                 _currentAccount.keyId = keyId.Text;
                 _currentAccount.vCode = vCode.Text;
@@ -92,7 +95,7 @@ namespace EveProfiler.Pages
                 }
                 catch (HttpRequestException exception)
                 {
-                    progressBar.IsIndeterminate = false;
+                    StatusBar.GetForCurrentView().HideAsync();
                     new MessageDialog("Invalid Api Keys").ShowAsync();
                 }
             }

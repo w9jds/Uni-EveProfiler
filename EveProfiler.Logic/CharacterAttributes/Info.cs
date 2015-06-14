@@ -16,7 +16,6 @@ namespace EveProfiler.Logic.CharacterAttributes
         private string _lastKnownLocation;
         private double _securityStatus;
 
-
         public double AccountBalance
         {
             get { return _accountBalance; }
@@ -26,6 +25,7 @@ namespace EveProfiler.Logic.CharacterAttributes
                 NotifyPropertyChanged("AccountBalance");
             }
         }
+
         public int SkillPoints
         {
             get { return _skillPoints; }
@@ -35,6 +35,7 @@ namespace EveProfiler.Logic.CharacterAttributes
                 NotifyPropertyChanged("SkillPoints");
             }
         }
+
         public string ShipName
         {
             get { return _shipName; }
@@ -44,7 +45,9 @@ namespace EveProfiler.Logic.CharacterAttributes
                 NotifyPropertyChanged("ShipName");
             }
         }
+
         public int ShipTypeID { get; set; }
+
         public string ShipTypeName
         {
             get { return _shipTypeName; }
@@ -54,7 +57,9 @@ namespace EveProfiler.Logic.CharacterAttributes
                 NotifyPropertyChanged("ShipTypeName");
             }
         }
+
         public int CorporationID { get; set; }
+
         public string Corporation
         {
             get { return _corporation; }
@@ -64,6 +69,7 @@ namespace EveProfiler.Logic.CharacterAttributes
                 NotifyPropertyChanged("Corporation");
             }
         }
+
         public DateTime CorporationDate
         {
             get { return _corporationDate; }
@@ -73,7 +79,9 @@ namespace EveProfiler.Logic.CharacterAttributes
                 NotifyPropertyChanged("CorporationDate");
             }
         }
+
         public int? AllianceID { get; set; }
+
         public string Alliance
         {
             get { return _alliance; }
@@ -83,6 +91,7 @@ namespace EveProfiler.Logic.CharacterAttributes
                 NotifyPropertyChanged("Alliance");
             }
         }
+
         public DateTime? AllianceDate
         {
             get { return _allianceDate; }
@@ -92,6 +101,7 @@ namespace EveProfiler.Logic.CharacterAttributes
                 NotifyPropertyChanged("AllianceDate");
             }
         }
+
         public string LastKnownLocation
         {
             get { return _lastKnownLocation; }
@@ -101,6 +111,7 @@ namespace EveProfiler.Logic.CharacterAttributes
                 NotifyPropertyChanged("LastKnownLocation");
             }
         }
+
         public double SecurityStatus
         {
             get { return _securityStatus; }
@@ -110,20 +121,10 @@ namespace EveProfiler.Logic.CharacterAttributes
                 NotifyPropertyChanged("SecurityStatus");
             }
         }
+
         public string ActiveShip => $"{ShipTypeName} [{ShipName}]";
 
         public DateTime LastPulled { get; set; }
         public DateTime CachedUntil { get; set; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
-
     }
 }

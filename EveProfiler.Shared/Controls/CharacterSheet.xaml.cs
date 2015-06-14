@@ -18,6 +18,7 @@ namespace EveProfiler.Shared.Controls
         {
             _currentCharacter = character;
             SetBinding(DataContextProperty, new Binding() { Source = character.Attributes[AttributeTypes.Sheet] });
+            infoPanel.SetBinding(DataContextProperty, new Binding() { Source = character.Attributes[AttributeTypes.Info] });
         }
     }
 }

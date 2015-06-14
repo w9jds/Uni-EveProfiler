@@ -31,6 +31,9 @@ namespace EveProfiler.Logic
             }
         }
 
+        public string PlayerCountLabel => $"{OnlinePlayerCount.ToString("##,#")} Players";
+        public string Status => ServerOpen ? "Online" : "Offline";
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void NotifyPropertyChanged(string propertyName)
